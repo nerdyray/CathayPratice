@@ -3,11 +3,12 @@ public class nnTable {
     private int j;//建立十位數變數
     private int sum;
     public nnTable(){
-    for(i=2;i<=9;i++){
-        System.out.println(" ");//換行
+    for(i=1;i<=9;i++){System.out.println(" ");//換行
         for(j=1;j<=9;j++){
             sum=i*j;//把乘法結果放入sum
-            System.out.print(i+"*"+j+"="+sum+" ");//印出乘法表
+            System.out.print(j+"*"+i+"="+sum+" ");//印出乘法表
+            // System.out.println(" ");//換行
+
         }
     }}
     public static void main(String[] args) {
