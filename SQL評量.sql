@@ -1,33 +1,36 @@
 CREATE Table block_office(
     ID INT AUTO_INCREMENT PRIMARY KEY,
     block_id VARCHAR(10),
-    block_name VARCHAR(10)
+    block_name NVARCHAR(10)
 );
 CREATE Table office_info(
     ID INT AUTO_INCREMENT PRIMARY KEY,
     office_num VARCHAR(10),
-    office_add VARCHAR(30),
-    office_block VARCHAR(10)
+    office_add NVARCHAR(30),
+    office_block NVARCHAR(10)
 );
 CREATE Table shelter_info(
     ID INT AUTO_INCREMENT PRIMARY KEY,
     building_type VARCHAR(10),
     shelter_bur VARCHAR(10),
     shelter_add VARCHAR(30),
-    shelter_capacity INTEGER,
-    shelter_floor INTEGER(10)
+    shelter_capacity INTEGER(2.0),
+    shelter_floor INTEGER(2.0),
+    shelter_block VARCHAR(10)
+
+
 );
 CREATE Table block_bur(
     ID INT AUTO_INCREMENT PRIMARY KEY,
-    block_name VARCHAR(10),
-    bur_name VARCHAR(10)
+    block_name NVARCHAR(10),
+    bur_name NVARCHAR(10)
 );
 CREATE Table bureau_info(
     ID INT AUTO_INCREMENT PRIMARY KEY,
     bureau_code VARCHAR(10),
-    bur_name VARCHAR(10),
-    bur_add VARCHAR(30),
-    bur_num INTEGER(10)
+    bur_name NVARCHAR(10),
+    bur_add NVARCHAR(30),
+    bur_num CHAR(10)
 );
 INSERT INTO block_office(block_id, block_name)
 VALUES
@@ -78,7 +81,7 @@ SELECT b.bur_name,b.bur_num -- b.bur..(bureau_info名稱)
 FROM shelter_info AS s -- shelter_info別名shelter
 JOIN bureau_info AS b -- bureau_info別名shelter
 on s.shelter_bur=b.bur_name -- 兩個資料表中的交集
-WHERE s.shelter_capacity>1000; -- 條件是大於1000
+WHERE s.shelter_capacity > 1000; -- 條件是大於1000
 
   -- 4-2
 SELECT 
@@ -101,24 +104,26 @@ FROM shelter_info AS s -- shelter_info別名s
 JOIN bureau_info AS b -- bureau_info別名b
 on s.shelter_bur=b.bur_name -- 兩個資料表中的交集
 JOIN office_info AS o -- office_info別名o
+on o.office_block=s.shelter_block -- 兩個資料表中的交集
+WHERE s.shelter_add like'%中%'; -- 條件是地址中有'中'
+
+-- 4-5
+SELECT s.shelter_add,s.shelter_capacity,o.office_block,o.office_add  -- b.bur..(bureau_info名稱)
+FROM shelter_info AS s -- shelter_info別名s
+JOIN bureau_info AS b -- bureau_info別名b
+on s.shelter_bur=b.bur_name -- 兩個資料表中的交集
+JOIN office_info AS o -- office_info別名o
 on o.office_block=s.shelter_block
-WHERE s.shelter_add like'中%'; 
+WHERE s.building_type in ('公寓','大樓'); 
+
+-- 5-1
+UPDATE shelter_info
+SET shelter_capacity=5000
+WHERE shelter_add='苗栗縣竹南鎮和平街79號';
 
 
-INSERT INTO shelter_info(sehlter_block)
-VALUES
-('大埔里'),
-('竹南里'),
-('山佳里'),
-('埔頂里'),
-('綠苗里'),
-('民族里'),
-('忠孝里'),
-('信義里');
-
-
-
-
+DELETE FROM shelter_info
+WHERE shelter_capacity<1000;
 
 
 
