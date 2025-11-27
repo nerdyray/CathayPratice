@@ -1,12 +1,22 @@
 package com.pratice.p3.iwork;
 
-public class supervisor extends Employee {
-    protected int payment; 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
+public class Supervisor extends Employee {
+    private BigDecimal payment; 
+        public  Supervisor(String name,String department,BigDecimal salary){
+        super(name,department,salary);
+        this.payment=salary;
+
+    }
+    @Override
     public void printInfo(){
-        
+        BigDecimal paymentRound=payment.setScale(0,RoundingMode.HALF_UP);
+        System.out.println("薪資單");
+        System.out.print("姓名:"+name+" 工作部門:"+department);
+        System.out.println();
+        System.out.println("薪水: "+paymentRound);
     }
-    public void work(){
 
-    }
 }

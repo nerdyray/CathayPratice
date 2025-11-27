@@ -6,7 +6,11 @@ public abstract class Employee implements IWork{
     protected String name;
     protected String department;
     protected BigDecimal salary;
-    
+    public Employee(String name, String department, BigDecimal salary) {
+        this.name = name;
+        this.department = department;
+        this.salary = salary;
+    }
     public String getName() {
         return name;
     }
