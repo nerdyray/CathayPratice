@@ -19,9 +19,7 @@ public class HRmain {
             HRmain hrMain = new HRmain();
             hrMain.writeOutput(employeeList);
 }
-            public void writeOutput(List<Employee>employeeList){
-                
-
+            public void writeOutput(List<Employee>employeeList){                
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter("d:/output.csv"))){
                 bw.write("姓名,薪水");
                 bw.newLine();  
