@@ -15,8 +15,9 @@ public class Supervisor extends Employee {
         BigDecimal paymentRound=payment.setScale(0,RoundingMode.HALF_UP);
         System.out.println("薪資單");
         System.out.print("姓名:"+name+" 工作部門:"+department);
-        System.out.println();
         System.out.println("薪水: "+paymentRound);
+        System.out.println();
+
     }
 
 }

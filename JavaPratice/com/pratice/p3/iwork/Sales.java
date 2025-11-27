@@ -23,9 +23,10 @@ public class Sales extends Employee{
         System.out.print("姓名:"+name+" 工作部門:"+department);
         System.out.println();
         System.out.println("月薪:"+salaryRound);
-        System.out.println();
         System.out.println("業績:"+bonusRound);
         System.out.println("薪水: "+paymentRound);
+            System.out.println();
+
     }
 
 }
