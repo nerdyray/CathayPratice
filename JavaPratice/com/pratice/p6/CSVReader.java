@@ -23,5 +23,9 @@ public class CSVReader  {
             cars.add(map);
         }
     }
-
+    //建立Read方法，讓carsList可以從外部存取
+    public List<Cars> read() throws FileNotFoundException{
+        List<Cars> carsList = new ArrayList<>();
+        return carsList;
+    }
 }
