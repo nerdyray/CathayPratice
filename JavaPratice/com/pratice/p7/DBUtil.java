@@ -1,4 +1,4 @@
-package com.pratice.p6.Util;
+package com.pratice.p7;
 import java.sql.*;
 import java.util.Properties;
 import java.io.FileInputStream;
