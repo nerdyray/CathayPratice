@@ -9,25 +9,17 @@ import java.util.Comparator;
 public class outPut {
 
     public static void main(String[] args) {
-
         try {
             List<Map<String, Object>> carsList = CSVReader.read();
-            Collections.sort(carsList, new Comparator<Map<String, Object>>() {
-                @Override
-                public int compare(Map<String, Object> a, Map<String, Object> b) {
-                    Object priceAObj = a.get("Price");
-                    Object priceBObj = b.get("Price");
-                    BigDecimal priceA = new BigDecimal(priceAObj.toString());
-                    BigDecimal priceB = new BigDecimal(priceBObj.toString());
-                    return priceA.compareTo(priceB);
-                }
-            });
+            orderByManu.arrMan(carsList);
             CSVWriter csvWriter = new CSVWriter();
             csvWriter.writeOutput(carsList);
+            // csvWriter.arrByMan(carsList);
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+
     }
 
 }

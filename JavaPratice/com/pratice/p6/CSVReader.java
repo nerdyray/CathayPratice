@@ -1,9 +1,11 @@
 package com.pratice.p6;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,16 @@ public class CSVReader {
             }
             cars.add(map);
         }
+        Collections.sort(cars, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> a, Map<String, Object> b) {
+                Object priceAObj = a.get("Price");
+                Object priceBObj = b.get("Price");
+                BigDecimal priceA = new BigDecimal(priceAObj.toString());
+                BigDecimal priceB = new BigDecimal(priceBObj.toString());
+                return priceA.compareTo(priceB);
+            }
+        });
         return cars;
 
     }
