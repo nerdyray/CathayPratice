@@ -39,7 +39,7 @@ public class orderByManu {
             BigDecimal min = new BigDecimal(m.get("Min.PRICE").toString());
             if (prevManu != null && !currentManu.equals(prevManu)) {
                 System.out.printf("小計 %-21s %s %12s\n", "", sumPrice, sumMin);
-                System.out.println(); // 空行
+                // System.out.println(); // 空行
                 sumPrice = BigDecimal.ZERO;
                 sumMin = BigDecimal.ZERO;
             }

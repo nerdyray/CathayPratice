@@ -1,8 +1,6 @@
 package com.pratice.p6;
 
 import java.io.BufferedWriter;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.io.FileWriter;
@@ -13,7 +11,7 @@ public class CSVWriter {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("d:/cars2.csv"))) {
             bw.write("Manufacturer,TYPE,Min.PRICE,Price");
             bw.newLine();
-            for (Map m : carsList) {
+            for (Map<String, Object> m : carsList) {
                 bw.write(m.get("manufacturer") + "," + m.get("TYPE") + "," + m.get("Min.PRICE") + "," + m.get("Price"));
                 bw.newLine();
 
