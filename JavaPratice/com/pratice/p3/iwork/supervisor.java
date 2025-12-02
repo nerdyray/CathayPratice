@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class Supervisor extends Employee {
-    private BigDecimal payment; 
+    private final BigDecimal payment; 
         public  Supervisor(String name,String department,BigDecimal salary){
         super(name,department,salary);
         this.payment=salary;

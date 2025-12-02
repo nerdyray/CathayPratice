@@ -4,15 +4,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class Sales extends Employee{
-    private BigDecimal bonus;
-    private BigDecimal payment; 
-    private BigDecimal performance;
+    private final BigDecimal bonus;
+    private final BigDecimal payment; 
     public  Sales(String name,String department,BigDecimal salary,BigDecimal performance){
         super(name,department,salary);
         BigDecimal scale = new BigDecimal("0.05");
         this.bonus=performance.multiply(scale);
         this.payment=salary.add(bonus);
-        this.performance = performance;
     }
     @Override
     public void printInfo(){
