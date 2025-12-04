@@ -14,24 +14,24 @@ import java.util.Map;
 
 public class Cars {
 
-    Scanner sc = new Scanner(System.in);
+    private static final String SELECT_SQL = "Select * from cars order by Manufacturer";
 
     public void loadDb() {
-        String sql = "Select * from cars order by Manufacturer";
         List<Map<String, Object>> cars = new ArrayList<>();
 
-        try (Connection conn = DBUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = DBUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(SELECT_SQL); ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("Manufacturer", rs.getString("Manufacturer"));
                 map.put("Type", rs.getString("Type"));
                 map.put("Min_Price", rs.getBigDecimal("Min_Price"));
                 map.put("Price", rs.getBigDecimal("Price"));
-                cars.add(map);
-            }
-            for (Map m : cars) {
-                System.out.println(m);
+                System.out.println(map);
                 System.out.println();
+                cars.add(map);
+                // for (Map m : cars) {
+                //     System.out.println(m);
+                // }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,6 +39,7 @@ public class Cars {
     }
 
     public void App() {
+
         String man;
         String Type;
         BigDecimal Min_Price;
@@ -46,7 +47,7 @@ public class Cars {
 
         while (true) {
 
-            try (Connection conn = DBUtil.getConnection();) {
+            try (Connection conn = DBUtil.getConnection(); Scanner sc = new Scanner(System.in);) {
 
                 System.out.println("請輸入以下指令: Select Insert Update Delete");
 
@@ -66,22 +67,19 @@ public class Cars {
                         selectPstmt.setString(1, man);
                         selectPstmt.setString(2, Type);
                         ResultSet rs = selectPstmt.executeQuery();
-                        if(!rs.next()) {
+                        if (!rs.next()) {
                             System.out.println("沒有找到符合項目!");
-                        }
-                             
-                        
-                        while (rs.next()) {
+                        }else{
                             System.out.println(rs.getString("Manufacturer"));
                             System.out.println(rs.getString("Type"));
                             System.out.println(rs.getBigDecimal("Min_Price"));
                             System.out.println(rs.getBigDecimal("Price"));
                             System.out.println("查詢成功！");
-                            break;
+
                         }
-                        
-                           
-                        
+
+
+
                         break;
                     case "Insert":
                         Map<String, Object> insertMap = new HashMap<>();
