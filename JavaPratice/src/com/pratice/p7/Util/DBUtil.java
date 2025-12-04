@@ -51,10 +51,10 @@ public class DBUtil {
         System.out.println("密碼：" + (password != null ? "已設定" : "未設定"));
     }
 
-    public static void main(String[] args) {
-        Cars cars = new Cars();
-        cars.loadDb();
-    }
+    // public static void main(String[] args) {
+    //     Cars cars = new Cars();
+    //     cars.loadDb();
+    // }
     //  public static void DBTest() {
     // //     loadConfig();
     // //     try {
