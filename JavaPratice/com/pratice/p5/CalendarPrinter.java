@@ -5,9 +5,8 @@ import java.util.Scanner;
 
 public class CalendarPrinter {
 
-    Scanner scanner = new Scanner(System.in);
-
-    public void printMonth(int month) {
+    
+    public static  void printMonth(int month) {
         Calendar calendar = Calendar.getInstance();
         int year = 2025;
         // int month = scanner.nextInt(); // 11月 (0-based index)
@@ -18,20 +17,20 @@ public class CalendarPrinter {
         // 取得該月天數
         //get方法找到正確的月份
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
+        
         // 輸出標頭 "日 一 二 三 四 五 六"
         System.out.println("   日  一  二  三  四  五  六");
-
+        
         // 輸出第一行的空白格
         // TODO 用計算代替迭代
         for (int i = 1; i < firstDayOfWeek; i++) {
             System.out.print("    ");
         }
-
+        
         // 迴圈印出日期
         for (int day = 1; day <= daysInMonth; day++) {
             System.out.printf("%4d", day);
-
+            
             // 如果是週日就換行
             if ((day + firstDayOfWeek - 1) % 7 == 0) {
                 System.out.println();
@@ -39,21 +38,24 @@ public class CalendarPrinter {
         }
         System.out.println(); // 結尾換行
     }
-
-    public void chooseMonth() {
+    
+    public static void chooseMonth() {
+        Scanner scanner = new Scanner(System.in);
         System.out.print("請輸入要查詢的月份 (1~12)：");
         int month = scanner.nextInt();
+        scanner.close();
 
         if (month < 1 || month > 12) {
             System.out.println("請輸入正確的 1~12 月");
             return;
         }
 
-        printMonth(month); // ⭐ 把月份傳進 printMonth
+        printMonth(month-1); //把月份傳進 printMonth
+        //要記得減一
     }
 
     public static void main(String[] args) {
-        CalendarPrinter cp = new CalendarPrinter();
-        cp.chooseMonth();
+        
+        CalendarPrinter.chooseMonth();
     }
 }

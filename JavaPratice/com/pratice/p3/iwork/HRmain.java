@@ -2,6 +2,7 @@ package com.pratice.p3.iwork;
 
 import java.util.List;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -18,6 +19,7 @@ public class HRmain {
 
         for (Employee employee : employeeList) {
             employee.printInfo();
+
         }
         // TODO 調用子類別的方法必須先轉型(Instance of)
         HRmain hrMain = new HRmain();
@@ -25,12 +27,20 @@ public class HRmain {
     }
 
     public void writeOutput(List<Employee> employeeList) {
+        BigDecimal salesSalary = BigDecimal.ZERO;
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("d:/output.csv"))) {
             bw.write("姓名,薪水");
             bw.newLine();
             for (Employee e : employeeList) {
-                bw.write(e.getName() + "," + e.getPayment());
-                bw.newLine();
+                if (e instanceof Sales) {
+                    Sales s = (Sales) e;
+                    salesSalary = s.getBonus().add(s.getPayment()).setScale(0, RoundingMode.HALF_UP);
+                    bw.write(e.getName() + "," + salesSalary.toString());
+                    bw.newLine();
+                } else {
+                    bw.write(e.getName() + "," + e.getSalary());
+                    bw.newLine();
+                }
             }
         } catch (IOException e) {
             System.err.println("Error writing file: " + e.getMessage());
