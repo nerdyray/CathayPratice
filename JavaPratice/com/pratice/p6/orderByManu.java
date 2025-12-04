@@ -8,7 +8,7 @@ import java.util.Map;
 public class orderByManu {
 
     public static void arrMan(List<Map<String, Object>> carsList) {
-        String prevManu = null;
+        String prevManu = "";
         BigDecimal sumPrice = BigDecimal.ZERO;
         BigDecimal sumMin = BigDecimal.ZERO;
         Collections.sort(carsList, (a, b) -> {
@@ -44,9 +44,11 @@ public class orderByManu {
         BigDecimal totalMin = BigDecimal.ZERO;
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (Map<String, Object> m : carsList) {
+            // TODO 顯式轉型取代toString
             String currentManu = m.get("manufacturer").toString();
             BigDecimal price = new BigDecimal(m.get("Price").toString());
             BigDecimal min = new BigDecimal(m.get("Min.PRICE").toString());
+            // TODO .equals前面的值不為null
             if (prevManu != null && !currentManu.equals(prevManu)) {
                 System.out.printf("小計 %-21s %s %12s\n", "", sumPrice, sumMin);
                 // System.out.println(); // 空行
@@ -65,7 +67,7 @@ public class orderByManu {
             totalPrice = totalPrice.add(price);
             totalMin = totalMin.add(min);
         }
-        System.out.printf("小計 %-21s %s %12s\n", "", sumPrice, sumMin);
+        System.out.printf("小計 %-21s %s %12s\n", "", sumMin, sumPrice);
         System.out.printf("總計 %-21s %s %12s\n", "", totalPrice, totalMin);
 
     }

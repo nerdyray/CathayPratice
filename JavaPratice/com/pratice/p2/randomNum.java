@@ -6,17 +6,17 @@ import java.util.Arrays;
 //產生隨機號碼並放入陣列
 public class randomNum {
 
-    Random rand = new Random();
-    private final int[] nums = new int[6];
+    static Random rand = new Random();
+    static private final int[] nums = new int[6];
 
-    public randomNum() {
+    public static void randomNum() {
         for (int i = 0; i < nums.length; i++) {
-            nums[i] = rand.nextInt((49));
+            nums[i] = rand.nextInt((49)) + 1;
         }
     }
 //排列數字
 
-    public void arrangeNum() {
+    public static void arrangeNum() {
         System.out.print("排列前: ");
 
         for (int num : nums) {

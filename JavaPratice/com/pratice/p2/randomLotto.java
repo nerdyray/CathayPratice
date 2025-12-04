@@ -1,9 +1,13 @@
 package com.pratice.p2;
 
-public class randomLotto extends randomNum {
+// TODO 類別名稱大駝峰
+public class RandomLotto {
+
     public static void main(String[] args) {
-        randomNum rn=new randomNum();
-        rn.arrangeNum();
-        
+        // TODO 工具方法不用產生物件
+        randomNum.randomNum();
+        randomNum.arrangeNum();
+        // randomNum.arrangeNum();
+
     }
 }
