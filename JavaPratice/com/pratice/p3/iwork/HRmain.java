@@ -27,7 +27,7 @@ public class HRmain {
     }
 
     public void writeOutput(List<Employee> employeeList) {
-        BigDecimal salesSalary = BigDecimal.ZERO;
+        BigDecimal salesSalary ;
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("d:/output.csv"))) {
             bw.write("姓名,薪水");
             bw.newLine();
@@ -37,8 +37,9 @@ public class HRmain {
                     salesSalary = s.getBonus().add(s.getPayment()).setScale(0, RoundingMode.HALF_UP);
                     bw.write(e.getName() + "," + salesSalary.toString());
                     bw.newLine();
-                } else {
-                    bw.write(e.getName() + "," + e.getSalary());
+                } 
+                if(e instanceof Supervisor){
+                    bw.write(e.getName() + "," + ((Supervisor) e).getPayment());
                     bw.newLine();
                 }
             }

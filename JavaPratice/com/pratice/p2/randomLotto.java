@@ -5,8 +5,8 @@ public class RandomLotto {
 
     public static void main(String[] args) {
         // TODO 工具方法不用產生物件
-        randomNum.randomNum();
-        randomNum.arrangeNum();
+        RandomNum.randomNum();
+        RandomNum.arrangeNum();
         // randomNum.arrangeNum();
 
     }

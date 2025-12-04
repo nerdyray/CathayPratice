@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Arrays;
 
 //產生隨機號碼並放入陣列
-public class randomNum {
+public class RandomNum {
 
     static Random rand = new Random();
     static private final int[] nums = new int[6];
