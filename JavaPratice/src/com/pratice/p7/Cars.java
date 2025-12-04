@@ -66,9 +66,12 @@ public class Cars {
                         selectPstmt.setString(1, man);
                         selectPstmt.setString(2, Type);
                         ResultSet rs = selectPstmt.executeQuery();
-                        boolean found = false;
+                        if(!rs.next()) {
+                            System.out.println("沒有找到符合項目!");
+                        }
+                             
+                        
                         while (rs.next()) {
-                            found = true;
                             System.out.println(rs.getString("Manufacturer"));
                             System.out.println(rs.getString("Type"));
                             System.out.println(rs.getBigDecimal("Min_Price"));
@@ -76,9 +79,9 @@ public class Cars {
                             System.out.println("查詢成功！");
                             break;
                         }
-                        if (found = false) {
-                            System.out.println("沒有找到符合項目!");
-                        }
+                        
+                           
+                        
                         break;
                     case "Insert":
                         Map<String, Object> insertMap = new HashMap<>();
