@@ -8,8 +8,8 @@ let value = [
 let nextNum = 0;
 //新增KEY / VALUE
 document.getElementById("PUT").addEventListener("click", function () {
-    const KEY = document.getElementById("KEY").value;
-    const VALUE = document.getElementById("VALUE").value;
+    const KEY = document.getElementById("KEY").value.trim();
+    const VALUE = document.getElementById("VALUE").value.trim();
     HashMap(KEY, VALUE);
     Render();
     console.log(key, value);
@@ -21,7 +21,7 @@ document.getElementById("CLEAR").addEventListener("click", function () {
 });
 
 function HashMap(KEY, VALUE) {
-    if (KEY.trim() === '' || key.includes(KEY)) {
+    if ( KEY==='' || key.includes(KEY)) {
         alert('KEY值不能為空或已有重複KEY值');
         return;
     }
