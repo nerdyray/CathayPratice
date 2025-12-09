@@ -4,8 +4,6 @@ let key = [
 let value = [
 
 ];
-//建立流水號
-let nextNum = 0;
 //新增KEY / VALUE
 document.getElementById("PUT").addEventListener("click", function () {
     const KEY = document.getElementById("KEY").value.trim();
