@@ -16,10 +16,14 @@ document.getElementsByClassName("add")[0].addEventListener("click", function () 
 document.getElementsByClassName("delete")[0].addEventListener("click", function () {
     deleteCar(selectedCarId);
 });
-// document.getElementsByClassName("update")[0].addEventListener("click"), function () {
-//     selectedCar(selectId);
-//     Render();
-// }
+document.getElementsByClassName("update")[0].addEventListener("click", function () {
+    const Mau = document.getElementsByClassName("detail")[0].value.trim();
+    const Type = document.getElementsByClassName("detail")[1].value.trim();
+    const Min_price = document.getElementsByClassName("detail")[2].value.trim();
+    const Price = document.getElementsByClassName("detail")[3].value.trim();
+    updateStatus(Mau, Type, Min_price, Price);
+    Render();
+});
 function addCars(Mau, Type, Min_price, Price) {
     if (Mau === '' || Type == '') {
         alert('製造商或類別不可為空');
@@ -42,19 +46,24 @@ function Render() {
     Table.innerHTML = '';
     //Create an "tr" node:
     const newDiv = document.createElement('table');
-    newDiv.className = 'car';
-    //表頭
+    newDiv.className = 'car styled-table';    //表頭
     const headerRow = document.createElement('tr');
+    const headerIndex = document.createElement('th');
+    headerIndex.textContent = '  ';
     const headerId = document.createElement('th');
-    headerId.textContent = '序號';
+    headerId.textContent = '   序號';
     const headerMau = document.createElement('th');
-    headerMau.textContent = '製造商';
+    headerMau.textContent = '   製造商';
+    const headerType = document.createElement('th');
+    headerType.textContent = '   類別';
     const headerMin_price = document.createElement('th');
-    headerMin_price.textContent = '底價';
+    headerMin_price.textContent = '   底價';
     const headerPrice = document.createElement('th');
-    headerPrice.textContent = '售價';
+    headerPrice.textContent = '   售價';
+    headerRow.appendChild(headerIndex);
     headerRow.appendChild(headerId);
     headerRow.appendChild(headerMau);
+    headerRow.appendChild(headerType);
     headerRow.appendChild(headerMin_price);
     headerRow.appendChild(headerPrice);
     newDiv.appendChild(headerRow);
@@ -101,8 +110,30 @@ function reIndex() {
     }
     nextNum = Cars.length + 1;
 }
-function selectedCar(id) {
+function selectedCar(id,) {
     const selectedCar = Cars.find(car => car.id == id);
-    console.log(selectedCarId)
-    selectedCarId = selectedCar.id;
+    if (selectedCar.id) {
+        selectedCarId = selectedCar.id;
+        document.getElementsByClassName("detail")[0].value = selectedCar.mau;
+        document.getElementsByClassName("detail")[1].value = selectedCar.type;
+        document.getElementsByClassName("detail")[2].value = selectedCar.min_price;
+        document.getElementsByClassName("detail")[3].value = selectedCar.price;
+    } else {
+        alert("請一次修改一項");
+    }
+}
+function updateStatus(Mau, Type, Min_price, Price) {
+    let carIndex = Cars.findIndex(car => car.id === selectedCarId);
+    if (carIndex !== -1) {
+        if (Mau === '' || Type == '') {
+            alert('製造商或類別不可為空');
+            return;
+        } else {
+            Cars[carIndex].mau = Mau;
+            Cars[carIndex].type = Type;
+            Cars[carIndex].min_price = Min_price;
+            Cars[carIndex].price = Price;
+        }
+    }
+    Render();
 }
