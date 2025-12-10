@@ -1,27 +1,7 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8" />
-    <title>模擬封裝與私有</title>
-</head>
-
-<body>
-    <div>
-        KEY<input type="text" id="KEY" placeholder="輸入KEY">
-        VALUE<input type="text" id="VALUE" placeholder="輸入VALUE">
-    </div>
-    <p>-----------------------------------------------------------</p>
-    <div>
-        <button id="PUT">PUT</button>
-        <button id="CLEAR">CLEAR</button>
-    </div>
-    <div id="Result"></div>
-</body>
-
 <script type="module">
     import { HashMap, key, value } from './HashMap.js';
-    
+
     //新增KEY / VALUE
     document.getElementById("PUT").addEventListener("click", function () {
         const KEY = document.getElementById("KEY").value.trim();
@@ -52,12 +32,32 @@
         for (let i = 0; i < key.length; i++) {
             const ResultKey = document.createElement('li');
             ResultKey.textContent = `KEY:  ${key[i]} 
-           VALUE:  ${value[i]}`;
+               VALUE:  ${value[i]}`;
             newDiv.appendChild(ResultKey);
         }
         document.getElementById("Result").appendChild(resultText);
         document.getElementById("Result").appendChild(newDiv);
     }
 </script>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>模擬封裝與私有</title>
+</head>
+
+<body>
+    <div>
+        KEY<input type="text" id="KEY" placeholder="輸入KEY">
+        VALUE<input type="text" id="VALUE" placeholder="輸入VALUE">
+    </div>
+    <p>-----------------------------------------------------------</p>
+    <div>
+        <button id="PUT">PUT</button>
+        <button id="CLEAR">CLEAR</button>
+    </div>
+    <div id="Result"></div>
+</body>
+
 
 </html>

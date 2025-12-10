@@ -1,5 +1,5 @@
 // TODO 變數命名小駝峰
-let Cars = [
+let cars = [
     //{id:1 , mau:Honda,type:Sporty,min_price:20,price:40},
 ];
 let nextNum = 1;
