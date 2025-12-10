@@ -1,35 +1,35 @@
-
+// TODO 變數命名小駝峰
 let Cars = [
     //{id:1 , mau:Honda,type:Sporty,min_price:20,price:40},
 ];
 let nextNum = 1;
-let selectedCarId;
+let selectedCarId=-1;
 document.getElementsByClassName("add")[0].addEventListener("click", function () {
-    // TODO 資料異動應以組處理
-    const Mau = document.getElementsByClassName("detail")[0].value.trim();
-    const Type = document.getElementsByClassName("detail")[1].value.trim();
-    const Min_price = document.getElementsByClassName("detail")[2].value.trim();
-    const Price = document.getElementsByClassName("detail")[3].value.trim();
+    const { Mau, Type, Min_price, Price } = getCarDetail();
     addCars(Mau, Type, Min_price, Price);
     render();
 });
 
 document.getElementsByClassName("delete")[0].addEventListener("click", function () {
-    document.getElementsByClassName("detail")[0].value = "";
-    document.getElementsByClassName("detail")[1].value = "";
-    document.getElementsByClassName("detail")[2].value = "";
-    document.getElementsByClassName("detail")[3].value = "";
-    document.getElementsByClassName("detail")[4].value = "";
-
+    document.getElementsByClassName("detail")[0].value = '';
+    document.getElementsByClassName("detail")[1].value = '';
+    document.getElementsByClassName("detail")[2].value = '';
+    document.getElementsByClassName("detail")[3].value = '';
 });
 document.getElementsByClassName("update")[0].addEventListener("click", function () {
+    const { Mau, Type, Min_price, Price } = getCarDetail();
+    updateStatus(Mau, Type, Min_price, Price);
+    render();
+});
+
+function getCarDetail() {
     const Mau = document.getElementsByClassName("detail")[0].value.trim();
     const Type = document.getElementsByClassName("detail")[1].value.trim();
     const Min_price = document.getElementsByClassName("detail")[2].value.trim();
     const Price = document.getElementsByClassName("detail")[3].value.trim();
-    updateStatus(Mau, Type, Min_price, Price);
-    render();
-});
+    return { Mau, Type, Min_price, Price };
+}
+
 function addCars(Mau, Type, Min_price, Price) {
     if (Mau === '' || Type == '') {
         alert('製造商或類別不可為空');
@@ -50,6 +50,7 @@ function render() {
     //清空舊畫面
     const tableList = document.getElementsByClassName('tableList')[0];
     const tableBody = document.getElementsByClassName('tableBody')[0];
+    console.log(tableBody);
     tableList.appendChild(tableBody);
     tableBody.innerHTML = '';
     //for  遍歷陣列
@@ -107,7 +108,7 @@ function reIndex() {
     nextNum = Cars.length + 1;
 }
 
-function selectedCar(id,) {
+function selectedCar(id) {
     const selectedCar = Cars.find(car => car.id == id);
     if (selectedCar.id) {
         selectedCarId = selectedCar.id;
