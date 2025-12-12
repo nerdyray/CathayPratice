@@ -1,0 +1,44 @@
+# --- Build artifacts and compiled files ---
+target/
+build/
+*.class
+*.jar
+*.war
+*.ear
+
+# --- IDE (IntelliJ IDEA, Eclipse, VS Code) ---
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+*.swp
+.vscode/
+
+# --- Log files ---
+*.log
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db
+
+# --- Maven/Gradle specific ---
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Gradle
+.gradle/
+build/
+gradle/wrapper/gradle-wrapper.jar
+out/
+
+# --- Other common files ---
+*.tmp
+~*
