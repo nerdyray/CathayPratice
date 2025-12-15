@@ -1,7 +1,10 @@
 package cathaybk.Midterm.svc.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -9,7 +12,7 @@ import org.springframework.stereotype.Service;
 import cathaybk.Midterm.svc.MidtermService;
 
 @Service
-public class MidtermServiceImpl implements MidtermService{
+public class MidtermServiceImpl implements MidtermService {
 
     @Override
     public Map<String, Object> demoCode(Map<String, String> demoMap) {
@@ -31,11 +34,12 @@ public class MidtermServiceImpl implements MidtermService{
         return null;
     }
 
-
-
-
-
-
-
-
+    public static int[] dealCards() {
+        int[] num = new int[52];
+        for (int i = 0; i < 52; i++) {
+            num[i] = (i % 13) + 1;
+        }
+        System.out.println(Arrays.toString(num));
+        return num;
+    }
 }
