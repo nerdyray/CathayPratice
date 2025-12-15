@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<head>
+    <title>期中測驗</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            var callApi = function callApi(url, param) {
+                return fetch(url, {
+                    method: 'post',
+                    body: JSON.stringify(param),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function (response) {
+                    return response.json();
+                });
+            }
+
+            document.getElementById('btnSubmit').addEventListener('click', function() {
+                var param = {
+                    id: '0000005',
+                    num: 4,
+                    keyword: 'ABCDE'
+                };
+                callApi('http://localhost:8080/midterm/demoCode', param).then(function (response) {
+                    console.log('return msg: ' + response.returnMessage);
+                    console.log('metro_fee' + response.metro_fee);
+                });
+            });
+
+        }
+
+    
+    </script>
+
+
+
+</head>
+<body>
+    請輸入 <input type="text" id="name" name="name">
+    <button type="button" id="btnSubmit">送出</button>
+</body>
+</html>
