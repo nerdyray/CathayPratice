@@ -1,7 +1,9 @@
 package cathaybk.Midterm.svc.impl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +36,17 @@ public class MidtermServiceImpl implements MidtermService {
         return null;
     }
 
-    public static int[] dealCards() {
+    public static int[]dealCards() {
         int[] num = new int[52];
+        List<Integer> deck = new ArrayList<>();
         for (int i = 0; i < 52; i++) {
-            num[i] = (i % 13) + 1;
+            num[i] = i + 1;
+            deck.add(i);
         }
+        Collections.shuffle(deck);
         System.out.println(Arrays.toString(num));
+                System.out.println(deck);
+
         return num;
     }
 }
