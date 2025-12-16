@@ -46,12 +46,28 @@ public class MidtermServiceImpl implements MidtermService {
 
     @Override
     public Map<String, Object> submit(Map<String, String> map) {
-        Map<Character, Integer> suitScoreMap = loadSuitScoreMap();
-        List<String> a = MidtermServiceImpl.pokerCard();
-        Map<Integer, List<String>> b = MidtermServiceImpl.dealCard1(4, a);
-        Map<Integer, Integer> scores = ranking(b, suitScoreMap);
+        Map<String, Object> result = new HashMap<>();
 
-        return null;
+        Map<Character, Integer> suitScoreMap = loadSuitScoreMap();
+        List<String> pokerSet = MidtermServiceImpl.pokerCard();
+        Map<Integer, List<String>> card = MidtermServiceImpl.dealCard1(4, pokerSet);
+        List<Map.Entry<Integer, Integer>> scores = ranking(card, suitScoreMap);
+        List<Map<String, Object>> players = new ArrayList<>();
+
+        //拿出在dealCard功能中分好的牌組。
+        for (Map.Entry<Integer, Integer> entry : scores) {
+            Integer player = entry.getKey();
+            Integer score = entry.getValue();
+            Map<String, Object> row = new HashMap<>();
+            row.put("player", player);
+            row.put("cards", card.get(player));
+            row.put("score", score);
+            players.add(row);
+            result.put("players", players);
+
+        }
+        System.out.println(result);
+        return result;
     }
 
     /**
@@ -114,13 +130,13 @@ public class MidtermServiceImpl implements MidtermService {
     }
 
     //計算每張牌的分數並排名
-    public static Map<Integer, Integer> ranking(Map<Integer, List<String>> resultMap, Map<Character, Integer> loadSuitScoreMap) {
+    public static List<Map.Entry<Integer, Integer>> ranking(Map<Integer, List<String>> resultMap, Map<Character, Integer> loadSuitScoreMap) {
         //計算分數，Map(玩家,總分)
         Map<Integer, Integer> playerMap = new HashMap<>();
         for (Map.Entry<Integer, List<String>> entry : resultMap.entrySet()) {
             int score = 0;
             List<String> cards = entry.getValue();
-            // 第二層迴圈拆解(分數A/B/C/D分別對應四種花色)
+            // 第二層迴圈拆解(分數S/H/D/C分別對應四種花色)
             for (String letter : cards) {
                 char suit = letter.charAt(0);
                 int rank = Integer.parseInt(letter.substring(1));
@@ -155,7 +171,7 @@ public class MidtermServiceImpl implements MidtermService {
         }
 
         System.out.println(list);//測試用
-        return playerMap;
+        return list;
 
     }
 }

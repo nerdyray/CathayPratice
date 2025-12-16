@@ -1,8 +1,16 @@
 <!DOCTYPE html>
+
 <head>
     <title>期中測驗</title>
     <script type="text/javascript">
-        window.onload = function() {
+        const suitNameMap = {
+            S: "黑桃",
+            H: "紅心",
+            D: "方塊",
+            C: "梅花"
+        };
+
+        window.onload = function () {
             var callApi = function callApi(url, param) {
                 return fetch(url, {
                     method: 'post',
@@ -15,28 +23,29 @@
                 });
             }
 
-            document.getElementById('btnSubmit').addEventListener('click', function() {
+            document.getElementById('btnSubmit').addEventListener('click', function () {
                 var param = {
-                    id: '0000005',
-                    num: 4,
-                    keyword: 'ABCDE'
+                    manCount: 4,
                 };
-                callApi('http://localhost:8080/midterm/demoCode', param).then(function (response) {
+                callApi('http://localhost:8080/midterm/submit', param).then(function (response) {
                     console.log('return msg: ' + response.returnMessage);
                     console.log('metro_fee' + response.metro_fee);
+                    console.log(response);
                 });
             });
 
         }
 
-    
+
     </script>
 
 
 
 </head>
+
 <body>
-    請輸入 <input type="text" id="name" name="name">
-    <button type="button" id="btnSubmit">送出</button>
+    <!-- 請輸入 <input type="text" id="name" name="name"> -->
+    <button type="button" id="btnSubmit">隨機抽牌</button>
 </body>
+
 </html>
