@@ -125,14 +125,15 @@ public class MidtermServiceImpl implements MidtermService {
             playerMap.put(entry.getKey(), score);
         }
 
-        //按玩家排序總分排序
+        //按總分排序
         List<Map.Entry<Integer, Integer>> list = new ArrayList<>(playerMap.entrySet());
         list.sort((e1, e2) -> e2.getValue() - e1.getValue());
+        //遍歷list
         for (Map.Entry<Integer, Integer> entry : list) {
             System.out.println( entry.getKey() + entry.getValue());//測試用
         }
 
-        System.out.println(playerMap);//測試用
+        System.out.println(list);//測試用
         return playerMap;
 
     }
