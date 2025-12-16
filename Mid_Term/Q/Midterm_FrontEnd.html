@@ -10,6 +10,46 @@
             C: "梅花"
         };
 
+
+        function formatCard(card) {
+            const suit = card.charAt(0);
+            const number = card.substring(1);
+            return suitNameMap[suit] + number;
+        }
+
+        function Render(players) {
+            //清空舊畫面
+            const cardDiv = document.getElementsByClassName('cardDeck')[0];
+            cardDiv.innerHTML = '';
+            const cardTable = document.createElement('Table');
+            // cardTable.className=('');
+            const headerRow = document.createElement('tr');
+            const rankTd = document.createElement('td');
+            rankTd.textContent = '排名';
+            const playerTd = document.createElement('td');
+            playerTd.textContent = '玩家';
+            const cardTd = document.createElement('td');
+            cardTd.textContent = '手牌';
+            const scoreTd = document.createElement('td');
+            scoreTd.textContent = '總分';
+            cardDiv.appendChild(cardTable);
+            cardTable.appendChild(headerRow);
+            headerRow.appendChild(rankTd)
+            headerRow.appendChild(playerTd);
+            headerRow.appendChild(cardTd);
+            headerRow.appendChild(scoreTd);
+            players.forEach((p, index) => {
+                const cardsText = p.cards.map(formatCard).join(', ');
+                const deckRow = document.createElement('tr');
+                deckRow.className = ('deckRow');
+                deckRow.innerHTML = `
+                <td>第 ${index + 1} 名</td>
+                <td>玩家 ${p.player}</td>
+                <td>${cardsText}</td>
+                <td>${p.score}</td>`;
+                cardTable.appendChild(deckRow);
+            });
+        }
         window.onload = function () {
             var callApi = function callApi(url, param) {
                 return fetch(url, {
@@ -28,11 +68,11 @@
                     manCount: 4,
                 };
                 callApi('http://localhost:8080/midterm/submit', param).then(function (response) {
-                    console.log('return msg: ' + response.returnMessage);
-                    console.log('metro_fee' + response.metro_fee);
                     console.log(response);
+                    Render(response.players);
                 });
             });
+
 
         }
 
@@ -46,6 +86,12 @@
 <body>
     <!-- 請輸入 <input type="text" id="name" name="name"> -->
     <button type="button" id="btnSubmit">隨機抽牌</button>
+    <div class="cardDeck">
+        <table class="cardTable">
+            <tr class="cardRow">
+            </tr>
+        </table>
+    </div>
 </body>
 
 </html>

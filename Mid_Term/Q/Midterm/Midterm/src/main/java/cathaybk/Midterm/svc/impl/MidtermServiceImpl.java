@@ -71,7 +71,8 @@ public class MidtermServiceImpl implements MidtermService {
     }
 
     /**
-     * 使用for迴圈得出0-51作為總數 Suits為四種花色，使用第二個迴圈把第一個迴圈的數字加上花色 回傳值為List
+     * 使用for迴圈得出0-51作為撲克牌總數
+     * Suits為四種花色(Spades,Hearts,Diamonds,Clubs)，使用第二個迴圈把第一個迴圈的數字加上花色 回傳值為List
      *
      * @param map
      * @return
@@ -84,34 +85,33 @@ public class MidtermServiceImpl implements MidtermService {
             num[i] = i;
         }
         for (int n : num) {
-            String suit = suits[n / 13];
-            int rank = (n % 13) + 1;
-            deck.add(suit + rank);
+            String suit = suits[n / 13];//一副牌四種花色
+            int rank = (n % 13) + 1;//把牌分成1-13
+            deck.add(suit + rank);//組合起來eg.(黑桃QS12)
         }
-        Collections.shuffle(deck);//先將排序打亂
+        Collections.shuffle(deck);//將排序打亂後續在固定四人的情況下就不用重新發牌
         // System.out.println(deck);
         // System.out.println();
         // System.out.println(deck);
-
         return deck;
     }
 
     /**
      * 發牌功能1
-     * 生成撲克牌的功能中就已經使用Collection.shuffle打亂排序，dealCard1功能中就使用SubList把已打亂的牌均分成四等份。
+     * 生成撲克牌的功能中就已經使用Collection.shuffle打亂排序，dealCard1功能中只需要使用SubList把已打亂的牌均分成四等份。
      *
      * @param manCount
      * @param deck
      */
     public static Map<Integer, List<String>> dealCard1(int manCount, List<String> deck) {
-        int resultSize = deck.size();
+        int resultSize = deck.size();//取得陣列長度
         Map<Integer, List<String>> resultMap = new HashMap<>();
         if (manCount == 0) {
             System.out.println("數字不能為零");
-        }
-        int counter = 0;
-        int result = resultSize / manCount;
-        int limit = result;
+        }//簡易防呆人數不可為零
+        int counter = 0;//計數器
+        int result = resultSize / manCount;//選擇分成幾等份,在這個方法中會將多餘的直接丟掉
+        int limit = result;//subList index尾端限制
         // int remainder = resultSize % manCount;
         for (int i = 1; i <= manCount; i++) {
             if (i == manCount) {
@@ -122,9 +122,9 @@ public class MidtermServiceImpl implements MidtermService {
             counter += result;
             limit = result + counter;
         }
-
-        for (Map.Entry<Integer, List<String>> entry : resultMap.entrySet()) {
-            System.out.println(entry.getKey() + " = " + entry.getValue());
+        //印出結果
+        for (Map.Entry<Integer, List<String>> e : resultMap.entrySet()) {
+            System.out.println(e.getKey() + " = " + e.getValue());
         }
         return resultMap;
     }
@@ -143,21 +143,6 @@ public class MidtermServiceImpl implements MidtermService {
 
                 int multiplier = loadSuitScoreMap.get(suit);
                 score += rank * multiplier;
-                // //計算加權後的總分
-                // switch (suit) {
-                //     case 'A':
-                //         score += rank * 6;
-                //         break;
-                //     case 'B':
-                //         score += rank * 5;
-                //         break;
-                //     case 'C':
-                //         score += rank * 3;
-                //         break;
-                //     default:
-                //         score += rank * 2;
-                //         break;
-                // }
             }
             playerMap.put(entry.getKey(), score);
         }
@@ -166,10 +151,9 @@ public class MidtermServiceImpl implements MidtermService {
         List<Map.Entry<Integer, Integer>> list = new ArrayList<>(playerMap.entrySet());
         list.sort((e1, e2) -> e2.getValue() - e1.getValue());
         //遍歷list
-        for (Map.Entry<Integer, Integer> entry : list) {
-            System.out.println(entry.getKey() + entry.getValue());//測試用
+        for (Map.Entry<Integer, Integer> e : list) {
+            System.out.println(e.getKey() + e.getValue());//測試用
         }
-
         System.out.println(list);//測試用
         return list;
 
