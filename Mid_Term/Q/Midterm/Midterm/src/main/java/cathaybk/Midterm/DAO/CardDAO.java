@@ -25,11 +25,10 @@ public class CardDAO {
     
     public List<Map<String,Object>> getCards() {
         List<Map<String, Object>> cards = new ArrayList<>();
-        String SelectSql = "select id, code, name, value from poker";
+        String SelectSql = "select code, name, value from poker";
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(SelectSql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("id", rs.getInt("id"));
                 map.put("code", rs.getString("code"));
                 map.put("name", rs.getString("name"));
                 map.put("value", rs.getInt("value"));

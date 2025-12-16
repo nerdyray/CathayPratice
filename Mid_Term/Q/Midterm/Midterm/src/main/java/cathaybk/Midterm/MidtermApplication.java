@@ -15,7 +15,7 @@ public class MidtermApplication {
 		SpringApplication.run(MidtermApplication.class, args);
 		List<String> a=MidtermServiceImpl.pokerCard();
 		Map<Integer,List<String>> b =MidtermServiceImpl.dealCard1(4, a);
-		MidtermServiceImpl.ranking(b);
+
 	}
 
 }

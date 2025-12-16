@@ -3,17 +3,31 @@ package cathaybk.Midterm.svc.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
+import cathaybk.Midterm.DAO.CardDAO;
 import cathaybk.Midterm.svc.MidtermService;
 
 @Service
 public class MidtermServiceImpl implements MidtermService {
+
+    private final CardDAO cardDAO;
+
+    public MidtermServiceImpl(CardDAO cardDAO) {
+        this.cardDAO = cardDAO;
+    }
+
+    private Map<Character, Integer> loadSuitScoreMap() {
+        List<Map<String, Object>> suitList = cardDAO.getCards();
+        Map<Character, Integer> map = new HashMap<>();
+        for (Map<String, Object> row : suitList) {
+            map.put(row.get("code").toString().charAt(0),
+                    (int) row.get("value"));
+        }
+        return map;
+    }
 
     @Override
     public Map<String, Object> demoCode(Map<String, String> demoMap) {
@@ -32,6 +46,11 @@ public class MidtermServiceImpl implements MidtermService {
 
     @Override
     public Map<String, Object> submit(Map<String, String> map) {
+        Map<Character, Integer> suitScoreMap = loadSuitScoreMap();
+        List<String> a = MidtermServiceImpl.pokerCard();
+        Map<Integer, List<String>> b = MidtermServiceImpl.dealCard1(4, a);
+        Map<Integer, Integer> scores = ranking(b, suitScoreMap);
+
         return null;
     }
 
@@ -44,7 +63,7 @@ public class MidtermServiceImpl implements MidtermService {
     public static List<String> pokerCard() {
         List<String> deck = new ArrayList<>();
         int[] num = new int[52];
-        String[] suits = {"A", "B", "C", "D"};
+        String[] suits = {"S", "H", "D", "C"};
         for (int i = 0; i < 52; i++) {
             num[i] = i;
         }
@@ -95,7 +114,7 @@ public class MidtermServiceImpl implements MidtermService {
     }
 
     //計算每張牌的分數並排名
-    public static Map<Integer, Integer> ranking(Map<Integer, List<String>> resultMap) {
+    public static Map<Integer, Integer> ranking(Map<Integer, List<String>> resultMap, Map<Character, Integer> loadSuitScoreMap) {
         //計算分數，Map(玩家,總分)
         Map<Integer, Integer> playerMap = new HashMap<>();
         for (Map.Entry<Integer, List<String>> entry : resultMap.entrySet()) {
@@ -104,23 +123,25 @@ public class MidtermServiceImpl implements MidtermService {
             // 第二層迴圈拆解(分數A/B/C/D分別對應四種花色)
             for (String letter : cards) {
                 char suit = letter.charAt(0);
-                String numberPart = letter.substring(1);
-                int rank = Integer.parseInt(numberPart);
-                //計算加權後的總分
-                switch (suit) {
-                    case 'A':
-                        score += rank * 6;
-                        break;
-                    case 'B':
-                        score += rank * 5;
-                        break;
-                    case 'C':
-                        score += rank * 3;
-                        break;
-                    default:
-                        score += rank * 2;
-                        break;
-                }
+                int rank = Integer.parseInt(letter.substring(1));
+
+                int multiplier = loadSuitScoreMap.get(suit);
+                score += rank * multiplier;
+                // //計算加權後的總分
+                // switch (suit) {
+                //     case 'A':
+                //         score += rank * 6;
+                //         break;
+                //     case 'B':
+                //         score += rank * 5;
+                //         break;
+                //     case 'C':
+                //         score += rank * 3;
+                //         break;
+                //     default:
+                //         score += rank * 2;
+                //         break;
+                // }
             }
             playerMap.put(entry.getKey(), score);
         }
@@ -130,7 +151,7 @@ public class MidtermServiceImpl implements MidtermService {
         list.sort((e1, e2) -> e2.getValue() - e1.getValue());
         //遍歷list
         for (Map.Entry<Integer, Integer> entry : list) {
-            System.out.println( entry.getKey() + entry.getValue());//測試用
+            System.out.println(entry.getKey() + entry.getValue());//測試用
         }
 
         System.out.println(list);//測試用
