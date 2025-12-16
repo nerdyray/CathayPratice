@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MidtermApplication<Midterm>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cathaybk.Midterm.MidtermApplication",
+            "projectName": "Midterm",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
