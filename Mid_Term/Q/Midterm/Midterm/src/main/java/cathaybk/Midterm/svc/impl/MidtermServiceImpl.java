@@ -39,7 +39,7 @@ public class MidtermServiceImpl implements MidtermService {
         } catch (Exception e) {
             throw new IllegalArgumentException("manCount must be a number");
         }
-        if (manCount <= 2) {
+        if (manCount < 2) {
             throw new IllegalArgumentException("manCount must be greater than 2");
         }
 
@@ -99,7 +99,6 @@ public class MidtermServiceImpl implements MidtermService {
             result.put("players", players);
 
         }
-        System.out.println(result);
         return result;
     }
 
