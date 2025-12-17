@@ -16,16 +16,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public class CardDAO {
-
+    //宣告資料庫
     private final DataSource dataSource;
-    
+    //建立連線
     public CardDAO(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-    
+    //取得資料
     public List<Map<String,Object>> getCards() {
         List<Map<String, Object>> cards = new ArrayList<>();
+        //SQL指令
         String SelectSql = "select code, name, value from poker";
+        //Preparestatement 建立連線
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(SelectSql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Map<String, Object> map = new LinkedHashMap<>();

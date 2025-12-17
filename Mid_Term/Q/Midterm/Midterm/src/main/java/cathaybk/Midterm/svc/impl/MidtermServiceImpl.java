@@ -67,7 +67,7 @@ public class MidtermServiceImpl implements MidtermService {
         //調用牌組
         List<String> pokerSet = MidtermServiceImpl.pokerCard();
         //使用方法2發牌
-        Map<Integer, List<String>> card = MidtermServiceImpl.dealCard2(manCount, pokerSet);
+        Map<Integer, List<String>> card = MidtermServiceImpl.LoopDealCard(manCount, pokerSet);
         //ranking總分並排名
         List<Map.Entry<Integer, Integer>> scores = ranking(card, suitScoreMap);
         //建立玩家List
@@ -98,7 +98,7 @@ public class MidtermServiceImpl implements MidtermService {
         //調用牌組
         List<String> pokerSet = MidtermServiceImpl.pokerCard();
         //使用方法2發牌，參加遊戲的人數寫死
-        Map<Integer, List<String>> card = MidtermServiceImpl.dealCard1(4, pokerSet);
+        Map<Integer, List<String>> card = MidtermServiceImpl.FixedDealCard(4, pokerSet);
         //ranking總分並排名
         List<Map.Entry<Integer, Integer>> scores = ranking(card, suitScoreMap);
         //建立玩家List
@@ -149,12 +149,12 @@ public class MidtermServiceImpl implements MidtermService {
 
     /**
      * 發牌功能1
-     * 生成撲克牌的功能中就已經使用Collection.shuffle打亂排序，dealCard1功能中只需要使用SubList把已打亂的牌均分成四等份。
+     * 生成撲克牌的功能中就已經使用Collection.shuffle打亂排序，FixedDealCard功能中只需要使用SubList把已打亂的牌均分成四等份。
      *
      * @param manCount
      * @param deck
      */
-    public static Map<Integer, List<String>> dealCard1(int manCount, List<String> deck) {
+    public static Map<Integer, List<String>> FixedDealCard(int manCount, List<String> deck) {
         //取得陣列長度
         int resultSize = deck.size();
         int counter = 0;
@@ -184,7 +184,7 @@ public class MidtermServiceImpl implements MidtermService {
      * @param deck
      * @return
      */
-    public static Map<Integer, List<String>> dealCard2(int manCount, List<String> deck) {
+    public static Map<Integer, List<String>> LoopDealCard(int manCount, List<String> deck) {
         Map<Integer, List<String>> resultMap = new HashMap<>();
         //初始化Key，(Map(i,List<String>))
         for (int i = 1; i <= manCount; i++) {
