@@ -82,7 +82,6 @@
                     manCount: 4,
                 };
                 callApi('http://localhost:8080/midterm/submit', param).then(function (response) {
-                    console.log(response);
                     Render(response.players);
                 });
             });
@@ -114,7 +113,6 @@
                     return;
                 }
                 callApi('http://localhost:8080/midterm/demoCode', param).then(function (response) {
-                    console.log(response);
                     Render(response.players);
                 });
             });
