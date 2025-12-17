@@ -18,6 +18,7 @@
         }
 
         function Render(players) {
+
             //清空舊畫面
             const cardDiv = document.getElementsByClassName('cardDeck')[0];
             cardDiv.innerHTML = '';
@@ -73,6 +74,29 @@
                 });
             });
 
+        //按鈕輸入
+            document.getElementById('inputSubmit').addEventListener('click', function () {
+                //輸入驗證
+                const manCountValue = document.getElementById('manCount').value.trim();
+                var param = {
+                    manCount: manCountValue,
+                };
+                if (manCountValue === '') {
+                    alert('請輸入人數');
+                }
+                manCount = Number(manCountValue);
+                if (manCount > 52 || manCount < 2) {
+                    alert('人數必須小於52且大於1');
+                }
+                if (Number.isNaN(manCount)) {
+                    alert('請輸入數字');
+                }
+                callApi('http://localhost:8080/midterm/demoCode', param).then(function (response) {
+                    console.log(response);
+                    Render(response.players);
+                });
+            });
+
 
         }
 
@@ -89,6 +113,16 @@
     <div class="cardDeck">
         <table class="cardTable">
             <tr class="cardRow">
+            </tr>
+        </table>
+    </div>
+
+    <!-- 手動輸入人數 -->
+    請輸入 <input type="text" id="manCount">
+    <button type="button" id="inputSubmit">抽牌</button>
+    <div class="cardDeck1">
+        <table class="cardTable1">
+            <tr class="cardRow1">
             </tr>
         </table>
     </div>

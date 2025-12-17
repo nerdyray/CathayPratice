@@ -31,6 +31,39 @@ public class MidtermServiceImpl implements MidtermService {
 
     @Override
     public Map<String, Object> demoCode(Map<String, String> demoMap) {
+        Map<String, Object> result = new HashMap<>();
+        int manCount;
+        try {
+            manCount = Integer.parseInt(demoMap.get("manCount"));
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("manCount must be a number");
+        }
+        if (manCount <= 2) {
+            throw new IllegalArgumentException("manCount must be greater than 2");
+        }
+
+        if (manCount > 52) {
+            throw new IllegalArgumentException("manCount cannot exceed 52");
+        }
+        Map<Character, Integer> suitScoreMap = loadSuitScoreMap();
+        List<String> pokerSet = MidtermServiceImpl.pokerCard();
+        Map<Integer, List<String>> card = MidtermServiceImpl.dealCard2(manCount, pokerSet);
+        List<Map.Entry<Integer, Integer>> scores = ranking(card, suitScoreMap);
+        List<Map<String, Object>> players = new ArrayList<>();
+
+        //拿出在dealCard功能中分好的牌組。
+        for (Map.Entry<Integer, Integer> entry : scores) {
+            Integer player = entry.getKey();
+            Integer score = entry.getValue();
+            Map<String, Object> row = new HashMap<>();
+            row.put("player", player);
+            row.put("cards", card.get(player));
+            row.put("score", score);
+            players.add(row);
+            result.put("players", players);
+
+        }
         // String id = demoMap.get("id");
         // String keyword = demoMap.get("keyword");
         // System.err.println("id: " + id);
@@ -41,7 +74,7 @@ public class MidtermServiceImpl implements MidtermService {
         // rtnMap.put("returnMessage", "驗證成功");
         // rtnMap.put("metro_fee", 100);
         // rtnMap.put("pokerA", new ArrayList<>());
-        return null;
+        return result;
     }
 
     @Override
@@ -125,6 +158,31 @@ public class MidtermServiceImpl implements MidtermService {
         //印出結果
         for (Map.Entry<Integer, List<String>> e : resultMap.entrySet()) {
             System.out.println(e.getKey() + " = " + e.getValue());
+        }
+        return resultMap;
+    }
+
+    /**
+     * 第二種發牌邏輯，當人數不能被整除時就循環發放
+     * @param manCount
+     * @param deck
+     * @return
+     */
+    public static Map<Integer, List<String>> dealCard2(int manCount, List<String> deck) {
+        Map<Integer, List<String>> resultMap = new HashMap<>();
+        //初始化Key，(Map(i,List<String>))
+        for (int i = 1; i <= manCount; i++) {
+
+            resultMap.put(i, new ArrayList<>());
+        }
+        //把撲克牌循環發給玩家
+        int count = 1;//計數器
+        for (String c : deck) {
+            resultMap.get(count).add(c);
+            count++;
+            if (count > manCount) {
+                count = 1;//超過人數時就歸零計數
+            }
         }
         return resultMap;
     }

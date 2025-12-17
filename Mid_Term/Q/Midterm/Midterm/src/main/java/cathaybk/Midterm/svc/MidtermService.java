@@ -5,7 +5,7 @@ import java.util.Map;
 public interface MidtermService {
 
     /**
-     * 範例程式
+     * 手動送出人數
      * @param map
      * @return
      */
@@ -16,5 +16,5 @@ public interface MidtermService {
      * @param map
      * @return
      */
-    Map<String, Object> submit(Map<String, String> map);
+    Map<String, Object> submit(Map<String, String> demoMap);
 }

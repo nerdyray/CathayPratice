@@ -38,8 +38,8 @@ public class MidtermController {
 
     @ResponseBody
     @PostMapping(value = "/demoCode")
-    public ResponseEntity<Map<String, Object>> demoCode(@RequestBody Map<String, String> map) {
-        return new ResponseEntity<>(midtermService.demoCode(map), HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> demoCode(@RequestBody Map<String, String> demoMap) {
+        return new ResponseEntity<>(midtermService.demoCode(demoMap), HttpStatus.OK);
     }
 
     @ResponseBody
