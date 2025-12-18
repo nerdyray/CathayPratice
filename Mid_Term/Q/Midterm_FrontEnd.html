@@ -94,7 +94,7 @@
             //按鈕輸入
             document.getElementById('inputSubmit').addEventListener('click', function () {
                 //輸入驗證
-                const manCountValue = document.getElementById('manCount').value.trim();
+                manCountValue = document.getElementById('manCount').value.trim();
 
                 var param = {
                     manCount: manCountValue,
@@ -129,6 +129,7 @@
 
 <body>
     <!-- 請輸入 <input type="text" id="name" name="name"> -->
+    <header>期中作業－抽牌遊戲</header>
     <button type="button" id="btnSubmit">隨機抽牌</button>
     <div class="cardDeck">
         <table class="cardTable">
@@ -138,7 +139,7 @@
     </div>
 
     <!-- 手動輸入人數 -->
-    請輸入 <input type="text" id="manCount">
+    請輸入人數<input type="text" id="manCount">
     <button type="button" id="inputSubmit">抽牌</button>
     <button type="button" id="clear">清除畫面</button>
 
@@ -149,5 +150,14 @@
         </table>
     </div>
 </body>
+
+
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
 
 </html>
