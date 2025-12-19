@@ -5,14 +5,14 @@ import java.util.Map;
 public interface MidtermService {
 
     /**
-     * 手動送出人數
+     * 加分題:手動選擇送出人數
      * @param map
      * @return
      */
     Map<String, Object> demoCode(Map<String, String> map);
 
     /**
-     * 送出
+     * 固定玩家4人送出
      * @param map
      * @return
      */

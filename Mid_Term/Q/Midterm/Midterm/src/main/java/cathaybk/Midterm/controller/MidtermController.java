@@ -35,13 +35,13 @@ public class MidtermController {
     public List<Map<String, Object>> getCards() {
         return cardDAO.getCards();
     }
-    //加分題方法端點
+    //加分題方法
     @ResponseBody
     @PostMapping(value = "/demoCode")
     public ResponseEntity<Map<String, Object>> demoCode(@RequestBody Map<String, String> demoMap) {
         return new ResponseEntity<>(midtermService.demoCode(demoMap), HttpStatus.OK);
     }
-    //一般方法端點
+    //一般方法
     @ResponseBody
     @PostMapping(value = "/submit")
     public ResponseEntity<Map<String, Object>> submit(@RequestBody Map<String, String> map) {
