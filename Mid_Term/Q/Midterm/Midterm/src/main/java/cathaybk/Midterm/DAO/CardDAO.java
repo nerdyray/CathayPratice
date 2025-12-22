@@ -29,7 +29,8 @@ public class CardDAO {
         
         List<Map<String, Object>> cards = new ArrayList<>(); 
         //Preparestatement 建立連線
-        try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(SELECT_SQL); ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(SELECT_SQL);
+         ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Map<String, Object> map = new LinkedHashMap<>();
                 //取得花色
