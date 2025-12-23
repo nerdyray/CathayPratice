@@ -1,13 +1,19 @@
 package com.example.demo.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.CarRequest;
+import com.example.demo.dto.CarResponse;
 import com.example.demo.entity.Car;
 import com.example.demo.service.CarService;
+
 
 @RestController
 public class CarController {
@@ -19,8 +25,15 @@ public class CarController {
     public List<Car> queryAllCar() {
         return carService.queryAllCar();
     }
-        @RequestMapping(value = "/insertCar", method = RequestMethod.GET)
-        public void insertCar() {
-            carService.insertCar();
+
+    @RequestMapping(value = "/insertCar", method = RequestMethod.GET)
+    public void insertCar() {
+        carService.insertCar();
     }
+
+    @RequestMapping(value="/query", method=RequestMethod.POST)
+    public CarResponse queryCar(@RequestBody CarRequest carRequest) {
+        return carService.queryCar(carRequest);
+    }
+    
 }
