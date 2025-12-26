@@ -7,5 +7,5 @@ import com.example.pratice.entity.CustomerEntity;
 
 @Repository
 public interface CustomerRepo extends JpaRepository<CustomerEntity, Object> {
-
+    
 }

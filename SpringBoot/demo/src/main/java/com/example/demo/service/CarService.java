@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.CarRequest;
 import com.example.demo.dto.CarResponse;
 import com.example.demo.entity.Car;
-import com.example.demo.entity.Emp;
 
 @Service
 public interface CarService {

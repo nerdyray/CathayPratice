@@ -12,7 +12,7 @@ public class CustomerRequest {
     @JsonProperty("Name")
     private String name;
 
-    @JsonProperty("Birthdat")
+    @JsonProperty("Birthday")
     private Integer birthday;
 
     @JsonProperty("Sex")
