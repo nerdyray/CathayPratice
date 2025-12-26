@@ -31,12 +31,10 @@ public class CustomerServiceImpl implements CustomerService {
                 .sex(customerRequest.getSex())
                 .id(customerRequest.getId())
                 .build();
-        // 建封包
+        // 建封包(Response{TRANQ{}})
         customerResponse.setName(customerRequest.getName());
 
-        // int birthday = customerRequest.setBirthday();
-        // String sex = customerRequest.setSex();
-        // String id = customerRequest.setId();
+       
         return customerResponse;
     }
 
