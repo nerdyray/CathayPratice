@@ -1,7 +1,9 @@
 package com.example.pratice.svc;
 
 import java.util.List;
+
 import com.example.pratice.dto.CustomerRequest;
+import com.example.pratice.dto.CustomerResponse;
 import com.example.pratice.entity.CustomerEntity;
 
 /**
@@ -9,7 +11,7 @@ import com.example.pratice.entity.CustomerEntity;
  */
 public interface CustomerService {
 
-    CustomerEntity createCustomer(CustomerRequest customerRequest);
+    CustomerResponse createCustomer(CustomerRequest customerRequest);
 
     List<CustomerEntity> searchCustomer(Long id);
 

@@ -6,24 +6,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.pratice.dto.CustomerRequest;
+import com.example.pratice.dto.CustomerResponse;
 import com.example.pratice.entity.CustomerEntity;
 import com.example.pratice.repository.CustomerRepo;
 import com.example.pratice.svc.CustomerService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+
     @Autowired
     private CustomerRepo customerRepo;
-    @Override
-    public CustomerEntity createCustomer(CustomerRequest customerRequest) {
-        CustomerEntity customerEntity = new CustomerEntity();
-        String name = customerRequest.getName();
-        int birthday= customerRequest.getBirthday();
-        String sex = customerRequest.getSex();
-        String id =customerRequest.getId();
 
-        customerRepo.save(customerEntity);
-        return null;
+    @Override
+    public CustomerResponse createCustomer(CustomerRequest customerRequest) {
+        CustomerEntity customerEntity = new CustomerEntity();
+        CustomerResponse customerResponse = new CustomerResponse();
+        // 檢核
+
+        // 主要操作
+        customerEntity.setName(customerRequest.getName());
+        CustomerEntity.builder()
+                .name(customerRequest.getName())
+                .birthday(customerRequest.getBirthday())
+                .sex(customerRequest.getSex())
+                .id(customerRequest.getId())
+                .build();
+        // 建封包
+        customerResponse.setName(customerRequest.getName());
+
+        // int birthday = customerRequest.setBirthday();
+        // String sex = customerRequest.setSex();
+        // String id = customerRequest.setId();
+        return customerResponse;
     }
 
     @Override
