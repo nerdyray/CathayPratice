@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
         // 建封包(Response{TRANQ{}})
         customerResponse.setName(customerRequest.getName());
 
-       
+    
         return customerResponse;
     }
 
