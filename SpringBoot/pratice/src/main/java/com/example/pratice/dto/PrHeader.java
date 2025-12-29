@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class CustomerRequest<T>  {
-
-    @JsonProperty("TRANRQ")
-    private T tranrq;
-
+public class PrHeader {
+@JsonProperty("SID")
+private Long sid;
 
 }

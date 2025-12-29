@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.pratice.dto.CUSTT001Tranrq;
+import com.example.pratice.dto.CUSTT001Tranrs;
 import com.example.pratice.dto.CustomerRequest;
 import com.example.pratice.dto.CustomerResponse;
 import com.example.pratice.svc.CustomerService;
@@ -16,8 +18,8 @@ public class CustomerController {
     CustomerService customerService;
 
     @PostMapping("/newCustomer")
-    public CustomerResponse createCustomer(@RequestBody CustomerRequest customerRequest) {
-
+    public CustomerResponse<CUSTT001Tranrs> createCustomer(@RequestBody CustomerRequest<CUSTT001Tranrq> customerRequest) {
+        
         return customerService.createCustomer(customerRequest);
     }
 

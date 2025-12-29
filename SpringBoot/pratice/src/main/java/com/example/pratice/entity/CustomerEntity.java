@@ -1,5 +1,7 @@
 package com.example.pratice.entity;
 
+import java.io.Serial;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,14 +19,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CustomerEntity {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(name = "CUSTOMER_ID", unique = true, nullable = false)
-    private Long custmoter_ID;
+    @Column(name = "CUSTOMERId", unique = true, nullable = false)
+    private Long custmoterId;
 
     @Column(name = "NAME", length = 50)
     private String name;
 
-    @Column(name = "BIRTHDAY")
+    @Column(name = "BIRTHDAY", nullable = true)
     private Integer birthday;
 
     @Column(name = "SEX", length = 1)
