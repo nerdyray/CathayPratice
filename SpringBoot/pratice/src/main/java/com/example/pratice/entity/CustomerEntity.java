@@ -24,7 +24,7 @@ public class CustomerEntity {
 
     @Id
     @Column(name = "CUSTOMERId", unique = true, nullable = false)
-    private Long custmoterId;
+    private Long customerId;
 
     @Column(name = "NAME", length = 50)
     private String name;
@@ -35,6 +35,6 @@ public class CustomerEntity {
     @Column(name = "SEX", length = 1)
     private String sex;
 
-    @Column(name = "ID", length = 20)
+    @Column(name = "ID",unique = true, length = 20)
     private String id;
 }

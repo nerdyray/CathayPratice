@@ -6,16 +6,16 @@ import lombok.Data;
 
 @Data
 public class CUSTQ001TranrsDatas {
+
     @JsonProperty("CUSTOMERId")
-    private Long custmoterId;
+    private Long customerId;
     @JsonProperty("NAME")
     private String name;
     @JsonProperty("BIRTHDAY")
     private Integer birthday;
-    
     @JsonProperty("SEX")
     private String sex;
     @JsonProperty("ID")
     private String id;
-    
+
 }
