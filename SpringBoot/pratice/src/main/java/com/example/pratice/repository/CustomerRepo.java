@@ -7,15 +7,15 @@ import com.example.pratice.dto.CUSTT001Tranrs;
 import com.example.pratice.entity.CustomerEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.pratice.dto.CUSTQ001Tranrs;
 import com.example.pratice.dto.CustomerResponse;
-
 
 @Repository
 public interface CustomerRepo extends JpaRepository<CustomerEntity, Long> {
 
     boolean existsByCustomerId(Long customerId);
-    
-    CustomerResponse<CUSTQ001Tranrs> findById(String id);
+
+    Optional<CustomerEntity> findById(String id);
 }

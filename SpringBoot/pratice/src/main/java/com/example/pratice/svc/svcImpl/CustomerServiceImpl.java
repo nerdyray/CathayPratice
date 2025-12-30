@@ -67,16 +67,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse<CUSTQ001Tranrs> searchCustomer(String id) {
-        CustomerEntity customerEntity;
+        CustomerEntity customerEntity = customerRepo.findById(id);
         //組裝Datas
-        CUSTQ001TranrsDatas data = new CUSTQ001TranrsDatas();
-        customerEntity = CustomerEntity.builder()
-                .customerId(data.getCustomerId())
-                .name(data.getName())
-                .birthday(data.getBirthday())
-                .sex(data.getSex())
-                .id(data.getId())
-                .build();
+
         //組裝CUSTQ001Tranrs
         CUSTQ001Tranrs createTranrs = new CUSTQ001Tranrs();
         createTranrs.setMessage("Success");
