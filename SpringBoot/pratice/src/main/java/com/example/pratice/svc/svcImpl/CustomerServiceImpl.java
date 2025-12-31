@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
         /**
          * 新增查詢修改方法介面 CustomerId要以localDate+DateFormmater格式化
          */
-        //生成SID(當前時間)
+        // 生成SID(當前時間)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmSS");
         createHeader.setSid(Long.parseLong(formatter.format(LocalDateTime.now())));
         CustomerResponse<CUSTT001Tranrs> res = new CustomerResponse<>();
@@ -67,14 +67,23 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse<CUSTQ001Tranrs> searchCustomer(String id) {
-        CustomerEntity customerEntity = customerRepo.findById(id);
-        //組裝Datas
+        // 使用Optional檢查NPE
+        CustomerEntity customerEntity = customerRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("查無此客戶編號: " + id));
+        // 進入組裝DTO
+        CUSTQ001TranrsDatas data = new CUSTQ001TranrsDatas();
+        data.setCustomerId(customerEntity.getCustomerId());
+        data.setBirthday(customerEntity.getBirthday());
+        data.setId(customerEntity.getId());
+        data.setSex(customerEntity.getSex());
+        data.setName(customerEntity.getName());
+        List<CUSTQ001TranrsDatas> datasList = List.of(data);
 
-        //組裝CUSTQ001Tranrs
+        // 組裝CUSTQ001Tranrs
         CUSTQ001Tranrs createTranrs = new CUSTQ001Tranrs();
         createTranrs.setMessage("Success");
-        createTranrs.setDatas(data);
-        //組裝Header
+        createTranrs.setDatas(datasList);
+        // 組裝Header
         PrHeader createHeader = new PrHeader();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmSS");
         createHeader.setSid(Long.parseLong(formatter.format(LocalDateTime.now())));
