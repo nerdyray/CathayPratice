@@ -1,6 +1,7 @@
 package com.example.pratice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,13 +11,14 @@ import com.example.pratice.dto.CUSTT001Tranrq;
 import com.example.pratice.dto.CUSTT001Tranrs;
 import com.example.pratice.dto.CustomerRequest;
 import com.example.pratice.dto.CustomerResponse;
+import com.example.pratice.exception.DataNotFoundException;
+import com.example.pratice.exception.ErrorInputException;
 import com.example.pratice.svc.CustomerService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.pratice.dto.CUSTQ001Tranrs;
 
@@ -29,8 +31,11 @@ public class CustomerController {
 
     @PostMapping("/newCustomer")
     public CustomerResponse<CUSTT001Tranrs> createCustomer(
-            @Valid @RequestBody CustomerRequest<CUSTT001Tranrq> customerRequest) {
-
+            @Valid @RequestBody CustomerRequest<CUSTT001Tranrq> customerRequest, Errors err)
+            throws ErrorInputException, DataNotFoundException {
+        if (err.hasErrors()) {
+            throw new ErrorInputException();
+        }
         return customerService.createCustomer(customerRequest);
     }
 

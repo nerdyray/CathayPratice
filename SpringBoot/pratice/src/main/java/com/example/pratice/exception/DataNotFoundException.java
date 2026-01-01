@@ -1,5 +1,6 @@
 package com.example.pratice.exception;
 
-public class ErrorInputException extends Exception {
+public class DataNotFoundException extends Exception {
     private static final long serialVersionUID = 1L;
+
 }

@@ -19,6 +19,7 @@ import com.example.pratice.dto.CustomerRequest;
 import com.example.pratice.dto.CustomerResponse;
 import com.example.pratice.dto.PrHeader;
 import com.example.pratice.entity.CustomerEntity;
+import com.example.pratice.exception.ErrorInputException;
 import com.example.pratice.repository.CustomerRepo;
 import com.example.pratice.svc.CustomerService;
 
@@ -29,7 +30,8 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepo customerRepo;
 
     @Override
-    public CustomerResponse<CUSTT001Tranrs> createCustomer(CustomerRequest<CUSTT001Tranrq> customerRequest) {
+    public CustomerResponse<CUSTT001Tranrs> createCustomer(CustomerRequest<CUSTT001Tranrq> customerRequest)
+            throws ErrorInputException {
         String bankNum = "11111";
         String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + bankNum;
 
@@ -37,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         CUSTT001Tranrq data = customerRequest.getTranrq();
         // 檢核各項輸入
         if (customerRepo.existsByCustomerId(data.getCustomerId())) {
-            throw new InputMismatchException("客戶資料已存在");
+            throw new ErrorInputException();
         }
         // 主要操作
         customerEntity = CustomerEntity.builder()
