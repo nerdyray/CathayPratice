@@ -1,5 +1,7 @@
 package com.example.pratice.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -12,7 +14,7 @@ public class CUSTQ001TranrsDatas {
     @JsonProperty("NAME")
     private String name;
     @JsonProperty("BIRTHDAY")
-    private Integer birthday;
+    private LocalDate birthday;
     @JsonProperty("SEX")
     private String sex;
     @JsonProperty("ID")

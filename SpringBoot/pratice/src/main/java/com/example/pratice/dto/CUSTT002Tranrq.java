@@ -1,5 +1,7 @@
 package com.example.pratice.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.Max;
@@ -11,7 +13,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CUSTT001Tranrq {
+public class CUSTT002Tranrq {
     @NotNull(message = "客戶編號不能為空")
     @Min(value = 1000000000000L, message = "客戶編號必須為 13 位數")
     @Max(value = 9999999999999L, message = "客戶編號長度超出限制")

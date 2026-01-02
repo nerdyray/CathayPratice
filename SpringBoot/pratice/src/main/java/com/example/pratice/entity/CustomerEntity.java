@@ -1,6 +1,7 @@
 package com.example.pratice.entity;
 
 import java.io.Serial;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,11 +31,11 @@ public class CustomerEntity {
     private String name;
 
     @Column(name = "BIRTHDAY", nullable = true)
-    private Integer birthday;
+    private LocalDate birthday;
 
     @Column(name = "SEX", length = 1)
     private String sex;
 
-    @Column(name = "ID",unique = true, length = 20)
+    @Column(name = "ID", unique = true, length = 20)
     private String id;
 }

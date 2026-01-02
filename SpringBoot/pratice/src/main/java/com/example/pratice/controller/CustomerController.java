@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pratice.dto.CUSTT001Tranrq;
 import com.example.pratice.dto.CUSTT001Tranrs;
+import com.example.pratice.dto.CUSTT002Tranrq;
+import com.example.pratice.dto.CUSTT002Tranrs;
+import com.example.pratice.dto.CUSTT003Tranrs;
 import com.example.pratice.dto.CustomerRequest;
 import com.example.pratice.dto.CustomerResponse;
 import com.example.pratice.exception.DataNotFoundException;
@@ -34,14 +37,34 @@ public class CustomerController {
             @Valid @RequestBody CustomerRequest<CUSTT001Tranrq> customerRequest, Errors err)
             throws ErrorInputException, DataNotFoundException {
         if (err.hasErrors()) {
+            System.err.println(err);
             throw new ErrorInputException();
         }
         return customerService.createCustomer(customerRequest);
     }
 
-    @GetMapping("/{id}")
-    public CustomerResponse<CUSTQ001Tranrs> searchCustomer(@Valid @PathVariable("id") String id) {
-        return customerService.searchCustomer(id);
+    @GetMapping("/{CustomerId}")
+    public CustomerResponse<CUSTQ001Tranrs> searchCustomer(@Valid @PathVariable("CustomerId") Long customerId)
+            throws ErrorInputException, DataNotFoundException {
+
+        return customerService.searchCustomer(customerId);
+    }
+
+    @PostMapping("/updateCustomer")
+    public CustomerResponse<CUSTT002Tranrs> updateCustomer(
+            @Valid @RequestBody CustomerRequest<CUSTT002Tranrq> customerRequest,
+            Errors err) throws ErrorInputException, DataNotFoundException {
+        if (err.hasErrors()) {
+            throw new ErrorInputException();
+        }
+        return customerService.updateCustomer(customerRequest);
+    }
+
+    @GetMapping("/deleteCustomer/{CustomerId}")
+    public CustomerResponse<CUSTT003Tranrs> deleteCustomer(@Valid @PathVariable("CustomerId") Long customerId)
+            throws ErrorInputException, DataNotFoundException {
+
+        return customerService.deleteCustomer(customerId);
     }
 
 }
