@@ -1,5 +1,6 @@
 package com.example.pratice.controller.advice;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,16 +15,19 @@ import com.example.pratice.dto.PrHeader;
 import com.example.pratice.exception.DataNotFoundException;
 import com.example.pratice.exception.ErrorInputException;
 
-import io.swagger.v3.oas.annotations.Hidden;
-
+/**
+ * 例外處理
+ */
 @ControllerAdvice
-public class WebExceptionHandler {
+public class WebExceptionHandler implements Serializable {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmSS");
+
     @ResponseBody
     @ExceptionHandler(ErrorInputException.class)
+    // 錯誤輸入例外拋出
     public CustomerResponse handleErrroInputException() {
         // 建立PrHeader
         PrHeader createHeader = new PrHeader();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmSS");
         // PrHeader統一SID
         createHeader.setSid(Long.parseLong(formatter.format(LocalDateTime.now())));
         // CustomerTT001的Tranrs
@@ -37,10 +41,10 @@ public class WebExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    // 輸入型別錯誤
     public CustomerResponse handleMethodArgumentTypeMismatchException() {
         // 建立PrHeader
         PrHeader createHeader = new PrHeader();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmSS");
         // PrHeader統一SID
         createHeader.setSid(Long.parseLong(formatter.format(LocalDateTime.now())));
         // CustomerTT001的Tranrs
@@ -54,6 +58,7 @@ public class WebExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(DataNotFoundException.class)
+    // 查無資料例外拋出
     public CustomerResponse handleDataNotFoundException(DataNotFoundException ex) {
         // 建立PrHeader
         PrHeader createHeader = new PrHeader();

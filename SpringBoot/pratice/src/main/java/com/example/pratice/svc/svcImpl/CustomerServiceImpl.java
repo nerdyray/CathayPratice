@@ -26,6 +26,11 @@ import com.example.pratice.exception.DataNotFoundException;
 import com.example.pratice.exception.ErrorInputException;
 import com.example.pratice.repository.CustomerRepo;
 import com.example.pratice.svc.CustomerService;
+import jakarta.transaction.Transactional;
+
+/**
+ * 方法實作
+ */
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -36,10 +41,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepo customerRepo;
 
+    // @Autowired
+    // private ObjectMapper om;
+    @Transactional
     @Override
     public CustomerResponse<CUSTT001Tranrs> createCustomer(CustomerRequest<CUSTT001Tranrq> customerRequest)
             throws ErrorInputException {
-        String bankNum = "11111";
+        // 可以生成日期為前四碼，後五碼為行編的CustomerId
+        // String bankNum = "11111";
         // String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
         // + bankNum;
 
@@ -49,6 +58,10 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerRepo.existsByCustomerId(data.getCustomerId())) {
             throw new ErrorInputException();
         }
+        // ObjectMapper映射轉型Entity
+        // CUSTT001Tranrq tranrq = customerRequest.getTranrq();
+        // customerEntity=om.convertValue(tranrq, CustomerEntity.class);
+
         // 主要操作
         customerEntity = CustomerEntity.builder()
                 .customerId(data.getCustomerId())
@@ -104,6 +117,7 @@ public class CustomerServiceImpl implements CustomerService {
         return res;
     }
 
+    @Transactional
     @Override
     public CustomerResponse<CUSTT002Tranrs> updateCustomer(CustomerRequest<CUSTT002Tranrq> customerRequest)
             throws ErrorInputException, DataNotFoundException {
@@ -129,6 +143,7 @@ public class CustomerServiceImpl implements CustomerService {
         return res;
     }
 
+    @Transactional
     @Override
     public CustomerResponse<CUSTT003Tranrs> deleteCustomer(Long customerId)
             throws ErrorInputException, DataNotFoundException {

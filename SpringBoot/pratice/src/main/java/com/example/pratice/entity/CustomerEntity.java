@@ -1,6 +1,7 @@
 package com.example.pratice.entity;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -18,7 +19,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerEntity {
+// *
+// 資料庫DB */
+public class CustomerEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

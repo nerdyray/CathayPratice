@@ -13,6 +13,9 @@ import com.example.pratice.dto.CustomerResponse;
 import com.example.pratice.exception.DataNotFoundException;
 import com.example.pratice.exception.ErrorInputException;
 
+/**
+ * 方法介面
+ */
 public interface CustomerService {
 
         CustomerResponse<CUSTT001Tranrs> createCustomer(CustomerRequest<CUSTT001Tranrq> customerRequest)

@@ -12,6 +12,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/**
+ * 新增客戶的資料請求
+ */
 @Data
 public class CUSTT002Tranrq {
     @NotNull(message = "客戶編號不能為空")
