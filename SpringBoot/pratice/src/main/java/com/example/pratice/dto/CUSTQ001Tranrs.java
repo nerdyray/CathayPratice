@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import lombok.Data;
 
+/**
+ * Tranrq的資料
+ */
 @Data
 @JsonPropertyOrder({ "MESSAGE", "DATAS" })
 public class CUSTQ001Tranrs {

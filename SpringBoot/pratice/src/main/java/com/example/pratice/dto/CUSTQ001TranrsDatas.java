@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+/**
+ * Data內的資料
+ */
 @Data
 public class CUSTQ001TranrsDatas {
 
