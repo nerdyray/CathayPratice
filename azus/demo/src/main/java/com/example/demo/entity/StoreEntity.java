@@ -1,0 +1,84 @@
+package com.example.demo.entity;
+
+import java.time.LocalDateTime; // 如果是 Spring Boot 2，請改用 javax.persistence
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "TB_STORE")
+
+public class StoreEntity {
+
+    /**
+     * 店家ID (Primary Key) 注意：您的 JSON 中沒有這個欄位，但在 DB 是 Not Null。 存檔前必須手動生成 (例如
+     * S0016) 或設定生成策略。
+     */
+    @Id
+    @Column(name = "STORE_ID", length = 5, nullable = false)
+    private String storeId;
+
+    /**
+     * 店家名稱 對應 JSON: "store_name"
+     */
+    @Column(name = "STORE_NAME", length = 20, nullable = false)
+    private String storeName;
+
+    /**
+     * 負責人 對應 JSON: "owner"
+     */
+    @Column(name = "OWNER", length = 20)
+    private String owner;
+
+    /**
+     * 電話 對應 JSON: "tel"
+     */
+    @Column(name = "TEL", length = 20, nullable = false)
+    private String tel;
+
+    /**
+     * 傳真 對應 JSON: "fax"
+     */
+    @Column(name = "FAX", length = 20)
+    private String fax;
+
+    /**
+     * 手機 對應 JSON: "mobile"
+     */
+    @Column(name = "MOBILE", length = 20)
+    private String mobile;
+
+    /**
+     * 地址 對應 JSON: "address"
+     */
+    @Column(name = "ADDRESS", length = 200)
+    private String address;
+
+    /**
+     * 評價 對應 JSON: "evaluation"
+     */
+    @Column(name = "EVALUATION", length = 20)
+    private String evaluation;
+
+    /**
+     * 備註 對應 JSON: "remarks"
+     */
+    @Column(name = "REMARKS", length = 20)
+    private String remarks;
+
+    /**
+     * 異動時間 對應 JSON: "date" ("05/10/2021") 注意：需將 String 轉換為 LocalDateTime
+     */
+    @Column(name = "UPDATE_TIME")
+    private LocalDateTime updateTime;
+
+    /**
+     * 異動人員 JSON 中無此欄位，建議在 Service 層補上
+     */
+    @Column(name = "UPDATE_USER", length = 20)
+    private String updateUser;
+}
