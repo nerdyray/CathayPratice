@@ -1,4 +1,4 @@
-package com.store.demo.XXA_C_STORE.common;
+package com.store.demo.common;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
