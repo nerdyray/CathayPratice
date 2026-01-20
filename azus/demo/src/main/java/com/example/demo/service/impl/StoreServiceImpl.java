@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.demo.common.UserObject;
 import com.example.demo.dto.MwHeader;
 import com.example.demo.dto.StoreRequest;
@@ -10,8 +11,10 @@ import com.example.demo.dto.StoreResponse;
 import com.example.demo.dto.XXACSTORET002Tranrq;
 import com.example.demo.dto.XXACSTORET002Tranrs;
 import com.example.demo.entity.StoreEntity;
+import com.example.demo.exception.ErrorInputException;
 import com.example.demo.repo.StoreRepo;
 import com.example.demo.service.StoreService;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 @Transactional
@@ -22,11 +25,12 @@ public class StoreServiceImpl implements StoreService{
     private final StoreRepo storeRepo;
 private final UserObject userObject;
 @Override
-public StoreResponse<XXACSTORET002Tranrs> createStore(StoreRequest<XXACSTORET002Tranrq> storeRequest) {
+public StoreResponse<XXACSTORET002Tranrs> createStore(StoreRequest<XXACSTORET002Tranrq> storeRequest) throws ErrorInputException{
     StoreEntity storeEntity;
     XXACSTORET002Tranrq data=storeRequest.getTranrq();
     if(storeRepo.existsByStoreId(data.getStoreId())){
-        
+                    throw new ErrorInputException();
+
     }
     storeEntity = StoreEntity.builder()
     .storeId(data.getStoreId())          
