@@ -10,6 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,12 +28,9 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 public class StoreEntity {
 
-    /**
-     * 店家ID (Primary Key) 注意：您的 JSON 中沒有這個欄位，但在 DB 是 Not Null。 存檔前必須手動生成 (例如
-     * S0016) 或設定生成策略。
-     */
     @Id
     @Column(name = "STORE_ID", length = 5, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String storeId;
 
     /**

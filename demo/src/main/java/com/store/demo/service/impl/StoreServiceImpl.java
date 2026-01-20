@@ -3,6 +3,7 @@ package com.store.demo.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.demo.common.UserObject;
 import com.store.demo.dto.MwHeader;
 import com.store.demo.dto.StoreRequest;
 import com.store.demo.dto.StoreResponse;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class StoreServiceImpl implements StoreService {
     @Autowired
     private final StoreRepo storeRepo;
+    // private final UserObject userObject;
 
     @Override
     public StoreResponse<XXACSTORET002Tranrs> createStore(StoreRequest<XXACSTORET002Tranrq> storeRequest)
