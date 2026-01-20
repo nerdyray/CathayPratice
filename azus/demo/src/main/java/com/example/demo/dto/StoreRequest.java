@@ -13,8 +13,7 @@ public class StoreRequest<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @JsonProperty("MWHEADER")
-    private MWHEADER mwheader;
-    // @Valid
+    private MwHeader mwheader;
     @JsonProperty("TRANRQ")
     private T tranrq;
 }

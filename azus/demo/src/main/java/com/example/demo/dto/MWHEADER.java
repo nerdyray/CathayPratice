@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class MWHEADER implements Serializable {
+public class MwHeader implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
