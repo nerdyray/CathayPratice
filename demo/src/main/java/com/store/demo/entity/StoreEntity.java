@@ -31,7 +31,7 @@ public class StoreEntity {
     @Id
     @Column(name = "STORE_ID", length = 5, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String storeId;
+    private Integer storeId;
 
     /**
      * 店家名稱 對應 JSON: "store_name"

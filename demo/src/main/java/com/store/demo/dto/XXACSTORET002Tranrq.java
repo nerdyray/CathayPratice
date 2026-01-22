@@ -13,7 +13,7 @@ public class XXACSTORET002Tranrq implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @NotNull(message = "客戶編號不可為空")
-    private String storeId;
+    private Integer storeId;
     @NotNull(message = "姓名不可為空")
     @Size(min = 1, max = 20)
     private String storeName;
