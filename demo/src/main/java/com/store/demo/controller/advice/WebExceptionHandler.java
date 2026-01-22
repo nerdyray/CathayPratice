@@ -11,7 +11,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.store.demo.dto.MwHeader;
 import com.store.demo.dto.StoreResponse;
-import com.store.demo.dto.XXACSTORET002Tranrs;
+import com.store.demo.dto.T002Tranrs;
 import com.store.demo.exception.DataNotFoundException;
 import com.store.demo.exception.ErrorInputException;
 import com.store.demo.exception.UpdateFailedException;
@@ -29,12 +29,12 @@ public class WebExceptionHandler implements Serializable {
     public StoreResponse handleErrroInputException() {
         // 建立MwHeader
         // StoreTT001的Tranrs
-        XXACSTORET002Tranrs createTranrs = new XXACSTORET002Tranrs();
+        T002Tranrs createTranrs = new T002Tranrs();
         MwHeader createMwHeader = new MwHeader();
         createMwHeader.setMsgid("XXA-C-STORE002");
         createMwHeader.setReturncode("E0001");
         createMwHeader.setReturndesc("必填欄位不完整");
-        StoreResponse<XXACSTORET002Tranrs> res = new StoreResponse<>();
+        StoreResponse<T002Tranrs> res = new StoreResponse<>();
         res.setMwheader(createMwHeader);
         res.setTranrs(createTranrs);
         return res;
@@ -45,12 +45,12 @@ public class WebExceptionHandler implements Serializable {
     // 輸入型別錯誤
     public StoreResponse handleMethodArgumentTypeMismatchException() {
         // 建立PrHeader
-        XXACSTORET002Tranrs createTranrs = new XXACSTORET002Tranrs();
+        T002Tranrs createTranrs = new T002Tranrs();
         MwHeader createMwHeader = new MwHeader();
         createMwHeader.setMsgid("XXA-C-STORE002");
         createMwHeader.setReturncode("E0001");
         createMwHeader.setReturndesc("必填欄位不完整");
-        StoreResponse<XXACSTORET002Tranrs> res = new StoreResponse<>();
+        StoreResponse<T002Tranrs> res = new StoreResponse<>();
         res.setMwheader(createMwHeader);
         res.setTranrs(createTranrs);
         return res;
@@ -60,12 +60,12 @@ public class WebExceptionHandler implements Serializable {
     @ExceptionHandler(UpdateFailedException.class)
     // 查無資料例外拋出
     public StoreResponse handleDataNotFoundException(UpdateFailedException ex) {
-        XXACSTORET002Tranrs createTranrs = new XXACSTORET002Tranrs();
+        T002Tranrs createTranrs = new T002Tranrs();
         MwHeader createMwHeader = new MwHeader();
         createMwHeader.setMsgid("XXA-C-STORE002");
         createMwHeader.setReturncode("E002");
         createMwHeader.setReturndesc("更新失敗");
-        StoreResponse<XXACSTORET002Tranrs> res = new StoreResponse<>();
+        StoreResponse<T002Tranrs> res = new StoreResponse<>();
         res.setMwheader(createMwHeader);
         res.setTranrs(createTranrs);
         return res;

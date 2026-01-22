@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class XXACSTORET002Tranrq implements Serializable {
+public class T002Tranrq implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
