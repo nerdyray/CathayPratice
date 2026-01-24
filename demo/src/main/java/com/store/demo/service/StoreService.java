@@ -1,8 +1,5 @@
 package com.store.demo.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.store.demo.dto.Q001Tranrq;
 import com.store.demo.dto.Q001Tranrs;
 

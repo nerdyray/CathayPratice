@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.store.demo.common.UserObject;
 import com.store.demo.dto.MwHeader;
-import com.store.demo.dto.Q001TranrqPage;
+
 import com.store.demo.dto.Q001Tranrq;
 import com.store.demo.dto.Q001Tranrs;
 import com.store.demo.dto.Q001TranrsItems;
@@ -75,8 +75,15 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public StoreResponse<Q001Tranrs> findAllStore(StoreRequest<Q001Tranrq> storeRequest)
             throws ErrorInputException, DataNotFoundException {
-        Page<StoreEntity> entityPage = storeRepo.findAllByStoreName();
+        Q001Tranrq data = storeRequest.getTranrq();
+        int pageNumber = data.getPage().getPageNumber();
+        int pageSize = data.getPage().getPageSize();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        // 決定要用哪種查詢 (解決 null 查詢條件問題)
+        String searchName = data.getStoreName(); // 從 DTO 拿名字
+        Page<StoreEntity> entityPage = storeRepo.findAllByStoreName(searchName, pageable);
         if (entityPage.isEmpty()) {
+            throw new DataNotFoundException();
         }
         // 使用 map + convertValue
         // 組裝Q001TranrsItems
@@ -96,6 +103,7 @@ public class StoreServiceImpl implements StoreService {
         createTranrs.setPageNumber(page.getPageNumber());
         createTranrs.setTotalPage(entityPage.getTotalPages());
         createTranrs.setTotalCount(entityPage.getTotalElements());
+        createTranrs.setItems(items);
         StoreResponse<Q001Tranrs> res = new StoreResponse<>();
         res.setMwheader(createMwheader);
         res.setTranrs(createTranrs);
