@@ -32,5 +32,5 @@ public class Q001TranrsItems {
     private String remarks;
     @Size(min = 1, max = 20)
     private String date;
-    private String updated_user;
+    private String updateUser;
 }

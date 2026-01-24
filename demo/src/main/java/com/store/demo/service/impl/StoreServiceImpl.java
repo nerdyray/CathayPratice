@@ -1,5 +1,6 @@
 package com.store.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,8 @@ import com.store.demo.dto.MwHeader;
 import com.store.demo.dto.Q001Tranrq;
 import com.store.demo.dto.Q001Tranrs;
 import com.store.demo.dto.Q001TranrsItems;
+import com.store.demo.dto.Q002Tranrq;
+import com.store.demo.dto.Q002Tranrs;
 import com.store.demo.dto.StoreRequest;
 import com.store.demo.dto.StoreResponse;
 import com.store.demo.dto.T002Tranrq;
@@ -26,7 +29,7 @@ import com.store.demo.repo.StoreRepo;
 import com.store.demo.service.StoreService;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+
 import tools.jackson.databind.ObjectMapper;
 
 @Transactional
@@ -103,6 +106,38 @@ public class StoreServiceImpl implements StoreService {
         createTranrs.setPageNumber(page.getPageNumber());
         createTranrs.setTotalPage(entityPage.getTotalPages());
         createTranrs.setTotalCount(entityPage.getTotalElements());
+        createTranrs.setItems(items);
+        StoreResponse<Q001Tranrs> res = new StoreResponse<>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+    }
+
+    @Override
+    public StoreResponse<Q001Tranrs> findByStoreId(StoreRequest<Q001Tranrq> storeRequest)
+            throws ErrorInputException, DataNotFoundException {
+
+        Q001Tranrq data = storeRequest.getTranrq();
+        Integer storeId = data.getStoreId();
+
+        // 決定要用哪種查詢 (解決 null 查詢條件問題)
+        StoreEntity storeEntity = storeRepo.findByStoreId(storeId)
+                .orElseThrow(() -> new DataNotFoundException());
+        Q001TranrsItems itemDto = om.convertValue(storeEntity, Q001TranrsItems.class);
+        // 組裝Q001TranrsItems
+        List<Q001TranrsItems> items = new ArrayList<>();
+        items.add(itemDto);
+        // 組裝MwHeader
+        MwHeader createMwheader = new MwHeader();
+        createMwheader.setMsgid("XXA-C-STORQ001");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        // 組裝PageDatas(分頁)
+        Q001Tranrs createTranrs = new Q001Tranrs();
+        createTranrs.setPageSize(0);
+        createTranrs.setPageNumber(0);
+        createTranrs.setTotalPage(0);
+        createTranrs.setTotalCount(null);
         createTranrs.setItems(items);
         StoreResponse<Q001Tranrs> res = new StoreResponse<>();
         res.setMwheader(createMwheader);

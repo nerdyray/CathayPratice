@@ -11,6 +11,7 @@ import lombok.Data;
 public class Q001Tranrq implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    private Integer storeId;
     @NotNull(message = "姓名不可為空")
     @Size(min = 1, max = 20)
     private String storeName;

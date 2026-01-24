@@ -35,4 +35,10 @@ public class StoreController {
             throws ErrorInputException, DataNotFoundException {
         return storeService.findAllStore(storeRequest);
     }
+
+    @PostMapping("/querystore")
+    public StoreResponse<Q001Tranrs> queryStoreById(@RequestBody StoreRequest<Q001Tranrq> storeRequest)
+            throws ErrorInputException, DataNotFoundException {
+        return storeService.findByStoreId(storeRequest);
+    }
 }

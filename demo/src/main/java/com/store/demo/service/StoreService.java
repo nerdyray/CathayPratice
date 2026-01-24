@@ -2,7 +2,8 @@ package com.store.demo.service;
 
 import com.store.demo.dto.Q001Tranrq;
 import com.store.demo.dto.Q001Tranrs;
-
+import com.store.demo.dto.Q002Tranrq;
+import com.store.demo.dto.Q002Tranrs;
 import com.store.demo.dto.StoreRequest;
 import com.store.demo.dto.StoreResponse;
 import com.store.demo.dto.T002Tranrq;
@@ -15,5 +16,8 @@ public interface StoreService {
             throws ErrorInputException;
 
     StoreResponse<Q001Tranrs> findAllStore(StoreRequest<Q001Tranrq> storeRequest)
+            throws ErrorInputException, DataNotFoundException;
+
+    StoreResponse<Q001Tranrs> findByStoreId(StoreRequest<Q001Tranrq> storeRequest)
             throws ErrorInputException, DataNotFoundException;
 }
