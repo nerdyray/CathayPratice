@@ -2,22 +2,31 @@ package com.store.demo.service;
 
 import com.store.demo.dto.Q001Tranrq;
 import com.store.demo.dto.Q001Tranrs;
-import com.store.demo.dto.Q002Tranrq;
-import com.store.demo.dto.Q002Tranrs;
+
 import com.store.demo.dto.StoreRequest;
 import com.store.demo.dto.StoreResponse;
+import com.store.demo.dto.T001Tranrq;
+import com.store.demo.dto.T001Tranrs;
 import com.store.demo.dto.T002Tranrq;
 import com.store.demo.dto.T002Tranrs;
+import com.store.demo.dto.T003Tranrq;
+import com.store.demo.dto.T003Tranrs;
 import com.store.demo.exception.DataNotFoundException;
 import com.store.demo.exception.ErrorInputException;
 
 public interface StoreService {
-    StoreResponse<T002Tranrs> createStore(StoreRequest<T002Tranrq> storeRequest)
-            throws ErrorInputException;
+        StoreResponse<T002Tranrs> createStore(StoreRequest<T002Tranrq> storeRequest)
+                        throws ErrorInputException;
 
-    StoreResponse<Q001Tranrs> findAllStore(StoreRequest<Q001Tranrq> storeRequest)
-            throws ErrorInputException, DataNotFoundException;
+        StoreResponse<Q001Tranrs> findAllStore(StoreRequest<Q001Tranrq> storeRequest)
+                        throws ErrorInputException, DataNotFoundException;
 
-    StoreResponse<Q001Tranrs> findByStoreId(StoreRequest<Q001Tranrq> storeRequest)
-            throws ErrorInputException, DataNotFoundException;
+        StoreResponse<Q001Tranrs> findByStoreId(StoreRequest<Q001Tranrq> storeRequest)
+                        throws ErrorInputException, DataNotFoundException;
+
+        StoreResponse<T001Tranrs> updateStore(StoreRequest<T001Tranrq> storeRequest)
+                        throws ErrorInputException, DataNotFoundException;
+
+        StoreResponse<T003Tranrs> deleteStore(StoreRequest<T003Tranrq> storeRequest)
+                        throws DataNotFoundException;
 }

@@ -1,5 +1,6 @@
 package com.store.demo.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,8 +21,12 @@ import com.store.demo.dto.Q002Tranrq;
 import com.store.demo.dto.Q002Tranrs;
 import com.store.demo.dto.StoreRequest;
 import com.store.demo.dto.StoreResponse;
+import com.store.demo.dto.T001Tranrq;
+import com.store.demo.dto.T001Tranrs;
 import com.store.demo.dto.T002Tranrq;
 import com.store.demo.dto.T002Tranrs;
+import com.store.demo.dto.T003Tranrq;
+import com.store.demo.dto.T003Tranrs;
 import com.store.demo.entity.StoreEntity;
 import com.store.demo.exception.DataNotFoundException;
 import com.store.demo.exception.ErrorInputException;
@@ -143,5 +148,52 @@ public class StoreServiceImpl implements StoreService {
         res.setMwheader(createMwheader);
         res.setTranrs(createTranrs);
         return res;
+    }
+
+    @Override
+    public StoreResponse<T001Tranrs> updateStore(StoreRequest<T001Tranrq> storeRequest)
+            throws ErrorInputException, DataNotFoundException {
+
+        T001Tranrq data = storeRequest.getTranrq();
+        StoreEntity storeEntity = storeRepo.findByStoreId(data.getStoreId())
+                .orElseThrow(() -> new DataNotFoundException());
+        // 有找到就更新
+        storeEntity.setStoreName(data.getStoreName());
+        storeEntity.setOwner(data.getOwner());
+        storeEntity.setTel(data.getTel());
+        storeEntity.setFax(data.getFax());
+        storeEntity.setMobile(data.getMobile());
+        storeEntity.setAddress(data.getAddress());
+        storeEntity.setEvaluation(data.getEvaluation());
+        storeEntity.setRemarks(data.getRemarks());
+        storeEntity.setUpdateTime(LocalDateTime.now());
+        storeRepo.save(storeEntity);
+        T001Tranrs createTranrs = new T001Tranrs();
+        MwHeader createMwheader = new MwHeader();
+        createMwheader.setMsgid("XXA-C-STORET001");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        StoreResponse<T001Tranrs> res = new StoreResponse<>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+    }
+
+    @Override
+    public StoreResponse<T003Tranrs> deleteStore(StoreRequest<T003Tranrq> storeRequest)
+            throws DataNotFoundException {
+        T003Tranrq data = storeRequest.getTranrq();
+        StoreEntity storeEntity = storeRepo.deleteByStoreId(data.getStoreId())
+                .orElseThrow(() -> new DataNotFoundException());
+        T003Tranrs createTranrs = new T003Tranrs();
+        MwHeader createMwheader = new MwHeader();
+        createMwheader.setMsgid("XXA-C-STORET003");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        StoreResponse<T003Tranrs> res = new StoreResponse<>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+
     }
 }

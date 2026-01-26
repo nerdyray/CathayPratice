@@ -8,8 +8,12 @@ import com.store.demo.dto.Q001Tranrq;
 import com.store.demo.dto.Q001Tranrs;
 import com.store.demo.dto.StoreRequest;
 import com.store.demo.dto.StoreResponse;
+import com.store.demo.dto.T001Tranrq;
+import com.store.demo.dto.T001Tranrs;
 import com.store.demo.dto.T002Tranrq;
 import com.store.demo.dto.T002Tranrs;
+import com.store.demo.dto.T003Tranrq;
+import com.store.demo.dto.T003Tranrs;
 import com.store.demo.exception.DataNotFoundException;
 import com.store.demo.exception.ErrorInputException;
 import com.store.demo.service.StoreService;
@@ -41,4 +45,17 @@ public class StoreController {
             throws ErrorInputException, DataNotFoundException {
         return storeService.findByStoreId(storeRequest);
     }
+
+    @PostMapping("/maintain")
+    public StoreResponse<T001Tranrs> updateStore(@RequestBody StoreRequest<T001Tranrq> storeRequest)
+            throws ErrorInputException, DataNotFoundException {
+        return storeService.updateStore(storeRequest);
+    }
+
+    @PostMapping("/delete")
+    public StoreResponse<T003Tranrs> deleteStore(@RequestBody StoreRequest<T003Tranrq> storeRequest)
+            throws DataNotFoundException {
+        return storeService.deleteStore(storeRequest);
+    }
+
 }

@@ -4,9 +4,6 @@ import java.io.Serial;
 import java.io.Serializable;
 
 import java.util.List;
-
-import org.springframework.data.domain.Page;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
