@@ -1,0 +1,95 @@
+<!-- 表單畫面 -->
+<div class="page-container">
+
+  <div class="section-header">
+    <div class="green-bar"></div>
+    <h2>新增店家維護作業</h2>
+  </div>
+
+  <form [formGroup]="storeForm" class="form-container">
+
+    <div class="form-row row-with-actions">
+      <div class="input-group">
+        @if (storeForm.get('storeName')?.hasError('required')) {
+        <p>店名為必填</p>
+        }
+        <input type="text" formControlName="storeName" placeholder="*店家名稱" class="form-control">
+      </div>
+
+      <div class="action-buttons">
+        <button type="button" class="btn btn-outline" (click)="onAdd()">
+          <span class="icon">＋</span> 新增
+        </button>
+        <button type="button" class="btn btn-outline" (click)="onClear()">
+          <span class="icon">⟲</span> 清除
+        </button>
+        <button type="button" class="btn btn-outline" (click)="onBack()">
+          <span class="icon">←</span> 回上一頁
+        </button>
+      </div>
+    </div>
+
+    <div class="form-row">
+      @if (storeForm.get('owner')?.hasError('required')) {
+      <p>負責人為必填</p>
+      }
+      <input type="text" formControlName="owner" placeholder="*負責人" class="form-control">
+    </div>
+
+    <div class="form-row">
+      @if (storeForm.get('tel')?.hasError('required')) {
+      <p>電話為必填</p>
+      }
+      <input type="text" formControlName="tel" placeholder="*電話" class="form-control">
+    </div>
+
+    <div class="form-row">
+      <input type="text" formControlName="fax" placeholder="傳真" class="form-control">
+    </div>
+
+    <div class="form-row">
+      <input type="text" formControlName="mobile" placeholder="手機" class="form-control">
+    </div>
+
+    <div class="form-row">
+      <input type="text" formControlName="address" placeholder="地址" class="form-control">
+    </div>
+
+    <div class="form-row">
+      <div class="fake-select-container">
+        <label class="floating-label">評價</label>
+
+        <div class="select-value-area">
+          @if (storeForm.get('rating')?.value) {
+          <span class="tag">
+            {{ storeForm.get('rating')?.value }}
+            <span class="tag-close" (click)="removeRating()">×</span>
+          </span>
+          }
+        </div>
+        <span class="chevron">⌄</span>
+      </div>
+      <input type="hidden" formControlName="rating">
+    </div>
+
+    <div class="form-row">
+      <div class="disabled-input-container">
+        <label class="floating-label-small">*異動日期</label>
+        <input type="text" formControlName="updateDate" class="form-control disabled">
+      </div>
+    </div>
+  </form>
+
+  <div class="notification-demo-area">
+    @if (showErrorToast){
+    <div class="toast toast-fail">
+      <div class="toast-indicator"></div>
+      <div class="toast-content">
+        <div class="toast-title">Fail</div>
+        <div class="toast-message">請確認必填資料!</div>
+      </div>
+      <button class="toast-close" (click)="closeToast()">×</button>
+    </div>
+    }
+
+  </div>

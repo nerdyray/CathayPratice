@@ -1,0 +1,243 @@
+/* --- 基礎設定 --- */
+.page-container {
+  padding: 20px;
+  font-family: "Microsoft JhengHei", sans-serif;
+  color: #333;
+  max-width: 800px;
+}
+
+/* --- 標題區 --- */
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.green-bar {
+  width: 5px;
+  height: 24px;
+  background-color: #4CAF50; /* 截圖中的綠色 */
+  margin-right: 10px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+/* --- 表單佈局 --- */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* 輸入框之間的間距 */
+  margin-bottom: 40px;
+}
+
+.form-row {
+  width: 100%;
+  max-width: 400px; /* 控制輸入框寬度，與截圖相仿 */
+}
+
+/* 第一行特殊處理：輸入框 + 按鈕 */
+.row-with-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%; /* 第一行可以寬一點以容納按鈕 */
+}
+
+.row-with-actions .input-group {
+  width: 400px; /* 固定與下方輸入框同寬 */
+  flex-shrink: 0;
+}
+
+/* --- 輸入框樣式 --- */
+.form-control {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* 確保 padding 不會撐大寬度 */
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: #66afe9;
+}
+
+/* Placeholder 樣式模擬 */
+::placeholder {
+  color: #999;
+}
+
+/* Disabled 輸入框 (異動日期) */
+.disabled-input-container {
+  position: relative;
+}
+
+.form-control.disabled {
+  background-color: #e0e0e0; /* 深灰色背景 */
+  color: #555;
+  border: 1px solid #aaa;
+  padding-top: 10px; /* 為了排版好看 */
+}
+
+.floating-label-small {
+  font-size: 12px;
+  color: #666;
+  position: absolute;
+  top: -20px; /* 將標籤移到輸入框上方 */
+  left: 0;
+}
+
+/* --- 按鈕樣式 --- */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  background: #fff;
+  border: 1px solid #28a745; /* 綠色邊框 */
+  color: #28a745;
+  padding: 4px 12px;
+  border-radius: 20px; /* 膠囊狀圓角 */
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background-color: #f0fff4;
+}
+
+.icon {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* --- 評價 (模擬 Select) --- */
+.fake-select-container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  position: relative;
+  height: 38px; /* 與 input 高度相似 */
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+
+.floating-label {
+  font-size: 12px;
+  color: #999;
+  position: absolute;
+  top: 2px;
+  left: 10px;
+}
+
+.select-value-area {
+  margin-top: 10px; /* 讓內容避開 label */
+  width: 100%;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.tag-close {
+  margin-left: 10px;
+  cursor: pointer;
+  color: #999;
+  font-weight: bold;
+}
+
+.chevron {
+  position: absolute;
+  right: 10px;
+  color: #999;
+}
+
+/* --- 訊息提示 (Toasts) 樣式 --- */
+.notification-demo-area {
+  border-top: 1px dashed #ccc;
+  padding-top: 20px;
+}
+
+.toast {
+  width: 400px;
+  min-height: 80px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  display: flex;
+  position: relative;
+  overflow: hidden; /* 確保左側條不溢出 */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.toast-indicator {
+  width: 10px;
+  flex-shrink: 0;
+}
+
+.toast-content {
+  flex-grow: 1;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.toast-title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.toast-message {
+  font-size: 16px;
+  color: #666;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+}
+
+/* Fail 樣式 (粉紅底/紅條) */
+.toast-fail {
+  background-color: #fdecea; /* 淺粉紅 */
+}
+.toast-fail .toast-indicator {
+  background-color: #e45a5a; /* 紅色 */
+}
+
+.notification-demo-area {
+  position: fixed; /* 固定在視窗 */
+  bottom: 20px;    /* 距離底部 20px */
+  right: 20px;     /* 距離右邊 20px */
+  z-index: 999;    /* 確保在最上層 */
+}
+/* Success 樣式 (淺綠底/綠條) */
+.toast-success {
+  background-color: #e9f7ef; /* 淺綠 */
+}
+.toast-success .toast-indicator {
+  background-color: #5bc283; /* 綠色 */
+}
