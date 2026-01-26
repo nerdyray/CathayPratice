@@ -1,9 +1,9 @@
 export interface Store {
   storeName: string;
   owner: string;
-  tel: number;
-  fax: number;
-  mobile: number;
+  tel: string;
+  fax: string;
+  mobile: string;
   address: string;
   evalution: string;
   remarks: string;

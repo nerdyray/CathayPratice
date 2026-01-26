@@ -46,12 +46,12 @@ export class Create001 implements OnInit {
       storeName: ['', [Validators.compose([
         Validators.required, Validators.minLength(1), Validators.maxLength(10), Validators.pattern(this.PATTERN_STRING)
       ])]],
-      tel: [null, [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_TEL)])]],
-      owner: [null, [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_STRING)])]],
+      tel: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_TEL)])]],
+      owner: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_STRING)])]],
       // 2. 選填欄位
-      fax: [null, [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_NUMBER)])]],
-      mobile: [null, [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_NUMBER)])]],
-      address: [null, [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_STRING)])]],
+      fax: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_NUMBER)])]],
+      mobile: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_NUMBER)])]],
+      address: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_STRING)])]],
 
       // 3. 特殊欄位 (評價、日期)
       rating: ['讚'], // 預設值
