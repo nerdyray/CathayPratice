@@ -7,12 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.store.demo.entity.StoreEntity;
-import java.util.List;
 
 public interface StoreRepo extends JpaRepository<com.store.demo.entity.StoreEntity, Integer> {
     boolean existsByStoreId(Integer storeId);
 
-    Page<StoreEntity> findAllByStoreName(String storeName, Pageable pageable);
+    Page<StoreEntity> findAllByStoreNameContaining(String storeName, Pageable pageable);
 
     Optional<StoreEntity> findByStoreId(Integer storeId);
 

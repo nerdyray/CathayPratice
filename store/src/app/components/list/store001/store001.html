@@ -1,0 +1,93 @@
+<div class="page-container">
+
+  <div class="section-header">
+    <div class="green-bar"></div>
+    <h2>店家查詢作業</h2>
+  </div>
+
+  <div class="search-container">
+    <div class="search-inputs">
+      <div class="input-group">
+        <label>店家名稱</label>
+        <input type="text" [(ngModel)]="searchKeyword" class="form-control" placeholder="請輸入">
+      </div>
+
+      <div class="search-actions">
+        <button class="btn btn-gray" (click)="onSearch()">
+          <span class="icon">🔍</span> 查詢
+        </button>
+        <button class="btn btn-outline-green" (click)="onClear()">
+          <span class="icon">⟲</span> 清除
+        </button>
+        <button class="btn btn-outline-green" (click)="onNavigateToAdd()">
+          <span class="icon">＋</span> 新增
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-actions">
+    <button class="btn btn-green" (click)="onEdit()" [disabled]="!selectedStore">
+      <span class="icon">✎</span> 修改
+    </button>
+    <button class="btn btn-red" (click)="onDelete()" [disabled]="!selectedStore">
+      <span class="icon">×</span> 刪除
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th style="width: 50px;">選取</th>
+          <th>店家名稱</th>
+          <th>負責人</th>
+          <th>電話</th>
+          <th>手機</th>
+          <th>評價</th>
+          <th>備註</th>
+          <th>異動人員</th>
+          <th>異動日期</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let store of storeList; let i = index" [class.selected-row]="selectedStore === store"
+          (click)="onSelect(store)">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <input type="radio" name="storeSelect" [checked]="selectedStore === store">
+            <span class="radio-custom"></span>
+          </td>
+          <td>{{ store.storeName }}</td>
+          <td>{{ store.owner }}</td>
+          <td>{{ store.tel }}</td>
+          <td>{{ store.mobile }}</td>
+          <td>{{ store.remarks }}</td>
+          <td>{{ store.address }}</td>
+          <td>Admin</td>
+          <td>{{ store.date }}</td>
+        </tr>
+
+        <tr *ngIf="storeList.length === 0">
+          <td colspan="10" class="no-data">查無資料</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination-container">
+    <div class="page-info">
+      <span class="page-size-select">10 筆/頁</span>
+      <span class="total-count">共 {{ storeList.length }} 筆</span>
+    </div>
+
+    <div class="page-nav">
+      <button class="nav-btn" disabled>◀</button>
+      <button class="page-num active">1</button>
+      <span class="total-pages">/ 5</span>
+      <button class="nav-btn">▶</button>
+    </div>
+  </div>
+
+</div>

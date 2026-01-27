@@ -1,8 +1,8 @@
+import { StoreService } from './../../../services/storeService'; // 路徑請確認
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '../../../interface/store';
-
 
 @Component({
   selector: 'app-create001',
@@ -12,89 +12,125 @@ import { Store } from '../../../interface/store';
 })
 export class Create001 implements OnInit {
 
-  //錯誤訊息彈出
+  remarksOptions: string[] = ['好', '中', '壞'];
+
+  // 修正 1: Regex 調整
+  // 電話: 允許 0-9，長度 1-15 (原本的寫法正確)
+  PATTERN_TEL: RegExp = /^[0-9]{1,15}$/;
+  // 文字: 允許中文、英文、數字 (增加 0-9 避免地址或店名報錯)
+  PATTERN_STRING_WITH_NUM: RegExp = /^[\u4e00-\u9fa5a-zA-Z0-9\s\-\.\,]+$/;
+  // 純數字: 用於傳真或手機 (修正：改用上面的 TEL Pattern 即可，不需要這個不允許0開頭的 Pattern)
+  // PATTERN_NUMBER: string = '^[1-9][0-9]*$' // 刪除這行，這會害死手機號碼
+
+  storeForm!: FormGroup;
   showErrorToast: boolean = false;
-  //傳入商店資料
+  showSuccessToast: boolean = false;
+  submited: boolean = false;
+
+  @Output() addStore = new EventEmitter<Store>();
+  @Output() updateStore = new EventEmitter<Store>();
+  @Output() deleteStore = new EventEmitter<Store>();
+  @Output() searchStore = new EventEmitter<Store>();
+
+  constructor(
+    private fb: FormBuilder,
+    private storeService: StoreService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  // 修正 2: 加入安全檢查
   @Input() set storeData(value: Store | null) {
-    if (value) {
+    if (value && this.storeForm) { // 多判斷 this.storeForm 是否存在
       this.storeForm.patchValue(value);
     }
   }
-  //新增資料觸發事件
-  @Output() addStore = new EventEmitter<Store>();
-  //修改資料觸發事件
-  @Output() updateStore = new EventEmitter<Store>();
-  //刪除資料觸發事件
-  @Output() deleteStore = new EventEmitter<Store>();
-  //查詢資料觸發事件
-  @Output() searchStore = new EventEmitter<Store>();
-  //建立商店FormFroup
-  storeForm!: FormGroup;
-  //送出確認
-  submited: boolean = false;
-  //價格正則表示式
-  PATTERN_TEL: RegExp = (/^[0-9]{1,15}$/)
-  //文字正則表示式
-  PATTERN_STRING: RegExp = (/^[\u4e00-\u9fa5a-zA-Z]+$/)
-  //數字正則表示式
-  PATTERN_NUMBER: string = '^[1-9][0-9]*$'
-  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    // TODO: 練習區 - 請在此處定義你的表單控制項與驗證邏輯
     this.storeForm = this.fb.group({
-      storeName: ['', [Validators.compose([
-        Validators.required, Validators.minLength(1), Validators.maxLength(10), Validators.pattern(this.PATTERN_STRING)
-      ])]],
-      tel: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_TEL)])]],
-      owner: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_STRING)])]],
-      // 2. 選填欄位
-      fax: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_NUMBER)])]],
-      mobile: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_NUMBER)])]],
-      address: ['', [Validators.compose([Validators.required, Validators.pattern(this.PATTERN_STRING)])]],
+      // 店名：加入數字允許
+      storeName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(10), Validators.pattern(this.PATTERN_STRING_WITH_NUM)]],
 
-      // 3. 特殊欄位 (評價、日期)
-      rating: ['讚'], // 預設值
-      updateDate: [{ value: '2022-05-16', disabled: true }] // 設定 disabled 狀態
+      // 負責人：維持純文字
+      owner: ['', [Validators.required, Validators.pattern(/^[\u4e00-\u9fa5a-zA-Z]+$/)]],
+
+      // 電話：必填
+      tel: ['', [Validators.required, Validators.pattern(this.PATTERN_TEL)]],
+
+      // 評價
+      remarks: ['', [Validators.required]], // 下拉選單通常不需要 Regex，只要 Required
+
+      // 修正 3: 手機、傳真、地址改為「非必填」(根據截圖)，並修正 Regex
+      // 如果確定是必填，請把 Validators.required 加回去
+      fax: ['', [Validators.pattern(this.PATTERN_TEL)]], // 改用 TEL Pattern (允許0開頭)
+      mobile: ['', [Validators.pattern(this.PATTERN_TEL)]], // 改用 TEL Pattern
+
+      // 地址：通常很難用 Regex 規範完美，建議只做長度或 Required 檢查，或允許寬鬆的格式
+      address: ['', [Validators.maxLength(100)]],
+
+      updateDate: [{ value: '2022-05-16', disabled: true }]
     });
   }
 
-  // 按鈕觸發函式
   onAdd(): void {
     this.storeForm.markAllAsTouched();
     if (this.storeForm.invalid) {
       this.showErrorToast = true;
+      // 建議：既然有 setTimeout 關閉，這裡可以不變，但建議在再次點擊時重置 timer (非必要)
       setTimeout(() => {
         this.showErrorToast = false;
       }, 3000);
       return;
     }
-    this.submited = true;
     const rawData = this.storeForm.getRawValue();
     const store: Store = { ...rawData };
-    this.addStore.emit(store);
-    console.log('表單狀態:', this.storeForm.status);
-    console.log('表單數值:', this.storeForm.getRawValue()); // getRawValue 包含 disabled 的欄位
+    this.storeService.addStore(store).subscribe({
+      next: (res) => {
+        this.showSuccessToast = true;
+        this.submited = true;
+        this.showErrorToast = false; // 確保錯誤關閉
+        this.cdr.detectChanges();
+        this.addStore.emit(res); // 建議在這裡 Emit
+        setTimeout(() => {
+          this.showSuccessToast = false;
+        }, 3000);
+      },
 
-    // TODO: 練習區 - 實作提交檢查
-    // if (this.storeForm.invalid) { ... }
+      // 成功後 3 秒自動關閉成功訊息
+      // 修正 4: 加入錯誤處理
+      error: (err) => {
+        console.error('新增失敗:', err);
+        this.showErrorToast = true; // 顯示錯誤訊息
+      }
+    });
   }
 
   onClear(): void {
-    // TODO: 練習區 - 實作重置邏輯
-    // this.storeForm.reset(...);
+    // 修正 5: 欄位名稱要跟 FormGroup 一模一樣
+    this.storeForm.reset({
+      storeName: '',
+      owner: '',
+      tel: '',
+      fax: '',
+      mobile: '',
+      address: '',
+      // evalution: '', // 刪除：這是錯字且不在 FormGroup
+      remarks: '',     // 對應 FormGroup
+      updateDate: '2022-05-16' // 對應 FormGroup (保持預設值)
+    });
+    this.submited = false;
   }
 
   onBack(): void {
     console.log('返回上一頁');
   }
 
-  // Helper function (給 HTML 用來移除評價 tag)
-  removeRating(): void {
-    // TODO: 練習區 - 清除 rating 欄位的值
-    // this.storeForm.get('rating')?.setValue(null);
+  // 實作移除評價
+  removeRemarks(): void {
+    this.storeForm.get('remarks')?.setValue(''); // 或 null
   }
+
   closeToast(): void {
     this.showErrorToast = false;
+    this.showSuccessToast = false; // 建議兩個都關
   }
 }

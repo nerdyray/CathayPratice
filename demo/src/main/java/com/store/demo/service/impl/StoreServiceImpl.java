@@ -17,8 +17,7 @@ import com.store.demo.dto.MwHeader;
 import com.store.demo.dto.Q001Tranrq;
 import com.store.demo.dto.Q001Tranrs;
 import com.store.demo.dto.Q001TranrsItems;
-import com.store.demo.dto.Q002Tranrq;
-import com.store.demo.dto.Q002Tranrs;
+
 import com.store.demo.dto.StoreRequest;
 import com.store.demo.dto.StoreResponse;
 import com.store.demo.dto.T001Tranrq;
@@ -89,7 +88,7 @@ public class StoreServiceImpl implements StoreService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         // 決定要用哪種查詢 (解決 null 查詢條件問題)
         String searchName = data.getStoreName(); // 從 DTO 拿名字
-        Page<StoreEntity> entityPage = storeRepo.findAllByStoreName(searchName, pageable);
+        Page<StoreEntity> entityPage = storeRepo.findAllByStoreNameContaining(searchName, pageable);
         if (entityPage.isEmpty()) {
             throw new DataNotFoundException();
         }

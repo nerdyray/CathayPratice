@@ -1,4 +1,3 @@
-<!-- 表單畫面 -->
 <div class="page-container">
 
   <div class="section-header">
@@ -10,10 +9,12 @@
 
     <div class="form-row row-with-actions">
       <div class="input-group">
-        @if (storeForm.get('storeName')?.hasError('required')) {
-        <p>店名為必填</p>
+        <input type="text" formControlName="storeName" placeholder="*店家名稱" class="form-control"
+          [class.error-border]="storeForm.get('storeName')?.invalid && storeForm.get('storeName')?.touched">
+
+        @if (storeForm.get('storeName')?.hasError('required') && storeForm.get('storeName')?.touched) {
+        <small class="text-danger">店名為必填</small>
         }
-        <input type="text" formControlName="storeName" placeholder="*店家名稱" class="form-control">
       </div>
 
       <div class="action-buttons">
@@ -30,17 +31,17 @@
     </div>
 
     <div class="form-row">
-      @if (storeForm.get('owner')?.hasError('required')) {
-      <p>負責人為必填</p>
-      }
       <input type="text" formControlName="owner" placeholder="*負責人" class="form-control">
+      @if (storeForm.get('owner')?.hasError('required') && storeForm.get('owner')?.touched) {
+      <small class="text-danger">負責人為必填</small>
+      }
     </div>
 
     <div class="form-row">
-      @if (storeForm.get('tel')?.hasError('required')) {
-      <p>電話為必填</p>
-      }
       <input type="text" formControlName="tel" placeholder="*電話" class="form-control">
+      @if (storeForm.get('tel')?.hasError('required') && storeForm.get('tel')?.touched) {
+      <small class="text-danger">電話為必填</small>
+      }
     </div>
 
     <div class="form-row">
@@ -59,23 +60,34 @@
       <div class="fake-select-container">
         <label class="floating-label">評價</label>
 
-        <div class="select-value-area">
-          @if (storeForm.get('rating')?.value) {
-          <span class="tag">
-            {{ storeForm.get('rating')?.value }}
-            <span class="tag-close" (click)="removeRating()">×</span>
-          </span>
+        <select formControlName="remarks" class="input-inside">
+          <option value="" disabled selected hidden></option>
+          @for (option of remarksOptions; track option) {
+          <option [value]="option">{{ option }}</option>
           }
-        </div>
+        </select>
+
         <span class="chevron">⌄</span>
       </div>
-      <input type="hidden" formControlName="rating">
     </div>
+
+    <div class="select-value-area">
+      @if (storeForm.get('remarks')?.value) {
+      <span class="tag">
+        {{ storeForm.get('remarks')?.value }}
+        <span class="tag-close" (click)="removeRemarks(); $event.stopPropagation()">×</span>
+      </span>
+      }
+    </div>
+    <span class="chevron">⌄</span>
+
+    <input type="hidden" formControlName="remarks">
+
 
     <div class="form-row">
       <div class="disabled-input-container">
-        <label class="floating-label-small">*異動日期</label>
-        <input type="text" formControlName="updateDate" class="form-control disabled">
+        <label class="floating-label-small">異動日期</label>
+        <input type="text" formControlName="updateDate" class="form-control disabled" readonly>
       </div>
     </div>
   </form>
@@ -91,5 +103,18 @@
       <button class="toast-close" (click)="closeToast()">×</button>
     </div>
     }
+    <div class="notification-demo-area">
+
+      @if (showSuccessToast){
+      <div class="toast toast-success">
+        <div class="toast-indicator"></div>
+        <div class="toast-content">
+          <div class="toast-title">Success</div>
+          <div class="toast-message">新增資料成功</div>
+        </div>
+        <button class="toast-close" (click)="closeToast()">×</button>
+      </div>
+      }
+    </div>
 
   </div>

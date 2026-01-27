@@ -1,0 +1,142 @@
+/* --- 共用容器 --- */
+.page-container {
+  padding: 20px;
+  font-family: "Microsoft JhengHei", sans-serif;
+  color: #333;
+  max-width: 1000px; /* 列表通常寬一點 */
+}
+
+/* --- 標題 --- */
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.green-bar {
+  width: 5px;
+  height: 24px;
+  background-color: #4CAF50;
+  margin-right: 10px;
+}
+h2 { font-size: 18px; margin: 0; font-weight: bold; }
+
+/* --- 搜尋區 --- */
+.search-container {
+  background: #fff;
+  padding: 15px 0;
+  border-bottom: 1px dashed #ddd; /* 分隔線 */
+  margin-bottom: 15px;
+}
+
+.search-inputs {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+.input-group label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+.form-control {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 250px;
+}
+
+.search-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px; /* 對齊輸入框 */
+}
+
+/* --- 按鈕樣式 --- */
+.btn {
+  padding: 5px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid transparent;
+}
+
+/* 灰色查詢按鈕 */
+.btn-gray { background: #e0e0e0; color: #555; border: 1px solid #ccc; }
+/* 綠色外框按鈕 (清除/新增) */
+.btn-outline-green { background: #fff; border: 1px solid #4CAF50; color: #4CAF50; }
+/* 實心綠色 (修改) */
+.btn-green { background: #4CAF50; color: #fff; }
+/* 實心紅色 (刪除) */
+.btn-red { background: #F44336; color: #fff; }
+
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* --- 表格操作區 --- */
+.table-actions {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* --- 表格樣式 --- */
+.table-container {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  background-color: #f9f9f9;
+  color: #666;
+  font-weight: normal;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+tr:hover { background-color: #f5f5f5; cursor: pointer; }
+.selected-row { background-color: #e8f5e9; } /* 選中時變淺綠色 */
+.no-data { text-align: center; color: #999; padding: 20px; }
+
+/* --- 分頁樣式 --- */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  font-size: 12px;
+  color: #666;
+}
+
+.page-nav { display: flex; align-items: center; gap: 5px; }
+.nav-btn {
+  border: 1px solid #ddd; background: #fff; width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.page-num {
+  border: 1px solid #ddd; background: #fff; width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+.page-num.active {
+  background: #eee; border-color: #ccc; font-weight: bold;
+}

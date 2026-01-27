@@ -31,7 +31,7 @@ h2 {
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* 輸入框之間的間距 */
+  gap: 30px; /* 原本是 15px，改成 30px 以容納浮動的 label */
   margin-bottom: 40px;
 }
 
@@ -126,12 +126,13 @@ h2 {
 .fake-select-container {
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 5px 10px;
+  padding: 0 10px; /* 調整 padding */
   position: relative;
-  height: 38px; /* 與 input 高度相似 */
+  height: 38px;
   display: flex;
   align-items: center;
   background: #fff;
+  overflow: hidden; /* 防止內容溢出 */
 }
 
 .floating-label {
@@ -140,6 +141,7 @@ h2 {
   position: absolute;
   top: 2px;
   left: 10px;
+  pointer-events: none; /* 讓滑鼠點擊可以直接穿透到 input */
 }
 
 .select-value-area {
@@ -240,4 +242,29 @@ h2 {
 }
 .toast-success .toast-indicator {
   background-color: #5bc283; /* 綠色 */
+}
+/* 讓 select 繼承 input-inside 的大小與無邊框設定 */
+select.input-inside {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding-top: 15px; /* 避開左上角的 label */
+  padding-left: 5px; /* 微調文字位置 */
+  font-size: 14px;
+  cursor: pointer;
+
+  /* --- 關鍵：隱藏瀏覽器預設的下拉箭頭 --- */
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  -moz-appearance: none;    /* Firefox */
+  appearance: none;         /* Standard */
+}
+
+/* 修正：讓箭頭 (chevron) 不會擋住點擊 */
+.chevron {
+  position: absolute;
+  right: 10px;
+  color: #999;
+  pointer-events: none; /* 讓滑鼠點擊穿透箭頭，直接點到 select */
 }
