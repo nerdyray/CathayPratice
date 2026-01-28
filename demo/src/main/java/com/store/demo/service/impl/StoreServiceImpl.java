@@ -1,6 +1,7 @@
 package com.store.demo.service.impl;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ import com.store.demo.dto.T003Tranrs;
 import com.store.demo.entity.StoreEntity;
 import com.store.demo.exception.DataNotFoundException;
 import com.store.demo.exception.ErrorInputException;
+import com.store.demo.repo.StoreProjection;
 import com.store.demo.repo.StoreRepo;
 import com.store.demo.service.StoreService;
 
@@ -88,17 +90,28 @@ public class StoreServiceImpl implements StoreService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         // 決定要用哪種查詢 (解決 null 查詢條件問題)
         String searchName = data.getStoreName(); // 從 DTO 拿名字
-        Page<StoreEntity> entityPage = storeRepo.findAllByStoreNameContaining(searchName, pageable);
-        if (entityPage.isEmpty()) {
+        Page<StoreProjection> projectionPage = storeRepo.findStoresWithDetails(searchName, pageable);
+        if (projectionPage.isEmpty()) {
             throw new DataNotFoundException();
         }
         // 使用 map + convertValue
         // 組裝Q001TranrsItems
-        List<StoreEntity> content = entityPage.getContent();
-        Pageable page = entityPage.getPageable();
-        List<Q001TranrsItems> items = content.stream()
-                .map(entity -> om.convertValue(entity, Q001TranrsItems.class))
-                .collect(Collectors.toList());
+        List<Q001TranrsItems> items = projectionPage.getContent().stream()
+                .map(proj -> {
+                    Q001TranrsItems item = om.convertValue(proj, Q001TranrsItems.class);
+                    if (proj.getUpdateTime() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        String dateString = proj.getUpdateTime().format(formatter);
+
+                        // 塞回 DTO
+                        item.setUpdateTime(dateString);
+                    } else {
+                        item.setUpdateTime("");
+                    }
+
+                    return item;
+                }).collect(Collectors.toList());
+
         // 組裝MwHeader
         MwHeader createMwheader = new MwHeader();
         createMwheader.setMsgid("XXA-C-STORQ001");
@@ -106,10 +119,10 @@ public class StoreServiceImpl implements StoreService {
         createMwheader.setReturndesc("交易成功");
         // 組裝PageDatas(分頁)
         Q001Tranrs createTranrs = new Q001Tranrs();
-        createTranrs.setPageSize(page.getPageSize());
-        createTranrs.setPageNumber(page.getPageNumber());
-        createTranrs.setTotalPage(entityPage.getTotalPages());
-        createTranrs.setTotalCount(entityPage.getTotalElements());
+        createTranrs.setPageSize(projectionPage.getSize());
+        createTranrs.setPageNumber(projectionPage.getNumber());
+        createTranrs.setTotalPage(projectionPage.getTotalPages());
+        createTranrs.setTotalCount(projectionPage.getTotalElements());
         createTranrs.setItems(items);
         StoreResponse<Q001Tranrs> res = new StoreResponse<>();
         res.setMwheader(createMwheader);

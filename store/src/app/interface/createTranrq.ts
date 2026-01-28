@@ -1,5 +1,5 @@
 // 1. 定義 TRANRQ (交易內容) - 注意這裡的屬性名稱要跟後端 JSON 一模一樣 (snake_case)
-export interface TranRq {
+export interface Tranrq {
   storeName: string;
   owner: string;
   tel: string;
@@ -19,5 +19,5 @@ export interface MwHeader {
 
 export interface CreateStoreTranrq {
   MWHEADER: MwHeader;
-  TRANRQ: TranRq;
+  TRANRQ: Tranrq;
 }

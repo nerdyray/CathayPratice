@@ -7,5 +7,6 @@ export interface Store {
   address: string;
   evalution: string;
   remarks: string;
-  date: string;
+  updateTime: string;
+  updateUser: string;
 }

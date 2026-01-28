@@ -29,7 +29,7 @@ export class StoreService {
         address: store.address,
         remarks: store.remarks,
         evaluation: '',
-        date: store.date || new Date().toLocaleDateString()
+        date: store.updateTime || new Date().toLocaleDateString()
       }
     };
     return this.http.post(this.createUrl, createTranrq);

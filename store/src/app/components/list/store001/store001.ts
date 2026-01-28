@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'; // 需要用 ngModel
 import { Store } from '../../../interface/store';
 import { StoreService } from '../../../services/storeService';
 import { Q001Tranrq } from '../../../interface/Q001Tranrq';
+import { ApiResponse } from '../../../interface/StoreItem';
 
 @Component({
   selector: 'app-store001',
@@ -31,31 +32,29 @@ export class Store001 implements OnInit {
     this.onSearch();
   }
 
+
   // 查詢功能
   onSearch(pageIdx: number = 1): void {
     this.currentPage = pageIdx;
     const queryCondition: Q001Tranrq = {
-      // 1. 搜尋條件
-      storeName: this.searchKeyword || '', // 避免傳 null，若為空傳空字串 (視後端驗證而定)
-      // storeId: ... (如果有要搜 ID 再填)
-
-      // 2. 分頁物件 (巢狀)
+      storeName: this.searchKeyword || '',
       page: {
-        // 注意：Java 的 PageRequest 通常從 0 開始，但前端顯示從 1 開始
-        // 所以這裡通常要減 1。請確認你的後端邏輯。
         pageNumber: this.currentPage - 1,
         pageSize: this.pageSize
       }
     };
-
-    console.log('準備送出的 Payload:', queryCondition);
-
-    // 3. 呼叫 Service
     this.storeService.findAllStore(queryCondition).subscribe({
       next: (res) => {
-        // ... 處理回傳資料
+        console.log("沒有資料", res);
+        if (res && res.TRANRS) {
+          this.storeList = res.TRANRS.items || []; // 資料清單
+          this.totalItems = res.TRANRS.totalCount; // 總筆數 (給分頁算頁數用)
+        } else {
+          this.storeList = [];
+          this.totalItems = 0;
+        }
       },
-      error: (err) => console.error(err)
+      error: (err) => console.error('連線失敗' + err)
     });
   }
 
