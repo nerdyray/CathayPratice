@@ -48,7 +48,7 @@ export class Store001 implements OnInit {
         console.log("沒有資料", res);
         if (res && res.TRANRS) {
           this.storeList = res.TRANRS.items || []; // 資料清單
-          this.totalItems = res.TRANRS.totalCount; // 總筆數 (給分頁算頁數用)
+          this.totalItems = res.TRANRS.totalElements; // 總筆數 (給分頁算頁數用)
         } else {
           this.storeList = [];
           this.totalItems = 0;

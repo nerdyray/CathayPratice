@@ -1,0 +1,132 @@
+.page-container {
+  padding: 20px;
+  max-width: 800px;
+  font-family: "Microsoft JhengHei", sans-serif;
+}
+
+/* --- 標題區 --- */
+.header-section {
+  margin-bottom: 20px;
+}
+
+.title-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.green-bar {
+  width: 5px;
+  height: 24px;
+  background-color: #4CAF50;
+  margin-right: 10px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+/* --- 按鈕區 --- */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px dashed #ddd; /* 分隔線 */
+  padding-bottom: 15px;
+}
+
+.btn {
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: white;
+  transition: all 0.3s;
+}
+
+/* 綠色外框按鈕樣式 */
+.btn-outline-green {
+  border: 1px solid #4CAF50;
+  color: #4CAF50;
+}
+
+.btn-outline-green:hover {
+  background-color: #e8f5e9;
+}
+
+.icon { font-size: 14px; }
+
+/* --- 表單樣式 --- */
+.form-container {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+  max-width: 300px; /* 限制寬度跟截圖一樣 */
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.required { color: red; margin-left: 3px; }
+
+.form-control {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* 唯讀欄位樣式 (灰色底) */
+.readonly-field {
+  background-color: #e0e0e0;
+  color: #555;
+  cursor: not-allowed;
+}
+
+.error-msg {
+  color: #F44336;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* --- Toast 樣式 (沿用你之前的) --- */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 9999;
+}
+
+.toast-success { background-color: #e8f5e9; border-left: 5px solid #4CAF50; }
+.toast-error { background-color: #ffebee; border-left: 5px solid #F44336; }
+
+.toast-icon { font-weight: bold; font-size: 16px; margin-right: 10px; }
+.toast-success .toast-icon { color: #2e7d32; }
+.toast-error .toast-icon { color: #c62828; }
+
+.toast-close { cursor: pointer; font-size: 20px; color: #999; }
