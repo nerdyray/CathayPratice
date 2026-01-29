@@ -1,9 +1,10 @@
+import { Tranrq } from './../../../interface/createTranrq';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router'; // 用於路由跳轉和接參數
 import { StoreService } from '../../../services/storeService';
-import { Store } from '../../../interface/store';
+import { T001Tranrq } from '../../../interface/T001Tranrq';
 
 @Component({
   selector: 'app-edit001',
@@ -22,6 +23,7 @@ export class Edit001 implements OnInit {
   errorMessage = '請確認必填資料!';
 
   constructor(
+
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -42,100 +44,115 @@ export class Edit001 implements OnInit {
   }
 
   ngOnInit(): void {
-    // 2. 取得路由參數 (例如: /store/update/123)
-    // 這裡假設你有點擊列表的「修改」按鈕，並傳遞了 ID
-    // this.storeId = Number(this.route.snapshot.paramMap.get('id'));
+    const idFromUrl = this.route.snapshot.paramMap.get('storeId');
 
-    // if (this.storeId) {
-    //   this.loadStoreData(this.storeId);
-    // }
+    if (idFromUrl) {
+      this.storeId = Number(idFromUrl);
+      console.log('✅ 成功鎖定 ID:', this.storeId);
+
+      // 🔥【關鍵】這行一定要加！不然 loadStoreDetail 永遠不會執行！
+      this.loadStoreDetail(this.storeId);
+
+    }
   }
 
-  // 載入資料
-  // loadStoreData(id: number): void {
-  //   // 這裡你需要一個 findById 的 API
-  //   // 暫時用 query 模擬，實際應該呼叫 findById
-  //   const req = { storeName: '', page: { pageNumber: 0, pageSize: 10 } };
-
-  //   // *建議*: 後端補一支 findById API 最標準
-  //   // 這裡假設你有做 findByStoreId，如下：
-  //   this.storeService.findByStoreId({ storeId: id } as any).subscribe({
-  //     next: (res) => {
-  //       if (res && res.tranrs && res.tranrs.content.length > 0) {
-  //         const data = res.tranrs.content[0];
-  //         // 將資料填入表單 (patchValue)
-  //         this.mainForm.patchValue({
-  //           storeId: data.storeId,
-  //           storeName: data.storeName,
-  //           owner: data.owner,
-  //           tel: data.tel,
-  //           mobile: data.mobile,
-  //           address: data.address,
-  //           evaluation: data.evaluation || '', // 避免 null
-  //           updateDate: data.updateDate || new Date().toISOString().split('T')[0] // 若無日期帶今日
-  //         });
-  //       }
-  //     },
-  //     error: (err) => console.error('載入失敗', err)
-  //   });
-  // }
-
   // 修改按鈕動作
-  // onUpdate(): void {
-  //   // 1. 驗證表單
-  //   if (this.mainForm.invalid) {
-  //     this.mainForm.markAllAsTouched(); // 觸發紅字檢查
-  //     this.errorMessage = '請確認必填資料!';
-  //     this.showErrorToast = true;
-  //     setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 3000);
-  //     return;
-  //   }
+  onUpdate(): void {
+    // 1. 驗證表單
+    if (this.mainForm.invalid) {
+      this.mainForm.markAllAsTouched(); // 觸發紅字檢查
+      this.errorMessage = '請確認必填資料!';
+      this.showErrorToast = true;
+      setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 3000);
+      return;
+    }
 
-  //   // 2. 準備 DTO
-  //   // getRawValue() 可以拿到包含 disabled (updateDate) 的值
-  //   const formValue = this.mainForm.getRawValue();
+    // 2. 準備 DTO
+    // getRawValue() 可以拿到包含 disabled (updateDate) 的值
+    const formValue = this.mainForm.getRawValue();
+    const rawData = {
+      storeId: this.storeId!, // 確保變數名稱是 storeId (駝峰)
+      storeName: formValue.storeName,
+      owner: formValue.owner,
+      tel: formValue.tel,
+      mobile: formValue.mobile,
+      address: formValue.address,
+      evaluation: formValue.evaluation,
+      fax: formValue.fax || '',
+      remarks: formValue.remarks || ''
+      // date: ... (如果有需要)
+    };
+    // 3. 呼叫 Service
+    this.storeService.updateStore(rawData as any).subscribe({
+      next: (res) => {
+        console.log('修改成功', res);
+        this.showSuccessToast = true;
+        this.showErrorToast = false;
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.showSuccessToast = false;
 
-  //   // 組裝後端需要的 Request
-  //   // 假設你的 Update API 需要 T001Tranrq
-  //   const updateReq: Store = {
-  //     ...formValue
-  //   };
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('修改失敗', err);
+        this.errorMessage = '修改失敗 : 更新失敗'; // 模擬截圖錯誤訊息
+        this.showErrorToast = true;
+        this.cdr.detectChanges();
+        setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 3000);
+      }
+    });
+  }
 
-  //   // 3. 呼叫 Service
-  //   this.storeService.updateStore(updateReq).subscribe({
-  //     next: (res) => {
-  //       console.log('修改成功', res);
-  //       this.showSuccessToast = true;
-  //       this.showErrorToast = false;
-  //       this.cdr.detectChanges();
+  loadStoreDetail(id: number): void {
+    console.log('準備向後端查詢 ID:', id);
+    const requestPayload = {
+      MWHEADER: {
+        MSGID: 'XXA-C-STOREQ001' // 查詢類的 MSGID
+      },
+      TRANRQ: {
+        storeId: id,
+        storeName: '',
+        page: {
+          pageNumber: 0,
+          pageSize: 1 // 查單筆，給 1 即可
+        }
+      }
+    };
 
-  //       // 3秒後自動跳回列表頁 (可選)
-  //       setTimeout(() => {
-  //         this.showSuccessToast = false;
-  //         // this.router.navigate(['/store/list']);
-  //       }, 3000);
-  //     },
-  //     error: (err) => {
-  //       console.error('修改失敗', err);
-  //       this.errorMessage = '修改失敗 : 更新失敗'; // 模擬截圖錯誤訊息
-  //       this.showErrorToast = true;
-  //       this.cdr.detectChanges();
-  //       setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 3000);
-  //     }
-  //   });
-  // }
+    // 2. 發送請求
+    this.storeService.findByStoreId(requestPayload).subscribe({
+      next: (res) => {
+        // 3. 解析回傳資料 (Response)
+        // 後端回傳的是 StoreResponse<Q001Tranrs>，裡面通常是 List (Page)
+        if (res && res.TRANRS && res.TRANRS.items && res.TRANRS.items.length > 0) {
+          // 因為是用 ID 查，理論上只會有一筆，抓第 0 筆
+          const data = res.TRANRS.items[0];
+          // 4. 填表
+          this.mainForm.patchValue({
+            store_id: data.storeId,
+            storeName: data.storeName,
+            owner: data.owner,
+            tel: data.tel,
+            mobile: data.mobile,
+            address: data.address,
+            evaluation: data.evaluation,
+            updateDate: data.updateTime // 視情況處理日期格式
+          });
+        }
+      },
+      error: (err) => console.error('API 連線失敗', err)
+    });
+  }
 
   // 清除按鈕 (重置為原始資料，或清空)
-  // onClear(): void {
-  //   if (this.storeId) {
-  //     this.loadStoreData(this.storeId); // 重置回資料庫的狀態
-  //   } else {
-  //     this.mainForm.reset();
-  //   }
-  // }
+  onClear(): void {
+    this.mainForm.reset();
+  }
 
   // 回上一頁
   onBack(): void {
     this.router.navigate(['/store/list']); // 請修改為你的列表頁路徑
   }
+
 }

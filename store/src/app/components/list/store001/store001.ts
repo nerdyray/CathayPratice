@@ -5,6 +5,7 @@ import { Store } from '../../../interface/store';
 import { StoreService } from '../../../services/storeService';
 import { Q001Tranrq } from '../../../interface/Q001Tranrq';
 import { ApiResponse } from '../../../interface/StoreItem';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-store001',
@@ -25,7 +26,10 @@ export class Store001 implements OnInit {
   // 目前選中的那筆資料
   selectedStore: Store | null = null;
 
-  constructor(private storeService: StoreService) { }
+  constructor(
+    private storeService: StoreService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     // 進頁面先查詢一次所有資料
@@ -77,9 +81,15 @@ export class Store001 implements OnInit {
 
   // 修改功能
   onEdit(): void {
-    if (!this.selectedStore) return;
-    console.log('準備修改:', this.selectedStore);
-    // TODO: 實作修改邏輯，例如帶參數跳轉
+
+    if (!this.selectedStore) {
+      alert('請先選擇一筆資料！');
+      return;
+    }
+    const targetId = this.selectedStore.storeId;
+    const path = ['/store/update', targetId];
+    this.router.navigate(['/store/update', targetId]);
+    console.log('=========', path, '=========')
   }
 
   // 刪除功能

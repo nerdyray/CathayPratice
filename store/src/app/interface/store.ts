@@ -1,4 +1,5 @@
 export interface Store {
+  storeId: number
   storeName: string;
   owner: string;
   tel: string;
