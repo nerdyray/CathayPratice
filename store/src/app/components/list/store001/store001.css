@@ -1,17 +1,18 @@
-/* --- 共用容器 --- */
+/* 頁面整體容器 */
 .page-container {
   padding: 20px;
   font-family: "Microsoft JhengHei", sans-serif;
   color: #333;
-  max-width: 1000px; /* 列表通常寬一點 */
+  max-width: 1000px;
 }
 
-/* --- 標題 --- */
+/* 區塊標題 */
 .section-header {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
+/* 標題左側綠色裝飾條 */
 .green-bar {
   width: 5px;
   height: 24px;
@@ -20,7 +21,7 @@
 }
 h2 { font-size: 18px; margin: 0; font-weight: bold; }
 
-/* --- 搜尋區 --- */
+/* 搜尋功能區塊 */
 .search-container {
   background: #fff;
   padding: 15px 0;
@@ -28,6 +29,7 @@ h2 { font-size: 18px; margin: 0; font-weight: bold; }
   margin-bottom: 15px;
 }
 
+/* 搜尋輸入框群組 */
 .search-inputs {
   display: flex;
   align-items: center;
@@ -50,13 +52,14 @@ h2 { font-size: 18px; margin: 0; font-weight: bold; }
   width: 250px;
 }
 
+/* 搜尋操作按鈕群組 */
 .search-actions {
   display: flex;
   gap: 10px;
-  margin-top: 18px; /* 對齊輸入框 */
+  margin-top: 18px; /* 為了和輸入框對齊 */
 }
 
-/* --- 按鈕樣式 --- */
+/* 按鈕通用樣式 */
 .btn {
   padding: 5px 15px;
   border-radius: 20px;
@@ -68,37 +71,39 @@ h2 { font-size: 18px; margin: 0; font-weight: bold; }
   border: 1px solid transparent;
 }
 
-/* 灰色查詢按鈕 */
+/* 灰色按鈕 (查詢) */
 .btn-gray { background: #e0e0e0; color: #555; border: 1px solid #ccc; }
 /* 綠色外框按鈕 (清除/新增) */
 .btn-outline-green { background: #fff; border: 1px solid #4CAF50; color: #4CAF50; }
-/* 實心綠色 (修改) */
+/* 實心綠色按鈕 (修改) */
 .btn-green { background: #4CAF50; color: #fff; }
-/* 實心紅色 (刪除) */
+/* 實心紅色按鈕 (刪除) */
 .btn-red { background: #F44336; color: #fff; }
 
+/* 禁用狀態的按鈕 */
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* --- 表格操作區 --- */
+/* 表格上方的操作按鈕區 */
 .table-actions {
   margin-bottom: 10px;
   display: flex;
   gap: 10px;
 }
 
-/* --- 表格樣式 --- */
+/* 表格容器 */
 .table-container {
   border: 1px solid #eee;
   border-radius: 4px;
-  overflow-x: auto;
+  overflow-x: auto; /* 當內容過寬時顯示水平捲軸 */
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* 讓表格邊框合併 */
   font-size: 14px;
 }
 
+/* 表格標頭 (th) */
 th {
   background-color: #f9f9f9;
   color: #666;
@@ -108,17 +113,21 @@ th {
   border-bottom: 1px solid #ddd;
 }
 
+/* 表格儲存格 (td) */
 td {
   padding: 10px;
   border-bottom: 1px solid #eee;
   color: #333;
 }
 
+/* 滑鼠懸停在表格列上的效果 */
 tr:hover { background-color: #f5f5f5; cursor: pointer; }
-.selected-row { background-color: #e8f5e9; } /* 選中時變淺綠色 */
+/* 被選中的表格列樣式 */
+.selected-row { background-color: #e8f5e9; }
+/* 無資料時的提示樣式 */
 .no-data { text-align: center; color: #999; padding: 20px; }
 
-/* --- 分頁樣式 --- */
+/* 分頁功能區塊 */
 .pagination-container {
   display: flex;
   justify-content: space-between;

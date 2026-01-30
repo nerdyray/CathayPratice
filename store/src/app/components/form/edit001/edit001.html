@@ -1,11 +1,15 @@
+<!-- 更新店家資料頁面 -->
 <div class="page-container">
 
+  <!-- 頁面標題與操作按鈕區 -->
   <div class="header-section">
+    <!-- 標題 -->
     <div class="title-group">
       <div class="green-bar"></div>
       <h2>更新店家維護作業</h2>
     </div>
 
+    <!-- 按鈕列：修改、清除、返回 -->
     <div class="action-buttons">
       <button class="btn btn-outline-green" (click)="onUpdate()">
         <span class="icon">✎</span> 修改
@@ -19,46 +23,59 @@
     </div>
   </div>
 
+  <!--
+    主要表單
+    使用 [formGroup] 將這個 div 與 TypeScript 中的 `mainForm` 物件綁定
+  -->
   <div class="form-container" [formGroup]="mainForm">
 
+    <!-- 店家名稱輸入欄位 -->
     <div class="form-group">
       <label>店家名稱 <span class="required">*</span></label>
       <input type="text" formControlName="storeName" class="form-control" placeholder="請輸入">
+      <!-- 錯誤提示: 當 storeName 欄位驗證失敗且使用者點擊過，就顯示此訊息 -->
       <div class="error-msg" *ngIf="mainForm.get('storeName')?.invalid && mainForm.get('storeName')?.touched">
         請輸入店家名稱
       </div>
     </div>
 
+    <!-- 負責人輸入欄位 -->
     <div class="form-group">
       <label>負責人 <span class="required">*</span></label>
       <input type="text" formControlName="owner" class="form-control" placeholder="請輸入">
     </div>
 
+    <!-- 電話輸入欄位 -->
     <div class="form-group">
       <label>電話</label>
       <input type="text" formControlName="tel" class="form-control" placeholder="請輸入">
     </div>
 
+    <!-- 手機輸入欄位 -->
     <div class="form-group">
       <label>手機</label>
       <input type="text" formControlName="mobile" class="form-control" placeholder="請輸入">
     </div>
 
+    <!-- 地址輸入欄位 -->
     <div class="form-group">
       <label>地址</label>
       <input type="text" formControlName="address" class="form-control" placeholder="請輸入">
     </div>
 
+    <!-- 評價下拉選單 -->
     <div class="form-group">
       <label>評價</label>
       <select formControlName="evaluation" class="form-control">
         <option value="">請選擇</option>
-        <option value="讚">讚</option>
-        <option value="普通">普通</option>
-        <option value="待加強">待加強</option>
+        <option value="1">讚</option>
+        <option value="2">普通</option>
+        <option value="3">中差</option>
+        <option value="4">拒絕往來戶</option>
       </select>
     </div>
 
+    <!-- 異動日期 (不可編輯) -->
     <div class="form-group">
       <label>異動日期 <span class="required">*</span></label>
       <input type="text" formControlName="updateDate" class="form-control readonly-field" readonly>
@@ -66,18 +83,22 @@
 
   </div>
 
+  <!-- 成功提示訊息: 當 showSuccessToast 為 true 時顯示 -->
   @if (showSuccessToast) {
   <div class="toast toast-success">
     <div class="toast-icon">Success</div>
     <div class="toast-msg">修改成功!</div>
+    <!-- 關閉按鈕 -->
     <div class="toast-close" (click)="showSuccessToast=false">×</div>
   </div>
   }
 
+  <!-- 錯誤提示訊息: 當 showErrorToast 為 true 時顯示 -->
   @if (showErrorToast) {
   <div class="toast toast-error">
     <div class="toast-icon">Fail</div>
     <div class="toast-msg">{{ errorMessage }}</div>
+    <!-- 關閉按鈕 -->
     <div class="toast-close" (click)="showErrorToast=false">×</div>
   </div>
   }

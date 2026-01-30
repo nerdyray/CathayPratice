@@ -1,22 +1,38 @@
+<!-- 新增店家資料頁面 -->
 <div class="page-container">
 
+  <!-- 頁面標題 -->
   <div class="section-header">
     <div class="green-bar"></div>
     <h2>新增店家維護作業</h2>
   </div>
 
+  <!--
+    主要表單
+    [formGroup]="storeForm": 將這個 <form> 與 TypeScript 中的 storeForm 物件綁定。
+  -->
   <form [formGroup]="storeForm" class="form-container">
 
+    <!-- 第一行: 店家名稱輸入框 + 主要操作按鈕 -->
     <div class="form-row row-with-actions">
       <div class="input-group">
+        <!--
+          formControlName="storeName": 將這個 <input> 與 storeForm 中的 'storeName' 欄位綁定。
+          [class.error-border]: Angular 的 class 綁定。如果條件為 true，則加上 'error-border'這個 CSS class。
+        -->
         <input type="text" formControlName="storeName" placeholder="*店家名稱" class="form-control"
           [class.error-border]="storeForm.get('storeName')?.invalid && storeForm.get('storeName')?.touched">
 
+        <!--
+          @if: Angular v17+ 的新語法，用來做條件渲染。
+          如果 'storeName' 欄位有 'required' 錯誤，且使用者已碰觸過此欄位，就顯示錯誤訊息。
+        -->
         @if (storeForm.get('storeName')?.hasError('required') && storeForm.get('storeName')?.touched) {
         <small class="text-danger">店名為必填</small>
         }
       </div>
 
+      <!-- 新增、清除、返回按鈕 -->
       <div class="action-buttons">
         <button type="button" class="btn btn-outline" (click)="onAdd()">
           <span class="icon">＋</span> 新增
@@ -30,6 +46,7 @@
       </div>
     </div>
 
+    <!-- 負責人 -->
     <div class="form-row">
       <input type="text" formControlName="owner" placeholder="*負責人" class="form-control">
       @if (storeForm.get('owner')?.hasError('required') && storeForm.get('owner')?.touched) {
@@ -37,6 +54,7 @@
       }
     </div>
 
+    <!-- 電話 -->
     <div class="form-row">
       <input type="text" formControlName="tel" placeholder="*電話" class="form-control">
       @if (storeForm.get('tel')?.hasError('required') && storeForm.get('tel')?.touched) {
@@ -44,46 +62,36 @@
       }
     </div>
 
+    <!-- 傳真 (選填) -->
     <div class="form-row">
       <input type="text" formControlName="fax" placeholder="傳真" class="form-control">
     </div>
 
+    <!-- 手機 (選填) -->
     <div class="form-row">
       <input type="text" formControlName="mobile" placeholder="手機" class="form-control">
     </div>
 
+    <!-- 地址 (選填) -->
     <div class="form-row">
       <input type="text" formControlName="address" placeholder="地址" class="form-control">
     </div>
 
-    <div class="form-row">
-      <div class="fake-select-container">
-        <label class="floating-label">評價</label>
-
-        <select formControlName="remarks" class="input-inside">
-          <option value="" disabled selected hidden></option>
-          @for (option of remarksOptions; track option) {
-          <option [value]="option">{{ option }}</option>
-          }
-        </select>
-
-        <span class="chevron">⌄</span>
-      </div>
+    <!-- 評價 (下拉選單) -->
+    <div class="form-group">
+      <label>評價</label>
+      <select formControlName="evaluation" class="form-control">
+        <option value="">請選擇</option>
+        <option value="1">讚</option>
+        <option value="2">普通</option>
+        <option value="3">中差</option>
+        <option value="4">拒絕往來戶</option>
+      </select>
     </div>
 
-    <div class="select-value-area">
-      @if (storeForm.get('remarks')?.value) {
-      <span class="tag">
-        {{ storeForm.get('remarks')?.value }}
-        <span class="tag-close" (click)="removeRemarks(); $event.stopPropagation()">×</span>
-      </span>
-      }
-    </div>
-    <span class="chevron">⌄</span>
-
-    <input type="hidden" formControlName="remarks">
 
 
+    <!-- 異動日期 (不可編輯) -->
     <div class="form-row">
       <div class="disabled-input-container">
         <label class="floating-label-small">異動日期</label>
@@ -92,7 +100,9 @@
     </div>
   </form>
 
+  <!-- 提示訊息區塊 (Toast) -->
   <div class="notification-demo-area">
+    <!-- 失敗提示 -->
     @if (showErrorToast){
     <div class="toast toast-fail">
       <div class="toast-indicator"></div>
@@ -103,6 +113,7 @@
       <button class="toast-close" (click)="closeToast()">×</button>
     </div>
     }
+    <!-- 成功提示 -->
     <div class="notification-demo-area">
 
       @if (showSuccessToast){

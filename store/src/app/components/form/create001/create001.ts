@@ -1,111 +1,124 @@
-import { StoreService } from './../../../services/storeService'; // 路徑請確認
-import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Store } from '../../../interface/store';
+// 匯入 Angular 核心模組
+import { CommonModule } from '@angular/common'; // 提供 *ngIf, *ngFor 等基本指令
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core'; // 元件的核心功能
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'; // 處理表單的功能
+import { Router } from '@angular/router'; // 處理頁面跳轉
 
+// 匯入自訂的資料介面 (Interface) 與服務 (Service)
+import { Q001Tranrq } from './../../../interface/Q001Tranrq';   // 查詢店家 Request
+import { Store } from '../../../interface/store';                 // 店家資料物件
+import { StoreStateService } from '../../store-list-state/storeListState'; // 跨元件狀態管理服務
+import { StoreService } from './../../../services/storeService';   // API 服務
+
+/**
+ * @Component: Angular 的裝飾器，用來定義一個「元件」
+ * 包含 HTML 樣板、CSS 樣式和 TypeScript 程式邏輯
+ */
 @Component({
-  selector: 'app-create001',
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './create001.html',
-  styleUrl: './create001.css',
+  selector: 'app-create001', // 在 HTML 中使用 <app-create001> 來嵌入此元件
+  imports: [CommonModule, ReactiveFormsModule], // 匯入此獨立元件需要的模組
+  templateUrl: './create001.html', // HTML 樣板檔案
+  styleUrl: './create001.css',     // CSS 樣式檔案
 })
 export class Create001 implements OnInit {
 
-  remarksOptions: string[] = ['好', '中', '壞'];
+  // 表單欄位驗證用的正規表示式
+  PATTERN_TEL: RegExp = /^[0-9]{1,15}$/; // 驗證電話，允許 1-15 位數字
+  PATTERN_STRING_WITH_NUM: RegExp = /^[\u4e00-\u9fa5a-zA-Z0-9\s\-\.\,]+$/; // 驗證字串，允許中文、英文、數字和部分符號
 
-  // 修正 1: Regex 調整
-  // 電話: 允許 0-9，長度 1-15 (原本的寫法正確)
-  PATTERN_TEL: RegExp = /^[0-9]{1,15}$/;
-  // 文字: 允許中文、英文、數字 (增加 0-9 避免地址或店名報錯)
-  PATTERN_STRING_WITH_NUM: RegExp = /^[\u4e00-\u9fa5a-zA-Z0-9\s\-\.\,]+$/;
-  // 純數字: 用於傳真或手機 (修正：改用上面的 TEL Pattern 即可，不需要這個不允許0開頭的 Pattern)
-  // PATTERN_NUMBER: string = '^[1-9][0-9]*$' // 刪除這行，這會害死手機號碼
+  // 元件內部狀態變數
+  storeForm!: FormGroup; // 用來管理整個表單的物件
+  showErrorToast = false;   // 控制「錯誤」提示訊息的顯示
+  showSuccessToast = false; // 控制「成功」提示訊息的顯示
+  submited = false;         // 標記表單是否已送出
 
-  storeForm!: FormGroup;
-  showErrorToast: boolean = false;
-  showSuccessToast: boolean = false;
-  submited: boolean = false;
-
-  @Output() addStore = new EventEmitter<Store>();
-  @Output() updateStore = new EventEmitter<Store>();
-  @Output() deleteStore = new EventEmitter<Store>();
-  @Output() searchStore = new EventEmitter<Store>();
-
+  /**
+   * 建構函式 (Constructor)
+   * Angular 會自動「注入」我們需要的服務，方便我們在元件中使用
+   */
   constructor(
-    private fb: FormBuilder,
-    private storeService: StoreService,
-    private cdr: ChangeDetectorRef
+    private fb: FormBuilder,                 // 表單建立工具
+    private storeService: StoreService,      // API 呼叫服務
+    private cdr: ChangeDetectorRef,          // 手動觸發變更偵測的工具
+    private router: Router,                  // 路由服務，用來跳轉頁面
+    private storeState: StoreStateService    // 跨元件狀態管理服務
   ) { }
 
-  // 修正 2: 加入安全檢查
-  @Input() set storeData(value: Store | null) {
-    if (value && this.storeForm) { // 多判斷 this.storeForm 是否存在
-      this.storeForm.patchValue(value);
-    }
-  }
-
+  /**
+   * ngOnInit: 元件的生命週期掛鉤 (Lifecycle Hook)
+   * 會在元件初始化時執行一次，適合放初始設定
+   */
   ngOnInit(): void {
+    // 使用 FormBuilder 建立表單 (storeForm)
     this.storeForm = this.fb.group({
-      // 店名：加入數字允許
+      // 定義表單中的欄位與其「驗證規則」
+      // 'storeName' 欄位: 必填, 長度 1-10, 且需符合特定格式
       storeName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(10), Validators.pattern(this.PATTERN_STRING_WITH_NUM)]],
-
-      // 負責人：維持純文字
+      // 'owner' 欄位: 必填, 需為中英文
       owner: ['', [Validators.required, Validators.pattern(/^[\u4e00-\u9fa5a-zA-Z]+$/)]],
-
-      // 電話：必填
+      // 'tel' 欄位: 必填, 需符合電話格式
       tel: ['', [Validators.required, Validators.pattern(this.PATTERN_TEL)]],
-
-      // 評價
-      remarks: ['', [Validators.required]], // 下拉選單通常不需要 Regex，只要 Required
-
-      // 修正 3: 手機、傳真、地址改為「非必填」(根據截圖)，並修正 Regex
-      // 如果確定是必填，請把 Validators.required 加回去
-      fax: ['', [Validators.pattern(this.PATTERN_TEL)]], // 改用 TEL Pattern (允許0開頭)
-      mobile: ['', [Validators.pattern(this.PATTERN_TEL)]], // 改用 TEL Pattern
-
-      // 地址：通常很難用 Regex 規範完美，建議只做長度或 Required 檢查，或允許寬鬆的格式
+      // 'evaluation' 欄位: 必填
+      evaluation: ['', [Validators.required]],
+      // 'fax' 欄位: 選填, 但若填寫需符合電話格式
+      fax: ['', [Validators.pattern(this.PATTERN_TEL)]],
+      // 'mobile' 欄位: 選填, 但若填寫需符合電話格式
+      mobile: ['', [Validators.pattern(this.PATTERN_TEL)]],
+      // 'address' 欄位: 選填, 長度最多 100
       address: ['', [Validators.maxLength(100)]],
-
+      // 'updateDate' 欄位: 給定預設值且不可編輯
       updateDate: [{ value: '2022-05-16', disabled: true }]
     });
   }
 
+  /**
+   * 點擊「新增」按鈕時觸發
+   */
   onAdd(): void {
+    // 步驟 1: 將所有欄位標記為已碰觸，這樣才會顯示錯誤訊息
     this.storeForm.markAllAsTouched();
-    if (this.storeForm.invalid) {
-      this.showErrorToast = true;
-      // 建議：既然有 setTimeout 關閉，這裡可以不變，但建議在再次點擊時重置 timer (非必要)
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 3000);
-      return;
-    }
-    const rawData = this.storeForm.getRawValue();
-    const store: Store = { ...rawData };
-    this.storeService.addStore(store).subscribe({
-      next: (res) => {
-        this.showSuccessToast = true;
-        this.submited = true;
-        this.showErrorToast = false; // 確保錯誤關閉
-        this.cdr.detectChanges();
-        this.addStore.emit(res); // 建議在這裡 Emit
-        setTimeout(() => {
-          this.showSuccessToast = false;
-        }, 3000);
-      },
 
-      // 成功後 3 秒自動關閉成功訊息
-      // 修正 4: 加入錯誤處理
+    // 步驟 2: 檢查表單驗證是否通過
+    if (this.storeForm.invalid) {
+      this.showErrorToast = true; // 顯示錯誤提示
+      return; // 中斷執行
+    }
+
+    // 步驟 3: 組合要送到後端的資料
+    const rawData = this.storeForm.getRawValue(); // 取得表單所有欄位的值
+    const store: Store = { ...rawData };         // 將表單值轉為 Store 物件
+
+    // 步驟 4: 呼叫 API 服務來新增資料
+    this.storeService.addStore(store).subscribe({
+      // `subscribe` 用來接收 API 的回應
+      // `next` 表示 API 成功回傳資料
+      next: (res) => {
+        this.showSuccessToast = true; // 顯示成功提示
+        this.submited = true;
+        this.showErrorToast = false;
+        this.cdr.detectChanges();     // 手動觸發畫面更新
+
+        // 建立新的查詢條件，讓列表頁返回時能直接搜尋到這筆新資料
+        const newCondition: Q001Tranrq = {
+          storeName: store.storeName,
+          page: { pageNumber: 0, pageSize: 10 }
+        };
+        // 透過狀態管理服務，通知其他元件 (如列表頁) 新增成功
+        this.storeState.setCreatedSuccessState(newCondition);
+      },
+      // `error` 表示 API 發生錯誤
       error: (err) => {
-        console.error('新增失敗:', err);
-        this.showErrorToast = true; // 顯示錯誤訊息
+        console.error('新增失敗:', err); // 在開發者工具中印出錯誤，方便除錯
+        this.showErrorToast = true;      // 顯示錯誤提示給使用者
       }
     });
   }
 
+  /**
+   * 點擊「清除」按鈕時觸發
+   */
   onClear(): void {
-    // 修正 5: 欄位名稱要跟 FormGroup 一模一樣
+    // 重設表單所有欄位的值
     this.storeForm.reset({
       storeName: '',
       owner: '',
@@ -113,24 +126,25 @@ export class Create001 implements OnInit {
       fax: '',
       mobile: '',
       address: '',
-      // evalution: '', // 刪除：這是錯字且不在 FormGroup
-      remarks: '',     // 對應 FormGroup
-      updateDate: '2022-05-16' // 對應 FormGroup (保持預設值)
+      evaluation: '',
+      updateDate: '2022-05-16' // 將日期恢復預設值
     });
     this.submited = false;
   }
 
+  /**
+   * 點擊「返回」按鈕時觸發
+   */
   onBack(): void {
-    console.log('返回上一頁');
+    // 使用 router 跳轉回店家列表頁
+    this.router.navigate(['/store/list']);
   }
 
-  // 實作移除評價
-  removeRemarks(): void {
-    this.storeForm.get('remarks')?.setValue(''); // 或 null
-  }
-
+  /**
+   * 關閉提示訊息
+   */
   closeToast(): void {
     this.showErrorToast = false;
-    this.showSuccessToast = false; // 建議兩個都關
+    this.showSuccessToast = false;
   }
 }

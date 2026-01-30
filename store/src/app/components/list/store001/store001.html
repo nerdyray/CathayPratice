@@ -1,18 +1,25 @@
+<!-- 店家查詢頁面 -->
 <div class="page-container">
 
+  <!-- 頁面標題 -->
   <div class="section-header">
     <div class="green-bar"></div>
     <h2>店家查詢作業</h2>
   </div>
 
+  <!-- 搜尋功能區 -->
   <div class="search-container">
     <div class="search-inputs">
+      <!-- 店家名稱輸入框 -->
       <div class="input-group">
         <label>店家名稱</label>
+        <!-- [(ngModel)]="searchKeyword" 是雙向綁定，會將輸入框的值同步到 TypeScript 中的 searchKeyword 變數 -->
         <input type="text" [(ngModel)]="searchKeyword" class="form-control" placeholder="請輸入">
       </div>
 
+      <!-- 搜尋按鈕區 -->
       <div class="search-actions">
+        <!-- (click)="onSearch()" 會在點擊按鈕時，呼叫 TypeScript 中的 onSearch 方法 -->
         <button class="btn btn-gray" (click)="onSearch()">
           <span class="icon">🔍</span> 查詢
         </button>
@@ -26,7 +33,9 @@
     </div>
   </div>
 
+  <!-- 表格操作按鈕 (修改、刪除) -->
   <div class="table-actions">
+    <!-- [disabled]="!selectedStore" 表示如果沒有選取任何店家 (selectedStore 為 null)，則禁用按鈕 -->
     <button class="btn btn-green" (click)="onEdit()" [disabled]="!selectedStore">
       <span class="icon">✎</span> 修改
     </button>
@@ -35,8 +44,10 @@
     </button>
   </div>
 
+  <!-- 顯示查詢結果的表格 -->
   <div class="table-container">
     <table>
+      <!-- 表頭 -->
       <thead>
         <tr>
           <th style="width: 50px;">#</th>
@@ -46,29 +57,39 @@
           <th>電話</th>
           <th>手機</th>
           <th>評價</th>
-          <th>備註</th>
+          <th>地址</th>
           <th>異動人員</th>
           <th>異動日期</th>
         </tr>
       </thead>
+      <!-- 表格內容 -->
       <tbody>
+        <!--
+          *ngFor: Angular 指令，會根據 storeList 陣列的長度，重複渲染 <tr> 元素。
+          let store of storeList: 將 storeList 陣列中的每個元素依序指定給 store 變數。
+          [class.selected-row]: 如果 selectedStore 等於目前的 store，就加上 'selected-row' CSS class。
+          (click)="onSelect(store)": 點擊這一列時，呼叫 onSelect 方法並傳入目前的 store 物件。
+        -->
         <tr *ngFor="let store of storeList; let i = index" [class.selected-row]="selectedStore === store"
           (click)="onSelect(store)">
           <td>{{ i + 1 }}</td>
           <td>
+            <!-- [checked] 綁定 radio 按鈕是否被選取 -->
             <input type="radio" name="storeSelect" [checked]="selectedStore === store">
             <span class="radio-custom"></span>
           </td>
+          <!-- {{ ... }}: 這是 Angular 的插值語法，會將變數的值顯示在畫面上 -->
           <td>{{ store.storeName }}</td>
           <td>{{ store.owner }}</td>
           <td>{{ store.tel }}</td>
           <td>{{ store.mobile }}</td>
-          <td>{{ store.remarks }}</td>
+          <td>{{ store.evaluation }}</td>
           <td>{{ store.address }}</td>
           <td>{{store.updateUser}}</td>
           <td>{{ store.updateTime }}</td>
         </tr>
 
+        <!-- 如果查無資料 (storeList 是空陣列)，就顯示這個提示訊息 -->
         <tr *ngIf="storeList.length === 0">
           <td colspan="10" class="no-data">查無資料</td>
         </tr>
@@ -76,6 +97,7 @@
     </table>
   </div>
 
+  <!-- 分頁功能 -->
   <div class="pagination-container">
     <div class="page-info">
       <span class="page-size-select">10 筆/頁</span>

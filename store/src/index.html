@@ -1,13 +1,29 @@
 <!doctype html>
+<!-- 這是整個應用程式最主要的 HTML 檔案，也是使用者瀏覽器載入的第一個檔案 -->
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Store</title>
+  <!-- meta 標籤提供了關於 HTML 文件的元數據 -->
+  <meta charset="utf-8"> <!-- 指定文件使用的字元編碼為 UTF-8 -->
+  <title>Store</title> <!-- 顯示在瀏覽器分頁上的標題 -->
+  
+  <!-- 
+    <base> 標籤為頁面上的所有相對 URL 提供基礎路徑。
+    href="/" 表示所有相對路徑 (例如圖片、腳本) 都會從網站的根目錄開始解析。
+    這對於 Angular 的路由功能至關重要。
+  -->
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- 讓網頁在手機等不同尺寸的設備上能有好的顯示效果 (RWD) -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico"> <!-- 指定顯示在瀏覽器分頁上的小圖示 -->
 </head>
 <body>
+  <!-- 
+    這裡是 Angular 應用程式的進入點。
+    Angular CLI 在建置專案時，會將所有必要的 JavaScript 檔案插入到這個檔案的末尾。
+    當瀏覽器載入這些腳本後，Angular 會啟動並尋找 <app-root> 這個標籤，
+    然後將根元件 (App Component) 的內容渲染到這個標籤裡面。
+    整個應用程式的故事就從這裡開始。
+  -->
   <app-root></app-root>
 </body>
 </html>

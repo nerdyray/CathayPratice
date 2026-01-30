@@ -1,20 +1,23 @@
+/* 頁面整體容器 */
 .page-container {
   padding: 20px;
   max-width: 800px;
   font-family: "Microsoft JhengHei", sans-serif;
 }
 
-/* --- 標題區 --- */
+/* 標題區塊 */
 .header-section {
   margin-bottom: 20px;
 }
 
+/* 標題群組 (綠色線 + 文字) */
 .title-group {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
 }
 
+/* 標題左側的綠色裝飾條 */
 .green-bar {
   width: 5px;
   height: 24px;
@@ -22,6 +25,7 @@
   margin-right: 10px;
 }
 
+/* H2 標題文字 */
 h2 {
   font-size: 18px;
   font-weight: bold;
@@ -29,58 +33,65 @@ h2 {
   color: #333;
 }
 
-/* --- 按鈕區 --- */
+/* 操作按鈕區塊 */
 .action-buttons {
   display: flex;
   gap: 10px;
-  border-bottom: 1px dashed #ddd; /* 分隔線 */
+  border-bottom: 1px dashed #ddd; /* 虛線分隔線 */
   padding-bottom: 15px;
 }
 
+/* 按鈕基本樣式 */
 .btn {
   padding: 6px 15px;
-  border-radius: 20px;
+  border-radius: 20px; /* 圓角 */
   font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 5px;
   background: white;
-  transition: all 0.3s;
+  transition: all 0.3s; /* 動畫效果 */
 }
 
-/* 綠色外框按鈕樣式 */
+/* 綠色外框按鈕 */
 .btn-outline-green {
   border: 1px solid #4CAF50;
   color: #4CAF50;
 }
 
+/* 綠色外框按鈕的滑鼠懸停效果 */
 .btn-outline-green:hover {
   background-color: #e8f5e9;
 }
 
+/* 按鈕中的圖示 */
 .icon { font-size: 14px; }
 
-/* --- 表單樣式 --- */
+/* 表單容器 */
 .form-container {
   margin-top: 20px;
 }
 
+/* 表單群組 (標籤 + 輸入框) */
 .form-group {
   margin-bottom: 15px;
   display: flex;
   flex-direction: column; /* 垂直排列 */
-  max-width: 300px; /* 限制寬度跟截圖一樣 */
+  max-width: 300px; /* 限制寬度 */
 }
 
+/* 欄位標籤 */
 .form-group label {
   font-size: 13px;
   color: #666;
   margin-bottom: 5px;
 }
 
+/* 必填星號 (*) */
 .required { color: red; margin-left: 3px; }
 
+/* 輸入框 */
 .form-control {
   padding: 8px 10px;
   border: 1px solid #ccc;
@@ -88,30 +99,32 @@ h2 {
   font-size: 14px;
 }
 
+/* 輸入框獲取焦點時的樣式 */
 .form-control:focus {
   border-color: #4CAF50;
   outline: none;
 }
 
-/* 唯讀欄位樣式 (灰色底) */
+/* 唯讀欄位的樣式 */
 .readonly-field {
   background-color: #e0e0e0;
   color: #555;
   cursor: not-allowed;
 }
 
+/* 錯誤訊息文字 */
 .error-msg {
   color: #F44336;
   font-size: 12px;
   margin-top: 4px;
 }
 
-/* --- Toast 樣式 (沿用你之前的) --- */
+/* 訊息提示框 (Toast) 的通用樣式 */
 .toast {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); /* 置中顯示 */
   width: 300px;
   padding: 15px;
   border-radius: 8px;
@@ -119,14 +132,19 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 9999;
+  z-index: 9999; /* 確保在最上層 */
 }
 
+/* 成功提示框 */
 .toast-success { background-color: #e8f5e9; border-left: 5px solid #4CAF50; }
+/* 錯誤提示框 */
 .toast-error { background-color: #ffebee; border-left: 5px solid #F44336; }
 
+/* 提示框圖示 */
 .toast-icon { font-weight: bold; font-size: 16px; margin-right: 10px; }
 .toast-success .toast-icon { color: #2e7d32; }
 .toast-error .toast-icon { color: #c62828; }
 
+/* 提示框關閉按鈕 */
 .toast-close { cursor: pointer; font-size: 20px; color: #999; }
+

@@ -1,10 +1,11 @@
-import { Tranrq } from './../../../interface/createTranrq';
+
+// 匯入 Angular 核心模組
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router'; // 用於路由跳轉和接參數
+import { ActivatedRoute, Router } from '@angular/router'; // 用於讀取路由參數和頁面跳轉
 import { StoreService } from '../../../services/storeService';
-import { T001Tranrq } from '../../../interface/T001Tranrq';
+import { EditTranrq } from '../../../interface/T001Tranrq';
 
 @Component({
   selector: 'app-edit001',
@@ -14,64 +15,59 @@ import { T001Tranrq } from '../../../interface/T001Tranrq';
 })
 export class Edit001 implements OnInit {
 
-  mainForm: FormGroup;
-  storeId: number | null = null; // 儲存目前的 StoreID
+  mainForm: FormGroup; // 表單物件
+  storeId: number | null = null; // 儲存從路由傳過來的店家 ID
 
-  // Toast 控制
+  // 提示訊息 (Toast) 的顯示控制
   showSuccessToast = false;
   showErrorToast = false;
   errorMessage = '請確認必填資料!';
 
   constructor(
-
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, // 用來取得當前路由資訊
     private storeService: StoreService,
     private cdr: ChangeDetectorRef
   ) {
-    // 1. 初始化表單
+    // 在建構函式中初始化表單
     this.mainForm = this.fb.group({
-      storeId: [null], // 隱藏欄位
-      storeName: ['', Validators.required],
-      owner: ['', Validators.required],
+      storeId: [null], // 隱藏欄位，用來存放店家 ID
+      storeName: ['', Validators.required], // 店家名稱，必填
+      owner: ['', Validators.required],     // 負責人，必填
       tel: [''],
       mobile: [''],
       address: [''],
       evaluation: [''],
-      updateDate: [{ value: '', disabled: true }] // 設為 disabled，使用者不能改
+      updateDate: [{ value: '', disabled: true }] // 異動日期，不可編輯
     });
   }
 
   ngOnInit(): void {
+    // 在元件初始化時，從路由的參數中取得 storeId
     const idFromUrl = this.route.snapshot.paramMap.get('storeId');
 
     if (idFromUrl) {
       this.storeId = Number(idFromUrl);
-      console.log('✅ 成功鎖定 ID:', this.storeId);
-
-      // 🔥【關鍵】這行一定要加！不然 loadStoreDetail 永遠不會執行！
+      // 根據取得的 ID，載入店家的詳細資料
       this.loadStoreDetail(this.storeId);
-
     }
   }
 
-  // 修改按鈕動作
+  // 點擊「修改」按鈕
   onUpdate(): void {
-    // 1. 驗證表單
+    // 步驟 1: 檢查表單是否有效
     if (this.mainForm.invalid) {
-      this.mainForm.markAllAsTouched(); // 觸發紅字檢查
+      this.mainForm.markAllAsTouched(); // 標記所有欄位為已碰觸，以顯示錯誤訊息
       this.errorMessage = '請確認必填資料!';
       this.showErrorToast = true;
-      setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 3000);
       return;
     }
 
-    // 2. 準備 DTO
-    // getRawValue() 可以拿到包含 disabled (updateDate) 的值
-    const formValue = this.mainForm.getRawValue();
-    const rawData = {
-      storeId: this.storeId!, // 確保變數名稱是 storeId (駝峰)
+    // 步驟 2: 組合要送到後端的 Request 資料
+    const formValue = this.mainForm.getRawValue(); // 使用 getRawValue() 才能取得被禁用的欄位值
+    const tranrq: EditTranrq = {
+      storeId: this.storeId ?? 0, // 使用目前儲存的 storeId
       storeName: formValue.storeName,
       owner: formValue.owner,
       tel: formValue.tel,
@@ -80,55 +76,47 @@ export class Edit001 implements OnInit {
       evaluation: formValue.evaluation,
       fax: formValue.fax || '',
       remarks: formValue.remarks || ''
-      // date: ... (如果有需要)
     };
-    // 3. 呼叫 Service
-    this.storeService.updateStore(rawData as any).subscribe({
+
+    // 步驟 3: 呼叫 API 服務
+    this.storeService.updateStore(tranrq).subscribe({
       next: (res) => {
-        console.log('修改成功', res);
+        // 更新成功
         this.showSuccessToast = true;
         this.showErrorToast = false;
-        this.cdr.detectChanges();
-        setTimeout(() => {
-          this.showSuccessToast = false;
-
-        }, 3000);
+        this.cdr.detectChanges(); // 手動觸發畫面更新
       },
       error: (err) => {
+        // 更新失敗
         console.error('修改失敗', err);
-        this.errorMessage = '修改失敗 : 更新失敗'; // 模擬截圖錯誤訊息
+        this.errorMessage = '修改失敗 : 更新失敗';
         this.showErrorToast = true;
         this.cdr.detectChanges();
-        setTimeout(() => { this.showErrorToast = false; this.cdr.detectChanges(); }, 3000);
       }
     });
   }
 
+  /**
+   * 根據 ID 載入店家資料並填入表單
+   * @param id 店家 ID
+   */
   loadStoreDetail(id: number): void {
-    console.log('準備向後端查詢 ID:', id);
     const requestPayload = {
-      MWHEADER: {
-        MSGID: 'XXA-C-STOREQ001' // 查詢類的 MSGID
-      },
+      MWHEADER: { MSGID: 'XXA-C-STOREQ001' },
       TRANRQ: {
         storeId: id,
         storeName: '',
-        page: {
-          pageNumber: 0,
-          pageSize: 1 // 查單筆，給 1 即可
-        }
+        page: { pageNumber: 0, pageSize: 1 } // 查單筆
       }
     };
 
-    // 2. 發送請求
+    // 呼叫 API 取得資料
     this.storeService.findByStoreId(requestPayload).subscribe({
       next: (res) => {
-        // 3. 解析回傳資料 (Response)
-        // 後端回傳的是 StoreResponse<Q001Tranrs>，裡面通常是 List (Page)
+        // 檢查回傳資料是否成功
         if (res && res.TRANRS && res.TRANRS.items && res.TRANRS.items.length > 0) {
-          // 因為是用 ID 查，理論上只會有一筆，抓第 0 筆
-          const data = res.TRANRS.items[0];
-          // 4. 填表
+          const data = res.TRANRS.items[0]; // 取回傳列表的第一筆資料
+          // 使用 patchValue 將資料填入表單
           this.mainForm.patchValue({
             store_id: data.storeId,
             storeName: data.storeName,
@@ -137,7 +125,7 @@ export class Edit001 implements OnInit {
             mobile: data.mobile,
             address: data.address,
             evaluation: data.evaluation,
-            updateDate: data.updateTime // 視情況處理日期格式
+            updateDate: data.updateTime
           });
         }
       },
@@ -145,14 +133,19 @@ export class Edit001 implements OnInit {
     });
   }
 
-  // 清除按鈕 (重置為原始資料，或清空)
+  // 點擊「清除」按鈕，重設表單
   onClear(): void {
-    this.mainForm.reset();
+    if (this.storeId) {
+      // 如果有 storeId，代表是編輯模式，應還原成原始資料
+      this.loadStoreDetail(this.storeId);
+    } else {
+      // 如果沒有 storeId，則清空表單
+      this.mainForm.reset();
+    }
   }
 
-  // 回上一頁
+  // 點擊「回上一頁」按鈕
   onBack(): void {
-    this.router.navigate(['/store/list']); // 請修改為你的列表頁路徑
+    this.router.navigate(['/store/list']); // 跳轉回路徑為 /store/list 的頁面
   }
-
 }

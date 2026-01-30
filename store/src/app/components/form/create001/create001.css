@@ -1,4 +1,4 @@
-/* --- 基礎設定 --- */
+/* 頁面整體容器 */
 .page-container {
   padding: 20px;
   font-family: "Microsoft JhengHei", sans-serif;
@@ -6,20 +6,22 @@
   max-width: 800px;
 }
 
-/* --- 標題區 --- */
+/* 區塊標題 */
 .section-header {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
+/* 標題左側的綠色裝飾條 */
 .green-bar {
   width: 5px;
   height: 24px;
-  background-color: #4CAF50; /* 截圖中的綠色 */
+  background-color: #4CAF50; /* 綠色 */
   margin-right: 10px;
 }
 
+/* H2 標題文字 */
 h2 {
   font-size: 18px;
   font-weight: bold;
@@ -27,84 +29,89 @@ h2 {
   color: #333;
 }
 
-/* --- 表單佈局 --- */
+/* 表單容器 */
 .form-container {
   display: flex;
   flex-direction: column;
-  gap: 30px; /* 原本是 15px，改成 30px 以容納浮動的 label */
+  gap: 30px; /* 增加間距以容納標籤 */
   margin-bottom: 40px;
 }
 
+/* 表單中的每一行 */
 .form-row {
   width: 100%;
-  max-width: 400px; /* 控制輸入框寬度，與截圖相仿 */
+  max-width: 400px; /* 限制輸入框寬度 */
 }
 
-/* 第一行特殊處理：輸入框 + 按鈕 */
+/* 包含按鈕的特殊行 */
 .row-with-actions {
   display: flex;
   align-items: center;
   gap: 10px;
-  max-width: 100%; /* 第一行可以寬一點以容納按鈕 */
+  max-width: 100%;
 }
 
 .row-with-actions .input-group {
-  width: 400px; /* 固定與下方輸入框同寬 */
+  width: 400px; /* 固定寬度 */
   flex-shrink: 0;
 }
 
-/* --- 輸入框樣式 --- */
+/* 輸入框基本樣式 */
 .form-control {
   width: 100%;
   padding: 8px 10px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box; /* 確保 padding 不會撐大寬度 */
+  box-sizing: border-box; /* 確保 padding 不影響寬度 */
   outline: none;
 }
 
+/* 輸入框獲取焦點時的樣式 */
 .form-control:focus {
   border-color: #66afe9;
 }
 
-/* Placeholder 樣式模擬 */
+/* 輸入框預設提示文字 */
 ::placeholder {
   color: #999;
 }
 
-/* Disabled 輸入框 (異動日期) */
+/* 不可編輯的輸入框容器 (用於異動日期) */
 .disabled-input-container {
   position: relative;
 }
 
+/* 不可編輯的輸入框樣式 */
 .form-control.disabled {
-  background-color: #e0e0e0; /* 深灰色背景 */
+  background-color: #e0e0e0; /* 灰色背景 */
   color: #555;
   border: 1px solid #aaa;
-  padding-top: 10px; /* 為了排版好看 */
+  padding-top: 10px;
 }
 
+/* 浮動在輸入框上方的小標籤 */
 .floating-label-small {
   font-size: 12px;
   color: #666;
   position: absolute;
-  top: -20px; /* 將標籤移到輸入框上方 */
+  top: -20px; /* 移到輸入框上方 */
   left: 0;
 }
 
-/* --- 按鈕樣式 --- */
+/* 操作按鈕的容器 */
 .action-buttons {
   display: flex;
   gap: 8px;
 }
 
+/* 按鈕基本樣式 */
 .btn {
   background: #fff;
   border: 1px solid #28a745; /* 綠色邊框 */
   color: #28a745;
   padding: 4px 12px;
-  border-radius: 20px; /* 膠囊狀圓角 */
+  border-radius: 20px; /* 圓角形成膠囊狀 */
   font-size: 14px;
   cursor: pointer;
   display: flex;
@@ -113,48 +120,54 @@ h2 {
   white-space: nowrap;
 }
 
+/* 按鈕滑鼠懸停效果 */
 .btn:hover {
   background-color: #f0fff4;
 }
 
+/* 按鈕中的圖示 */
 .icon {
   font-weight: bold;
   font-size: 16px;
 }
 
-/* --- 評價 (模擬 Select) --- */
+/* 模擬下拉選單的容器 (評價) */
 .fake-select-container {
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 0 10px; /* 調整 padding */
+  padding: 0 10px;
   position: relative;
   height: 38px;
   display: flex;
   align-items: center;
   background: #fff;
-  overflow: hidden; /* 防止內容溢出 */
+  overflow: hidden;
 }
 
+/* 浮動標籤 */
 .floating-label {
   font-size: 12px;
   color: #999;
   position: absolute;
   top: 2px;
   left: 10px;
-  pointer-events: none; /* 讓滑鼠點擊可以直接穿透到 input */
+  pointer-events: none; /* 讓滑鼠點擊可以穿透 */
 }
 
+/* 下拉選單的值區域 */
 .select-value-area {
-  margin-top: 10px; /* 讓內容避開 label */
+  margin-top: 10px;
   width: 100%;
 }
 
+/* 標籤樣式 */
 .tag {
   display: inline-flex;
   align-items: center;
   font-size: 14px;
 }
 
+/* 標籤關閉按鈕 */
 .tag-close {
   margin-left: 10px;
   cursor: pointer;
@@ -162,18 +175,20 @@ h2 {
   font-weight: bold;
 }
 
+/* 下拉箭頭圖示 */
 .chevron {
   position: absolute;
   right: 10px;
   color: #999;
 }
 
-/* --- 訊息提示 (Toasts) 樣式 --- */
+/* 訊息提示框的區域 */
 .notification-demo-area {
   border-top: 1px dashed #ccc;
   padding-top: 20px;
 }
 
+/* 訊息提示框 (Toast) */
 .toast {
   width: 400px;
   min-height: 80px;
@@ -181,15 +196,17 @@ h2 {
   border-radius: 8px;
   display: flex;
   position: relative;
-  overflow: hidden; /* 確保左側條不溢出 */
+  overflow: hidden; /* 避免內容溢出 */
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* 提示框左側的指示條 */
 .toast-indicator {
   width: 10px;
   flex-shrink: 0;
 }
 
+/* 提示框內容 */
 .toast-content {
   flex-grow: 1;
   padding: 15px 20px;
@@ -198,6 +215,7 @@ h2 {
   justify-content: center;
 }
 
+/* 提示框標題 */
 .toast-title {
   font-weight: bold;
   font-size: 18px;
@@ -205,11 +223,13 @@ h2 {
   color: #555;
 }
 
+/* 提示框訊息 */
 .toast-message {
   font-size: 16px;
   color: #666;
 }
 
+/* 提示框關閉按鈕 */
 .toast-close {
   background: none;
   border: none;
@@ -222,7 +242,7 @@ h2 {
   cursor: pointer;
 }
 
-/* Fail 樣式 (粉紅底/紅條) */
+/* 失敗提示框 (粉紅底色/紅色指示條) */
 .toast-fail {
   background-color: #fdecea; /* 淺粉紅 */
 }
@@ -230,41 +250,43 @@ h2 {
   background-color: #e45a5a; /* 紅色 */
 }
 
+/* 固定提示框在右下角 */
 .notification-demo-area {
   position: fixed; /* 固定在視窗 */
   bottom: 20px;    /* 距離底部 20px */
   right: 20px;     /* 距離右邊 20px */
   z-index: 999;    /* 確保在最上層 */
 }
-/* Success 樣式 (淺綠底/綠條) */
+/* 成功提示框 (淺綠底色/綠色指示條) */
 .toast-success {
   background-color: #e9f7ef; /* 淺綠 */
 }
 .toast-success .toast-indicator {
   background-color: #5bc283; /* 綠色 */
 }
-/* 讓 select 繼承 input-inside 的大小與無邊框設定 */
+/* 讓 select 元素看起來像普通輸入框 */
 select.input-inside {
   width: 100%;
   height: 100%;
   border: none;
   outline: none;
   background: transparent;
-  padding-top: 15px; /* 避開左上角的 label */
+  padding-top: 15px; /* 避開左上角的標籤 */
   padding-left: 5px; /* 微調文字位置 */
   font-size: 14px;
   cursor: pointer;
 
-  /* --- 關鍵：隱藏瀏覽器預設的下拉箭頭 --- */
-  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  /* 隱藏瀏覽器預設的下拉箭頭 */
+  -webkit-appearance: none; /* 舊版 WebKit 瀏覽器 */
   -moz-appearance: none;    /* Firefox */
-  appearance: none;         /* Standard */
+  appearance: none;         /* 標準語法 */
 }
 
-/* 修正：讓箭頭 (chevron) 不會擋住點擊 */
+/* 修正下拉箭頭，避免擋住點擊 */
 .chevron {
   position: absolute;
   right: 10px;
   color: #999;
-  pointer-events: none; /* 讓滑鼠點擊穿透箭頭，直接點到 select */
+  pointer-events: none; /* 讓點擊可以穿透 */
 }
+
