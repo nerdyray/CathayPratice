@@ -36,7 +36,7 @@ import tools.jackson.databind.ObjectMapper;
 
 /**
  * @Transactional：標記在類別上，表示這個類別所有 public 方法都具有交易性。
- *               如果方法執行成功，交易就提交；如果中途發生例外，交易就回滾。
+ *                                如果方法執行成功，交易就提交；如果中途發生例外，交易就回滾。
  * @Service：告訴 Spring 框架，這是一個服務層的元件，應該被 Spring 容器管理。
  */
 @Transactional
@@ -53,6 +53,7 @@ public class StoreServiceImpl implements StoreService {
 
     /**
      * 新增店家資料
+     * 
      * @param storeRequest 包含店家資料的請求
      * @return 包含操作結果的回應
      * @throws ErrorInputException 如果輸入資料有誤
@@ -85,9 +86,10 @@ public class StoreServiceImpl implements StoreService {
 
     /**
      * 查詢所有店家資料（分頁）
+     * 
      * @param storeRequest 包含查詢條件與分頁資訊的請求
      * @return 包含查詢結果與分頁資訊的回應
-     * @throws ErrorInputException 如果輸入資料有誤
+     * @throws ErrorInputException   如果輸入資料有誤
      * @throws DataNotFoundException 如果查無資料
      */
     @Override
@@ -145,9 +147,10 @@ public class StoreServiceImpl implements StoreService {
 
     /**
      * 根據店家 ID 查詢特定店家資料
+     * 
      * @param storeRequest 包含店家 ID 的請求
      * @return 包含店家資料的回應
-     * @throws ErrorInputException 如果輸入資料有誤
+     * @throws ErrorInputException   如果輸入資料有誤
      * @throws DataNotFoundException 如果查無資料
      */
     @Override
@@ -159,7 +162,7 @@ public class StoreServiceImpl implements StoreService {
         Integer storeId = data.getStoreId();
 
         // 使用
-		// repo 查詢店家，如果找不到就拋出例外
+        // repo 查詢店家，如果找不到就拋出例外
         StoreEntity storeEntity = storeRepo.findByStoreId(storeId)
                 .orElseThrow(() -> new DataNotFoundException());
 
@@ -193,9 +196,10 @@ public class StoreServiceImpl implements StoreService {
 
     /**
      * 更新店家資料
+     * 
      * @param storeRequest 包含要更新的店家資料的請求
      * @return 包含操作結果的回應
-     * @throws ErrorInputException 如果輸入資料有誤
+     * @throws ErrorInputException   如果輸入資料有誤
      * @throws DataNotFoundException 如果找不到要更新的店家
      */
     @Override
@@ -238,6 +242,7 @@ public class StoreServiceImpl implements StoreService {
 
     /**
      * 刪除店家資料
+     * 
      * @param storeRequest 包含要刪除的店家 ID 的請求
      * @return 包含操作結果的回應
      * @throws DataNotFoundException 如果找不到要刪除的店家
@@ -248,7 +253,7 @@ public class StoreServiceImpl implements StoreService {
         T003Tranrq data = storeRequest.getTranrq();
         // 呼叫 repo 的刪除方法，如果刪除不成功 (找不到資料)，就拋出例外
         storeRepo.deleteByStoreId(data.getStoreId())
-        .orElseThrow(() -> new DataNotFoundException());
+                .orElseThrow(() -> new DataNotFoundException());
 
         // 準備成功的回應訊息
         T003Tranrs createTranrs = new T003Tranrs();
