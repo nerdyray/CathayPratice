@@ -86,7 +86,7 @@ export class Store001 implements OnInit {
   // 點擊「清除」按鈕
   onClear(): void {
     this.searchKeyword = '';
-    this.onSearch(); // 清空後重新查詢所有資料
+    this.storeList = [];
   }
 
   // 當使用者點擊表格中的某一列
@@ -113,7 +113,6 @@ export class Store001 implements OnInit {
   // 點擊「刪除」按鈕
   onDelete(): void {
     if (!this.selectedStore) return;
-
     // 跳出確認對話框，防止誤刪
     const confirmDelete = confirm(`確定要刪除 ${this.selectedStore.storeName} 嗎？`);
     if (confirmDelete) {

@@ -77,7 +77,6 @@ export class Create001 implements OnInit {
   onAdd(): void {
     // 步驟 1: 將所有欄位標記為已碰觸，這樣才會顯示錯誤訊息
     this.storeForm.markAllAsTouched();
-
     // 步驟 2: 檢查表單驗證是否通過
     if (this.storeForm.invalid) {
       this.showErrorToast = true; // 顯示錯誤提示

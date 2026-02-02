@@ -211,20 +211,21 @@ public class StoreServiceImpl implements StoreService {
         // 先從資料庫撈出舊資料，如果撈不到就拋出例外
         StoreEntity storeEntity = storeRepo.findByStoreId(data.getStoreId())
                 .orElseThrow(() -> new DataNotFoundException());
-
-        // 將傳入的新資料更新到從資料庫撈出來的實體物件上
-        storeEntity.setStoreName(data.getStoreName());
-        storeEntity.setOwner(data.getOwner());
-        storeEntity.setTel(data.getTel());
-        storeEntity.setFax(data.getFax());
-        storeEntity.setMobile(data.getMobile());
-        storeEntity.setAddress(data.getAddress());
-        storeEntity.setEvaluation(data.getEvaluation());
-        storeEntity.setRemarks(data.getRemarks());
-        // JPA Auditing 會自動更新 updateTime，所以這裡手動設定會被覆蓋
-        storeEntity.setUpdateTime(LocalDateTime.now());
-        // 儲存更新後的實體
+        //改以ObjectMapper轉換資料格式
+        storeEntity = om.convertValue(data, StoreEntity.class);
         storeRepo.save(storeEntity);
+        // 將傳入的新資料更新到從資料庫撈出來的實體物件上
+        // storeEntity.setStoreName(data.getStoreName());
+        // storeEntity.setOwner(data.getOwner());
+        // storeEntity.setTel(data.getTel());
+        // storeEntity.setFax(data.getFax());
+        // storeEntity.setMobile(data.getMobile());
+        // storeEntity.setAddress(data.getAddress());
+        // storeEntity.setEvaluation(data.getEvaluation());
+        // storeEntity.setRemarks(data.getRemarks());
+        // JPA Auditing 會自動更新 updateTime，所以這裡手動設定會被覆蓋
+        // storeEntity.setUpdateTime(LocalDateTime.now());
+        // 儲存更新後的實體
 
         // 準備成功的回應訊息
         T001Tranrs createTranrs = new T001Tranrs();
