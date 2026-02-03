@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.exam.exam.dto.CustomerRequest;
 import com.exam.exam.dto.CustomerResponse;
+import com.exam.exam.dto.Q002Tranrq;
+import com.exam.exam.dto.Q002Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
+import com.exam.exam.exception.DataNotFoundException;
 import com.exam.exam.exception.DuplicateDataException;
 import com.exam.exam.exception.ErrorInputException;
 import com.exam.exam.service.CustomerService;
@@ -19,7 +22,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@RequestMapping("/customer")
+@RequestMapping("/cif")
 @RestController
 @CrossOrigin(origins = "*")
 public class CustomerController {
@@ -32,7 +35,12 @@ public class CustomerController {
         if (err.hasErrors()) {
             throw new ErrorInputException();
         }
-        return customerService.createStore(customerRequest);
+        return customerService.createCusotmer(customerRequest);
     }
 
+    @PostMapping("filter")
+    public CustomerResponse<Q002Tranrs> findAllCustomer(
+            @Valid @RequestBody CustomerRequest<Q002Tranrq> customerRequest) throws DataNotFoundException {
+        return customerService.findAllCustomer(customerRequest);
+    }
 }
