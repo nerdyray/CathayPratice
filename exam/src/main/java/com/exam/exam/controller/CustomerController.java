@@ -12,6 +12,8 @@ import com.exam.exam.dto.Q001Tranrq;
 import com.exam.exam.dto.Q001Tranrs;
 import com.exam.exam.dto.Q002Tranrq;
 import com.exam.exam.dto.Q002Tranrs;
+import com.exam.exam.dto.Q003Tranrq;
+import com.exam.exam.dto.Q003Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.exception.DataNotFoundException;
@@ -51,4 +53,11 @@ public class CustomerController {
             @Valid @RequestBody CustomerRequest<Q001Tranrq> customerRequest) throws DataNotFoundException {
         return customerService.findByOrderId(customerRequest);
     }
+
+    @PostMapping("checkId")
+    public CustomerResponse<Q003Tranrs> excisedByIdNum(
+            @Valid @RequestBody CustomerRequest<Q003Tranrq> customerRequest) throws DataNotFoundException {
+        return customerService.excisedByIdNum(customerRequest);
+    }
+
 }

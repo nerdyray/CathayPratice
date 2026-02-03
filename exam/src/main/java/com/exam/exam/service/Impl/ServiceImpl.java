@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.xml.crypto.Data;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -21,6 +23,8 @@ import com.exam.exam.dto.Q002Tranrq;
 import com.exam.exam.dto.Q002TranrqSortInfo;
 import com.exam.exam.dto.Q002Tranrs;
 import com.exam.exam.dto.Q002TranrsItems;
+import com.exam.exam.dto.Q003Tranrq;
+import com.exam.exam.dto.Q003Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.dto.TranData;
@@ -129,6 +133,29 @@ public class ServiceImpl implements CustomerService {
         createTranrs.setTranData(dataList);
         // 裝進CustomerResponse
         CustomerResponse<Q001Tranrs> res = new CustomerResponse<Q001Tranrs>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+    }
+
+    @Override
+    public CustomerResponse<Q003Tranrs> excisedByIdNum(CustomerRequest<Q003Tranrq> customerRequest)
+            throws DataNotFoundException {
+        Q003Tranrq tranrq = customerRequest.getTranrq();
+        String idNum = tranrq.getIdNum();
+        if (!customerRepo.existsByIdNum(tranrq.getIdNum())) {
+            throw new DataNotFoundException();
+        }
+        Q003Tranrs createTranrs = new Q003Tranrs();
+        MWHEADER createMwheader = new MWHEADER();
+        // 組裝回應表頭
+        createMwheader.setMsgid("XXA-C-CIFQ003");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        // 回應本體
+        createTranrs.setIdNum(idNum);
+        // 裝進CustomerResponse
+        CustomerResponse<Q003Tranrs> res = new CustomerResponse<Q003Tranrs>();
         res.setMwheader(createMwheader);
         res.setTranrs(createTranrs);
         return res;

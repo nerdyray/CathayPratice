@@ -6,6 +6,8 @@ import com.exam.exam.dto.Q001Tranrq;
 import com.exam.exam.dto.Q001Tranrs;
 import com.exam.exam.dto.Q002Tranrq;
 import com.exam.exam.dto.Q002Tranrs;
+import com.exam.exam.dto.Q003Tranrq;
+import com.exam.exam.dto.Q003Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.exception.DataNotFoundException;
@@ -19,5 +21,8 @@ public interface CustomerService {
                         throws DataNotFoundException;
 
         CustomerResponse<Q001Tranrs> findByOrderId(CustomerRequest<Q001Tranrq> customerRequest)
+                        throws DataNotFoundException;
+
+        CustomerResponse<Q003Tranrs> excisedByIdNum(CustomerRequest<Q003Tranrq> customerRequest)
                         throws DataNotFoundException;
 }
