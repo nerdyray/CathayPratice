@@ -2,18 +2,20 @@ package com.exam.exam.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.Valid;
+
+import jakarta.validation.constraints.Digits;
+
 import lombok.Data;
 
 @Data
-public class T001Tranrq implements Serializable {
+public class Q001Tranrq implements Serializable {
     // 序列化版本 ID
     @Serial
     private static final long serialVersionUID = 1L;
-
-    @Valid
-    @JsonProperty("DATA")
-    private TranData data;
+    @Digits(integer = 999, fraction = 0)
+    @JsonProperty("orderId")
+    private Integer orderId;
 
 }

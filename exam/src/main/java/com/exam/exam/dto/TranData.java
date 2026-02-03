@@ -7,7 +7,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
-public class TranrqData implements Serializable {
+public class TranData implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 

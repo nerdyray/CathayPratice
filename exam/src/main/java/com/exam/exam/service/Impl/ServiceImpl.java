@@ -1,5 +1,6 @@
 package com.exam.exam.service.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,13 +15,15 @@ import org.springframework.stereotype.Service;
 import com.exam.exam.dto.CustomerRequest;
 import com.exam.exam.dto.CustomerResponse;
 import com.exam.exam.dto.MWHEADER;
+import com.exam.exam.dto.Q001Tranrq;
+import com.exam.exam.dto.Q001Tranrs;
 import com.exam.exam.dto.Q002Tranrq;
 import com.exam.exam.dto.Q002TranrqSortInfo;
 import com.exam.exam.dto.Q002Tranrs;
 import com.exam.exam.dto.Q002TranrsItems;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
-import com.exam.exam.dto.TranrqData;
+import com.exam.exam.dto.TranData;
 import com.exam.exam.entity.CustomerEntity;
 import com.exam.exam.exception.DataNotFoundException;
 import com.exam.exam.exception.DuplicateDataException;
@@ -40,7 +43,7 @@ public class ServiceImpl implements CustomerService {
     public CustomerResponse<T001Tranrs> createCusotmer(CustomerRequest<T001Tranrq> customerRequest)
             throws DuplicateDataException {
         T001Tranrq tranrq = customerRequest.getTranrq();
-        TranrqData dataDto = tranrq.getData();
+        TranData dataDto = tranrq.getData();
         if (customerRepo.existsByIdNum(dataDto.getIdNum())) {
             throw new DuplicateDataException();
         }
@@ -98,6 +101,34 @@ public class ServiceImpl implements CustomerService {
         createTranrs.setItems(items);
         // 裝進CustomerResponse
         CustomerResponse<Q002Tranrs> res = new CustomerResponse<Q002Tranrs>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+    }
+
+    @Override
+    public CustomerResponse<Q001Tranrs> findByOrderId(CustomerRequest<Q001Tranrq> customerRequest)
+            throws DataNotFoundException {
+        Q001Tranrq tranrq = customerRequest.getTranrq();
+        Integer orderId = tranrq.getOrderId();
+
+        CustomerEntity entity = customerRepo.findByOrderId(orderId)
+                .orElseThrow(() -> new DataNotFoundException());
+
+        TranData dataDto = om.convertValue(entity, TranData.class);
+        List<TranData> dataList = new ArrayList<>();
+        dataList.add(dataDto);
+
+        Q001Tranrs createTranrs = new Q001Tranrs();
+        MWHEADER createMwheader = new MWHEADER();
+        // 組裝回應表頭
+        createMwheader.setMsgid("XXA-C-CIFQ001");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        // 回應本體
+        createTranrs.setTranData(dataList);
+        // 裝進CustomerResponse
+        CustomerResponse<Q001Tranrs> res = new CustomerResponse<Q001Tranrs>();
         res.setMwheader(createMwheader);
         res.setTranrs(createTranrs);
         return res;

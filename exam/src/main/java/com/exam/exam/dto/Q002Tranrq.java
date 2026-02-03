@@ -15,7 +15,7 @@ public class Q002Tranrq implements Serializable {
     @JsonProperty("PAGE")
     private Q002TranrqPage page;
     @JsonProperty("DATA")
-    private TranrqData tranrqData;
+    private TranData tranrqData;
     @JsonProperty("STOREINFO")
     private Q002TranrqSortInfo storeInfo;
 

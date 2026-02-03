@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.exam.exam.dto.CustomerRequest;
 import com.exam.exam.dto.CustomerResponse;
+import com.exam.exam.dto.Q001Tranrq;
+import com.exam.exam.dto.Q001Tranrs;
 import com.exam.exam.dto.Q002Tranrq;
 import com.exam.exam.dto.Q002Tranrs;
 import com.exam.exam.dto.T001Tranrq;
@@ -42,5 +44,11 @@ public class CustomerController {
     public CustomerResponse<Q002Tranrs> findAllCustomer(
             @Valid @RequestBody CustomerRequest<Q002Tranrq> customerRequest) throws DataNotFoundException {
         return customerService.findAllCustomer(customerRequest);
+    }
+
+    @PostMapping("getOne")
+    public CustomerResponse<Q001Tranrs> findByOrderId(
+            @Valid @RequestBody CustomerRequest<Q001Tranrq> customerRequest) throws DataNotFoundException {
+        return customerService.findByOrderId(customerRequest);
     }
 }
