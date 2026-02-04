@@ -13,4 +13,7 @@ public interface CustomerRepo extends JpaRepository<CustomerEntity, Integer> {
     Page<CustomerEntity> findAll(Pageable pageable);
 
     Optional<CustomerEntity> findByOrderId(Integer orderId);
+
+
+
 }

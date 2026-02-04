@@ -16,6 +16,8 @@ import com.exam.exam.dto.Q003Tranrq;
 import com.exam.exam.dto.Q003Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
+import com.exam.exam.dto.T002Tranrq;
+import com.exam.exam.dto.T002Tranrs;
 import com.exam.exam.exception.DataNotFoundException;
 import com.exam.exam.exception.DuplicateDataException;
 import com.exam.exam.exception.ErrorInputException;
@@ -39,7 +41,7 @@ public class CustomerController {
         if (err.hasErrors()) {
             throw new ErrorInputException();
         }
-        return customerService.createCusotmer(customerRequest);
+        return customerService.createCustomer(customerRequest);
     }
 
     @PostMapping("filter")
@@ -60,4 +62,12 @@ public class CustomerController {
         return customerService.excisedByIdNum(customerRequest);
     }
 
+    @PostMapping("editInfo")
+    public CustomerResponse<T002Tranrs> updateCustomer(@Valid @RequestBody CustomerRequest<T002Tranrq> customerRequest,
+            Errors err) throws ErrorInputException, DataNotFoundException {
+        if (err.hasErrors()) {
+            throw new ErrorInputException();
+        }
+        return customerService.updateCustomer(customerRequest);
+    }
 }

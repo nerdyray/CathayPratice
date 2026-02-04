@@ -27,6 +27,8 @@ import com.exam.exam.dto.Q003Tranrq;
 import com.exam.exam.dto.Q003Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
+import com.exam.exam.dto.T002Tranrq;
+import com.exam.exam.dto.T002Tranrs;
 import com.exam.exam.dto.TranData;
 import com.exam.exam.entity.CustomerEntity;
 import com.exam.exam.exception.DataNotFoundException;
@@ -44,7 +46,7 @@ public class ServiceImpl implements CustomerService {
     private CustomerRepo customerRepo;
 
     @Override
-    public CustomerResponse<T001Tranrs> createCusotmer(CustomerRequest<T001Tranrq> customerRequest)
+    public CustomerResponse<T001Tranrs> createCustomer(CustomerRequest<T001Tranrq> customerRequest)
             throws DuplicateDataException {
         T001Tranrq tranrq = customerRequest.getTranrq();
         TranData dataDto = tranrq.getData();
@@ -159,5 +161,31 @@ public class ServiceImpl implements CustomerService {
         res.setMwheader(createMwheader);
         res.setTranrs(createTranrs);
         return res;
+    }
+
+    @Override
+    public CustomerResponse<T002Tranrs> updateCustomer(CustomerRequest<T002Tranrq> customerRequest)
+            throws DataNotFoundException {
+        T002Tranrq tranrq = customerRequest.getTranrq();
+        TranData dataDto = tranrq.getData();
+        Integer orderId = dataDto.getOrderId();
+        CustomerEntity entity = customerRepo.findByOrderId(orderId)
+                .orElseThrow(() -> new DataNotFoundException());
+        entity = om.convertValue(dataDto, CustomerEntity.class);
+        List<TranData> dataList = new ArrayList<>();
+        dataList.add(dataDto);
+        customerRepo.save(entity);
+
+        T002Tranrs createTranrs = new T002Tranrs();
+        MWHEADER createMwheader = new MWHEADER();
+        createMwheader.setMsgid("XXA-C-CIFT002");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        // Response
+        CustomerResponse<T002Tranrs> res = new CustomerResponse<>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+
     }
 }
