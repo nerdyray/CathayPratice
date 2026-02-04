@@ -29,15 +29,20 @@ import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.dto.T002Tranrq;
 import com.exam.exam.dto.T002Tranrs;
+import com.exam.exam.dto.T003Tranrq;
+import com.exam.exam.dto.T003Tranrs;
 import com.exam.exam.dto.TranData;
 import com.exam.exam.entity.CustomerEntity;
 import com.exam.exam.exception.DataNotFoundException;
+import com.exam.exam.exception.DeleteFailedException;
 import com.exam.exam.exception.DuplicateDataException;
 import com.exam.exam.repo.CustomerRepo;
 import com.exam.exam.service.CustomerService;
 
+import jakarta.transaction.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
+@Transactional
 @Service
 public class ServiceImpl implements CustomerService {
     @Autowired
@@ -186,6 +191,25 @@ public class ServiceImpl implements CustomerService {
         res.setMwheader(createMwheader);
         res.setTranrs(createTranrs);
         return res;
+    }
 
+    @Override
+    public CustomerResponse<T003Tranrs> deleteCustomer(CustomerRequest<T003Tranrq> customerRequest)
+            throws DeleteFailedException {
+        T003Tranrq tranrq = customerRequest.getTranrq();
+        Integer orderId = tranrq.getOrderId();
+        customerRepo.deleteByOrderId(orderId)
+                .orElseThrow(() -> new DeleteFailedException());
+        T003Tranrs createTranrs = new T003Tranrs();
+        MWHEADER createMwheader = new MWHEADER();
+        // 組裝回應表頭
+        createMwheader.setMsgid("XXA-C-CIFT003");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        // 裝進CustomerResponse
+        CustomerResponse<T003Tranrs> res = new CustomerResponse<T003Tranrs>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
     }
 }

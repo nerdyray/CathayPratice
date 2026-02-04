@@ -12,7 +12,10 @@ import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.dto.T002Tranrq;
 import com.exam.exam.dto.T002Tranrs;
+import com.exam.exam.dto.T003Tranrq;
+import com.exam.exam.dto.T003Tranrs;
 import com.exam.exam.exception.DataNotFoundException;
+import com.exam.exam.exception.DeleteFailedException;
 import com.exam.exam.exception.DuplicateDataException;
 
 public interface CustomerService {
@@ -30,4 +33,7 @@ public interface CustomerService {
 
         CustomerResponse<T002Tranrs> updateCustomer(CustomerRequest<T002Tranrq> customerRequest)
                         throws DataNotFoundException;
+
+        CustomerResponse<T003Tranrs> deleteCustomer(CustomerRequest<T003Tranrq> customerRequest)
+                        throws DeleteFailedException;
 }

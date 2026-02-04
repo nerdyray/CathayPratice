@@ -12,6 +12,7 @@ import com.exam.exam.dto.CustomerResponse;
 import com.exam.exam.dto.MWHEADER;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.exception.DataNotFoundException;
+import com.exam.exam.exception.DeleteFailedException;
 import com.exam.exam.exception.DuplicateDataException;
 import com.exam.exam.exception.ErrorInputException;
 import com.exam.exam.exception.UpdateFailedException;
@@ -75,6 +76,21 @@ public class WebExceptionHandler implements Serializable {
         createMwheader.setMsgid("XXA-C-CIFT001");
         createMwheader.setReturncode("E003");
         createMwheader.setReturndesc("資料重複");
+
+        CustomerResponse<T001Tranrs> res = new CustomerResponse<>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+    }
+
+    @ResponseBody
+    @ExceptionHandler(DeleteFailedException.class)
+    public CustomerResponse handleDeleteFailedException() {
+        T001Tranrs createTranrs = new T001Tranrs();
+        MWHEADER createMwheader = new MWHEADER();
+        createMwheader.setMsgid("XXA-C-CIFT003");
+        createMwheader.setReturncode("E004");
+        createMwheader.setReturndesc("刪除失敗");
 
         CustomerResponse<T001Tranrs> res = new CustomerResponse<>();
         res.setMwheader(createMwheader);

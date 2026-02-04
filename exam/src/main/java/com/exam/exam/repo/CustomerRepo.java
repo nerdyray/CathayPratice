@@ -14,6 +14,6 @@ public interface CustomerRepo extends JpaRepository<CustomerEntity, Integer> {
 
     Optional<CustomerEntity> findByOrderId(Integer orderId);
 
-
+    Optional<CustomerEntity> deleteByOrderId(Integer orderId);
 
 }

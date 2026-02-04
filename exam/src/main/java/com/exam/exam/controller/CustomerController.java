@@ -18,7 +18,10 @@ import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.dto.T002Tranrq;
 import com.exam.exam.dto.T002Tranrs;
+import com.exam.exam.dto.T003Tranrq;
+import com.exam.exam.dto.T003Tranrs;
 import com.exam.exam.exception.DataNotFoundException;
+import com.exam.exam.exception.DeleteFailedException;
 import com.exam.exam.exception.DuplicateDataException;
 import com.exam.exam.exception.ErrorInputException;
 import com.exam.exam.service.CustomerService;
@@ -69,5 +72,14 @@ public class CustomerController {
             throw new ErrorInputException();
         }
         return customerService.updateCustomer(customerRequest);
+    }
+
+    @PostMapping("deleteInfo")
+    public CustomerResponse<T003Tranrs> deleteCustomer(@Valid @RequestBody CustomerRequest<T003Tranrq> customerRequest,
+            Errors err) throws DataNotFoundException, DeleteFailedException {
+        if (err.hasErrors()) {
+            throw new DeleteFailedException();
+        }
+        return customerService.deleteCustomer(customerRequest);
     }
 }
