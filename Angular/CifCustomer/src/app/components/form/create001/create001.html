@@ -1,0 +1,154 @@
+<mat-sidenav-container class="admin-container">
+  <mat-sidenav mode="side" opened class="side-menu">
+    <div class="logo">CIF 管理系統</div>
+    <mat-nav-list>
+      <a mat-list-item href="#">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>查詢</span>
+      </a>
+      <a mat-list-item href="#" class="active">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>新增</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+    <div class="page-header">
+      <span class="green-bar"></span>
+      <h2>CIF 新增功能</h2>
+    </div>
+
+    <div class="content-card">
+      <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-grid four-cols">
+          <div class="field-group">
+            <label>身份證字號</label>
+            <div class="input-with-btn">
+              <mat-form-field appearance="outline">
+                <input matInput formControlName="idNumber" placeholder="請輸入身份證字號">
+              </mat-form-field>
+              <button type="button" mat-stroked-button class="verify-btn">驗證</button>
+            </div>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+
+          <div class="field-group">
+            <label>中文姓名</label>
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="name" placeholder="請輸入姓名">
+            </mat-form-field>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+
+          <div class="field-group">
+            <label>性別</label>
+            <mat-radio-group formControlName="gender" color="primary">
+              <mat-radio-button value="M">男</mat-radio-button>
+              <mat-radio-button value="F">女</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div class="field-group">
+            <label>學歷</label>
+            <mat-form-field appearance="outline">
+              <mat-select formControlName="education">
+                <mat-option value="master">碩士</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-grid address-row">
+          <div class="field-group">
+            <label>郵遞區號</label>
+            <mat-form-field appearance="outline">
+              <mat-select formControlName="resZip" placeholder="請選擇">
+                <mat-option value="103">103 台北市大同區</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+          <div class="field-group span-2">
+            <label>戶籍地址</label>
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="resAddress" placeholder="請輸入地址">
+            </mat-form-field>
+          </div>
+          <div class="field-group">
+            <label>戶籍電話</label>
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="resPhone" placeholder="請輸入電話">
+            </mat-form-field>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+        </div>
+
+        <div class="form-grid address-row">
+          <div class="field-group">
+            <label>郵遞區號</label>
+            <mat-form-field appearance="outline">
+              <mat-select formControlName="curZip">
+                <mat-option value="103">103 台北市中山區</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="field-group span-2">
+            <label>現居地址</label>
+            <div class="flex-row">
+              <mat-checkbox formControlName="isSameAddress">同戶籍地址</mat-checkbox>
+              <mat-form-field appearance="outline" class="flex-1">
+                <input matInput formControlName="curAddress" placeholder="請輸入地址">
+              </mat-form-field>
+            </div>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+          <div class="field-group">
+            <label>現居電話</label>
+            <div class="flex-row">
+              <mat-checkbox formControlName="isSamePhone">同戶籍電話</mat-checkbox>
+              <mat-form-field appearance="outline" class="flex-1">
+                <input matInput formControlName="curPhone" placeholder="請輸入電話">
+              </mat-form-field>
+            </div>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+        </div>
+
+        <div class="form-grid address-row">
+          <div class="field-group">
+            <label>行動電話</label>
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="mobile" placeholder="請輸入手機">
+            </mat-form-field>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+          <div class="field-group">
+            <label>電子郵件</label>
+            <mat-form-field appearance="outline">
+              <input matInput formControlName="email">
+            </mat-form-field>
+          </div>
+          <div class="field-group">
+            <label>現居年限</label>
+            <mat-form-field appearance="outline" class="no-margin">
+              <input matInput type="number" formControlName="livingYears">
+            </mat-form-field>
+            <mat-slider min="0" max="50" discrete color="primary">
+              <input matSliderThumb formControlName="livingYears">
+            </mat-slider>
+            <small class="error-msg">此為必填資料</small>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button mat-flat-button color="primary" [disabled]="createForm.invalid" class="save-btn">儲存</button>
+          <button type="button" mat-stroked-button class="outline-green" (click)="createForm.reset()">清除</button>
+          <button type="button" mat-stroked-button class="outline-green">返回</button>
+        </div>
+
+      </form>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

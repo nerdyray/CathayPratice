@@ -1,0 +1,182 @@
+/* 1. 全局容器設定：確保撐滿視窗 */
+.admin-container {
+  height: 100vh; /* 關鍵：沒有這個，側邊欄會縮起來 */
+  background-color: #f5f5f5;
+}
+
+/* 2. 側邊選單樣式 */
+.side-menu {
+  width: 240px;
+  background-color: #f0f0f0;
+  border-right: 1px solid #ddd;
+
+  .logo {
+    padding: 30px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #444;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  mat-nav-list {
+    padding-top: 10px;
+
+    .active {
+      background-color: #e0e0e0;
+      border-left: 5px solid #2e7d32; /* 綠色激活標示 */
+      font-weight: bold;
+      color: #2e7d32;
+    }
+  }
+}
+
+/* 3. 主內容區域 */
+.main-content {
+  padding: 20px 40px;
+  background-color: #f5f5f5;
+
+  /* 標題區塊 */
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .green-bar {
+      width: 5px;
+      height: 24px;
+      background-color: #2e7d32;
+      border-radius: 2px;
+    }
+
+    h2 {
+      margin: 0;
+      color: #333;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  }
+}
+
+/* 4. 表單卡片區 (對應 HTML 的 content-card) */
+.content-card {
+  background: white;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+  /* 格線系統 */
+  .form-grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 15px;
+
+    /* 四欄佈局 */
+    &.four-cols {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    /* 地址欄位佈局：仿照圖片比例 (郵遞區號窄 | 地址寬 | 電話適中) */
+    &.address-row {
+      grid-template-columns: 1fr 2.5fr 1.5fr;
+    }
+  }
+
+  /* 單個欄位群組 */
+  .field-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    /* 跨欄設定 */
+    &.span-2 { grid-column: span 2; }
+
+    /* 紅色必填文字 */
+    .error-msg {
+      color: #d32f2f;
+      font-size: 12px;
+      margin-top: -12px; /* 將文字往上拉近 Input */
+      margin-bottom: 5px;
+      min-height: 15px; /* 預留高度避免跳動 */
+    }
+  }
+
+  /* 驗證按鈕組合 */
+  .input-with-btn {
+    display: flex;
+    gap: 10px;
+
+    mat-form-field { flex: 1; }
+    .verify-btn {
+      height: 42px;
+      margin-top: 2px;
+      border-color: #2e7d32;
+      color: #2e7d32;
+    }
+  }
+
+  /* Checkbox 與 Input 組合 */
+  .flex-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+
+    mat-checkbox {
+      margin-top: 8px;
+      white-space: nowrap;
+    }
+    .flex-1 { flex: 1; }
+  }
+
+  /* Slider 微調 */
+  .no-margin { margin-bottom: 0; }
+  mat-slider {
+    width: 100%;
+    margin-top: -10px;
+  }
+
+  /* --- Material 樣式強制覆寫 --- */
+  /* 移除預設的底部保留空間 (讓佈局更緊湊) */
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+/* 5. 底部按鈕區 */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+
+  button {
+    min-width: 120px;
+    height: 40px;
+    border-radius: 20px; /* 圓角按鈕 */
+  }
+
+  /* 儲存按鈕 */
+  .save-btn {
+    background-color: #ccc;
+    color: white;
+
+    /* 當按鈕不是 disabled 時變綠色 (Angular Material 自動處理) */
+    &:not([disabled]) {
+      background-color: #2e7d32 !important;
+    }
+  }
+
+  /* 清除/返回按鈕 */
+  .outline-green {
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+  }
+}
