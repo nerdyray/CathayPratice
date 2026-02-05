@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { CustomerService } from './../../../services/customerService';
+import { Q003Tranrq } from './../../../interface/Q003Tranrq';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; // 建議加入 CommonModule
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -11,6 +13,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
+import { Router } from '@angular/router';
 
 const MATERIAL_MODULES = [
   MatSidenavModule,
@@ -33,9 +36,20 @@ const MATERIAL_MODULES = [
   styleUrl: './create001.css',
 })
 export class Create001 implements OnInit {
-  createForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+
+  createForm!: FormGroup;
+  PATTERN_STRING_WITH_NUM: RegExp = /^[\u4e00-\u9fa5a-zA-Z0-9\s\-\.\,]+$/; // 驗證字串，允許中文、英文、數字和部分符號
+  showErrorToast = false;   // 控制「錯誤」提示訊息的顯示
+  showSuccessToast = false; // 控制「成功」提示訊息的顯示
+  submited = false;         // 標記表單是否已送出
+  isVerifying = false; // 用來控制按鈕 Loading 狀態 (選用)
+  constructor(
+    private fb: FormBuilder,
+    private customerService: CustomerService,
+    private cdr: ChangeDetectorRef,          // 手動觸發變更偵測的工具
+    private router: Router,                  // 路由服務，用來跳轉頁面
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -43,32 +57,28 @@ export class Create001 implements OnInit {
 
   initForm() {
     this.createForm = this.fb.group({
-      idNumber: ['', [Validators.required]],
-      name: ['', Validators.required],
-      gender: ['F'], // 對應 HTML 的 value="F"
-      education: ['master'],
+      idNum: ['', [Validators.required, Validators.pattern(/^[A-Z][12]\d{8}$/)]],
+      name: [{ value: '', disabled: true }, Validators.required],
+      gender: [{ value: 'F', disabled: true }],
+      education: [{ value: 'master', disabled: true }],
 
-      // --- 戶籍 (Permanent / Residence) ---
-      resZip: ['', Validators.required],     // HTML: formControlName="resZip"
-      resAddress: ['', Validators.required], // HTML: formControlName="resAddress"
-      resPhone: ['', Validators.required],   // HTML: formControlName="resPhone"
+      resZip: [{ value: '', disabled: true }, Validators.required],
+      resAddress: [{ value: '', disabled: true }, Validators.required],
+      resPhone: [{ value: '', disabled: true }, Validators.required],
 
-      // --- 現居 (Current) ---
-      curZip: ['103'],                       // HTML: formControlName="curZip"
-      curAddress: [''],                      // HTML: formControlName="curAddress"
-      curPhone: [''],                        // HTML: formControlName="curPhone"
+      curZip: [{ value: '103', disabled: true }],
+      curAddress: [{ value: '', disabled: true }],
+      curPhone: [{ value: '', disabled: true }],
 
-      // --- 核取方塊 ---
-      isSameAddress: [false],
-      isSamePhone: [false],
+      isSameAddress: [{ value: false, disabled: true }],
+      isSamePhone: [{ value: false, disabled: true }],
 
-      // --- 其他 ---
-      mobile: ['', Validators.required],
-      email: ['123@gmail.com', [Validators.email]],
-      livingYears: [0, Validators.required]  // HTML: formControlName="livingYears"
+      mobile: [{ value: '', disabled: true }, Validators.required],
+      email: [{ value: '123@gmail.com', disabled: true }, [Validators.email]],
+      livingYears: [{ value: 0, disabled: true }, Validators.required]
     });
 
-    // --- 監聽邏輯 (必須放在 initForm 內部) ---
+
 
     // 1. 同戶籍地址
     this.createForm.get('isSameAddress')?.valueChanges.subscribe(checked => {
@@ -98,23 +108,37 @@ export class Create001 implements OnInit {
 
   // 驗證按鈕動作
   onVerify() {
-    const id = this.createForm.get('idNumber')?.value;
-    if (id) {
-      console.log('正在驗證身分證字號:', id);
-    }
+    const idNum = this.createForm.get('idNum');
+    if (idNum?.invalid) return;
+    this.isVerifying = true;
+    //呼叫Service
+    this.customerService.checkId({ idNum: idNum?.value }).subscribe({
+      next: (res) => {
+        const returnCode = res.MWHEADER.RETURNCODE;
+        if (returnCode === '0000') {
+          // 回傳成功 = 資料已存在 = 驗證失敗(Duplicate)
+          idNum?.setErrors({ duplicate: true });
+          console.log('驗證失敗：資料已存在');
+        } else {
+          // 回傳其他代碼 (如 404, E001) = 查無資料 = 驗證通過
+          idNum?.setErrors(null);
+          this.createForm.enable();
+          console.log('驗證成功：查無資料，可註冊');
+        }
+        this.isVerifying = false;
+        this.cdr.detectChanges();
+      }, error: (err) => {
+        console.error('帳號已存在:', err); // 在開發者工具中印出錯誤，方便除錯
+        this.showErrorToast = true;      // 顯示錯誤提示給使用者
+        this.isVerifying = false;
+      }
+    })
+
   }
 
   onReset() {
     // 這裡的名稱也必須跟上方定義的一致
-    this.createForm.reset({
-      gender: 'F',
-      education: 'master',
-      curZip: '103',
-      email: '123@gmail.com',
-      livingYears: 0,
-      isSameAddress: false,
-      isSamePhone: false
-    });
+    this.createForm.reset();
   }
 
   onSubmit() {
@@ -124,5 +148,9 @@ export class Create001 implements OnInit {
       this.createForm.markAllAsTouched(); // 強制顯示紅字錯誤
       alert('表單有誤，請檢查紅色必填欄位');
     }
+  }
+
+  closeToast() {
+    throw new Error('Method not implemented.');
   }
 }

@@ -26,33 +26,63 @@
           <div class="field-group">
             <label>身份證字號</label>
             <div class="input-with-btn">
-              <mat-form-field appearance="outline">
-                <input matInput formControlName="idNumber" placeholder="請輸入身份證字號">
-              </mat-form-field>
-              <button type="button" mat-stroked-button class="verify-btn">驗證</button>
-            </div>
-            <small class="error-msg">此為必填資料</small>
-          </div>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <input matInput formControlName="idNum" placeholder="請輸入身份證字號">
 
+                <mat-error *ngIf="createForm.get('idNum')?.hasError('required')">
+                  請輸入身份證字號
+                </mat-error>
+
+                <mat-error
+                  *ngIf="createForm.get('idNum')?.hasError('pattern') && !createForm.get('idNum')?.hasError('required')">
+                  身份證格式不正確
+                </mat-error>
+
+                <mat-error *ngIf="createForm.get('idNum')?.hasError('duplicate')">
+                  此身份證字號已存在，無法重複註冊
+                </mat-error>
+
+                <mat-error *ngIf="createForm.get('idNum')?.hasError('serverError')">
+                  連線異常，請稍後再試
+                </mat-error>
+              </mat-form-field>
+
+              <button type="button" mat-stroked-button class="verify-btn" (click)="onVerify()"
+                [disabled]="isVerifying || (createForm.get('idNum')?.invalid && !createForm.get('idNum')?.hasError('duplicate'))">
+                @if(!isVerifying) {
+                <span>驗證</span>
+                } @else {
+                <span>驗證中...</span>
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="form-grid four-cols">
           <div class="field-group">
             <label>中文姓名</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input matInput formControlName="name" placeholder="請輸入姓名">
             </mat-form-field>
-            <small class="error-msg">此為必填資料</small>
+            <small class="error-msg"
+              *ngIf="createForm.get('name')?.invalid && (createForm.get('name')?.dirty || createForm.get('name')?.touched)">
+              此為必填資料
+            </small>
           </div>
 
           <div class="field-group">
             <label>性別</label>
-            <mat-radio-group formControlName="gender" color="primary">
-              <mat-radio-button value="M">男</mat-radio-button>
-              <mat-radio-button value="F">女</mat-radio-button>
-            </mat-radio-group>
+            <div class="radio-group-container">
+              <mat-radio-group formControlName="gender" color="primary">
+                <mat-radio-button value="M">男</mat-radio-button>
+                <mat-radio-button value="F">女</mat-radio-button>
+              </mat-radio-group>
+            </div>
           </div>
 
           <div class="field-group">
             <label>學歷</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-select formControlName="education">
                 <mat-option value="master">碩士</mat-option>
               </mat-select>
@@ -63,32 +93,42 @@
         <div class="form-grid address-row">
           <div class="field-group">
             <label>郵遞區號</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-select formControlName="resZip" placeholder="請選擇">
                 <mat-option value="103">103 台北市大同區</mat-option>
               </mat-select>
             </mat-form-field>
-            <small class="error-msg">此為必填資料</small>
+            <small class="error-msg"
+              *ngIf="createForm.get('resZip')?.invalid && (createForm.get('resZip')?.dirty || createForm.get('resZip')?.touched)">
+              此為必填資料
+            </small>
           </div>
           <div class="field-group span-2">
             <label>戶籍地址</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input matInput formControlName="resAddress" placeholder="請輸入地址">
             </mat-form-field>
+            <small class="error-msg"
+              *ngIf="createForm.get('resAddress')?.invalid && (createForm.get('resAddress')?.dirty || createForm.get('resAddress')?.touched)">
+              此為必填資料
+            </small>
           </div>
           <div class="field-group">
             <label>戶籍電話</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input matInput formControlName="resPhone" placeholder="請輸入電話">
             </mat-form-field>
-            <small class="error-msg">此為必填資料</small>
+            <small class="error-msg"
+              *ngIf="createForm.get('resPhone')?.invalid && (createForm.get('resPhone')?.dirty || createForm.get('resPhone')?.touched)">
+              此為必填資料
+            </small>
           </div>
         </div>
 
         <div class="form-grid address-row">
           <div class="field-group">
             <label>郵遞區號</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-select formControlName="curZip">
                 <mat-option value="103">103 台北市中山區</mat-option>
               </mat-select>
@@ -98,47 +138,65 @@
             <label>現居地址</label>
             <div class="flex-row">
               <mat-checkbox formControlName="isSameAddress">同戶籍地址</mat-checkbox>
-              <mat-form-field appearance="outline" class="flex-1">
+              <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
                 <input matInput formControlName="curAddress" placeholder="請輸入地址">
               </mat-form-field>
             </div>
-            <small class="error-msg">此為必填資料</small>
+            <small class="error-msg"
+              *ngIf="createForm.get('curAddress')?.invalid && (createForm.get('curAddress')?.dirty || createForm.get('curAddress')?.touched)">
+              此為必填資料
+            </small>
           </div>
           <div class="field-group">
             <label>現居電話</label>
             <div class="flex-row">
               <mat-checkbox formControlName="isSamePhone">同戶籍電話</mat-checkbox>
-              <mat-form-field appearance="outline" class="flex-1">
+              <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
                 <input matInput formControlName="curPhone" placeholder="請輸入電話">
               </mat-form-field>
             </div>
-            <small class="error-msg">此為必填資料</small>
+            <small class="error-msg"
+              *ngIf="createForm.get('curPhone')?.invalid && (createForm.get('curPhone')?.dirty || createForm.get('curPhone')?.touched)">
+              此為必填資料
+            </small>
           </div>
         </div>
 
         <div class="form-grid address-row">
           <div class="field-group">
             <label>行動電話</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input matInput formControlName="mobile" placeholder="請輸入手機">
             </mat-form-field>
-            <small class="error-msg">此為必填資料</small>
+            <small class="error-msg"
+              *ngIf="createForm.get('mobile')?.invalid && (createForm.get('mobile')?.dirty || createForm.get('mobile')?.touched)">
+              此為必填資料
+            </small>
           </div>
           <div class="field-group">
             <label>電子郵件</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <input matInput formControlName="email">
             </mat-form-field>
+            <small class="error-msg"
+              *ngIf="createForm.get('email')?.invalid && (createForm.get('email')?.dirty || createForm.get('email')?.touched)">
+              Email 格式不正確
+            </small>
           </div>
           <div class="field-group">
             <label>現居年限</label>
-            <mat-form-field appearance="outline" class="no-margin">
-              <input matInput type="number" formControlName="livingYears">
-            </mat-form-field>
-            <mat-slider min="0" max="50" discrete color="primary">
-              <input matSliderThumb formControlName="livingYears">
-            </mat-slider>
-            <small class="error-msg">此為必填資料</small>
+            <div class="slider-group">
+              <mat-form-field appearance="outline" class="no-margin" style="width: 80px;" subscriptSizing="dynamic">
+                <input matInput type="number" formControlName="livingYears">
+              </mat-form-field>
+              <mat-slider min="0" max="50" discrete color="primary">
+                <input matSliderThumb formControlName="livingYears">
+              </mat-slider>
+            </div>
+            <small class="error-msg"
+              *ngIf="createForm.get('livingYears')?.invalid && (createForm.get('livingYears')?.dirty || createForm.get('livingYears')?.touched)">
+              此為必填資料
+            </small>
           </div>
         </div>
 
@@ -152,3 +210,27 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<div class="notification-demo-area">
+  @if (showErrorToast){
+  <div class="toast toast-fail">
+    <div class="toast-indicator"></div>
+    <div class="toast-content">
+      <div class="toast-title">Fail</div>
+      <div class="toast-message">請確認必填資料!</div>
+    </div>
+    <button class="toast-close" (click)="closeToast()">×</button>
+  </div>
+  }
+
+  @if (showSuccessToast){
+  <div class="toast toast-success">
+    <div class="toast-indicator"></div>
+    <div class="toast-content">
+      <div class="toast-title">Success</div>
+      <div class="toast-message">新增資料成功</div>
+    </div>
+    <button class="toast-close" (click)="closeToast()">×</button>
+  </div>
+  }
+</div>
