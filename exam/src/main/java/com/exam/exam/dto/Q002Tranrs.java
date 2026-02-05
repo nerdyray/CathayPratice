@@ -8,30 +8,48 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+/**
+ * Q002 交易的回應資料傳輸物件 (DTO)。
+ * 包含分頁查詢的結果，包括客戶列表、分頁統計和排序資訊。
+ */
 @Data
 public class Q002Tranrs implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    // 對應 JSON 的 "pageSize"
+
+    /**
+     * 每頁的資料筆數。
+     */
     @JsonProperty("pageSize")
-    private int pageSize; // 每頁筆數
+    private int pageSize;
 
-    // 對應 JSON 的 "pageNumber"
+    /**
+     * 當前回應的頁碼。
+     */
     @JsonProperty("pageNumber")
-    private int pageNumber; // 當前頁碼
+    private int pageNumber;
 
-    // 對應 JSON 的 "totalPage"
+    /**
+     * 總頁數。
+     */
     @JsonProperty("totalPage")
-    private int totalPage; // 總頁數
+    private int totalPage;
 
-    // 對應 JSON 的 "totalCount"
+    /**
+     * 符合查詢條件的總資料筆數。
+     */
     @JsonProperty("totalCount")
-    private Long totalCount; // 總資料筆數
+    private Long totalCount;
 
-    // 對應 JSON 的 "items"
-    // 這是一個列表，存放所有查詢到的店家資料 (Q001TranrsItems 物件)
+    /**
+     * 當前頁的客戶資料項目列表。
+     */
     @JsonProperty("items")
     private List<Q002TranrsItems> items;
+
+    /**
+     * 回應中使用的排序資訊。
+     */
     @JsonProperty("SORTINFO")
     private Q002TranrqSortInfo SortInfo;
 }

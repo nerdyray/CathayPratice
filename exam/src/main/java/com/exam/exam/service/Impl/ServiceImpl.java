@@ -42,6 +42,10 @@ import com.exam.exam.service.CustomerService;
 import jakarta.transaction.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
+/**
+ * 客戶服務的實作，處理客戶資料的 CRUD 操作。
+ * 所有方法都在交易中執行。
+ */
 @Transactional
 @Service
 public class ServiceImpl implements CustomerService {
@@ -50,6 +54,10 @@ public class ServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepo customerRepo;
 
+    /**
+     * {@inheritDoc}
+     * 建立新客戶。如果身分證號碼已存在，則會拋出 {@link DuplicateDataException}。
+     */
     @Override
     public CustomerResponse<T001Tranrs> createCustomer(CustomerRequest<T001Tranrq> customerRequest)
             throws DuplicateDataException {
@@ -73,6 +81,10 @@ public class ServiceImpl implements CustomerService {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     * 查詢所有客戶，並提供分頁功能。如果找不到任何資料，則拋出 {@link DataNotFoundException}。
+     */
     @Override
     public CustomerResponse<Q002Tranrs> findAllCustomer(CustomerRequest<Q002Tranrq> customerRequest)
             throws DataNotFoundException {
@@ -117,6 +129,10 @@ public class ServiceImpl implements CustomerService {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     * 根據訂單 ID 查找客戶。如果找不到客戶，則拋出 {@link DataNotFoundException}。
+     */
     @Override
     public CustomerResponse<Q001Tranrs> findByOrderId(CustomerRequest<Q001Tranrq> customerRequest)
             throws DataNotFoundException {
@@ -145,6 +161,10 @@ public class ServiceImpl implements CustomerService {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     * 根據身分證號碼檢查客戶是否存在。如果不存在，則拋出 {@link DataNotFoundException}。
+     */
     @Override
     public CustomerResponse<Q003Tranrs> excisedByIdNum(CustomerRequest<Q003Tranrq> customerRequest)
             throws DataNotFoundException {
@@ -168,6 +188,10 @@ public class ServiceImpl implements CustomerService {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     * 更新客戶資料。如果找不到指定的客戶，則拋出 {@link DataNotFoundException}。
+     */
     @Override
     public CustomerResponse<T002Tranrs> updateCustomer(CustomerRequest<T002Tranrq> customerRequest)
             throws DataNotFoundException {
@@ -193,6 +217,10 @@ public class ServiceImpl implements CustomerService {
         return res;
     }
 
+    /**
+     * {@inheritDoc}
+     * 根據訂單 ID 刪除客戶。如果刪除失敗，則拋出 {@link DeleteFailedException}。
+     */
     @Override
     public CustomerResponse<T003Tranrs> deleteCustomer(CustomerRequest<T003Tranrq> customerRequest)
             throws DeleteFailedException {
