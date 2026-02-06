@@ -10,6 +10,9 @@ import { Data } from '@angular/router';
   providedIn: 'root',
 })
 export class CustomerService {
+  deleteCustomer(id: string) {
+    throw new Error('Method not implemented.');
+  }
   private checkUrl = 'http://localhost:8080/cif/checkId';
   private createUrl = 'http://localhost:8080/cif/create';       // 「新增」店家的 API
 

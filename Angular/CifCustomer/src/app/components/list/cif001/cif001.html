@@ -1,0 +1,60 @@
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 customer-table">
+
+    <ng-container matColumnDef="idNum">
+      <th mat-header-cell *matHeaderCellDef> 身分證字號 </th>
+      <td mat-cell *matCellDef="let element"> {{element.idNum}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="chineseName">
+      <th mat-header-cell *matHeaderCellDef> 中文姓名 </th>
+      <td mat-cell *matCellDef="let element"> {{element.chineseName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gender">
+      <th mat-header-cell *matHeaderCellDef> 性別 </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.gender === 'M' ? '男' : '女' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="education">
+      <th mat-header-cell *matHeaderCellDef> 學歷 </th>
+      <td mat-cell *matCellDef="let element"> {{element.education}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="mobile">
+      <th mat-header-cell *matHeaderCellDef> 行動電話 </th>
+      <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> 電子郵件 </th>
+      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="year">
+      <th mat-header-cell *matHeaderCellDef> 居住年限 </th>
+      <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> 操作 </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-flat-button color="accent" class="mgr-8">修改</button>
+
+        <!-- <button mat-flat-button color="warn" (click)="openDeleteDialog(element)">
+          刪除
+        </button> -->
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+
+  <div *ngIf="dataSource.data.length === 0" class="no-data-msg">
+    查無資料
+  </div>
+</div>

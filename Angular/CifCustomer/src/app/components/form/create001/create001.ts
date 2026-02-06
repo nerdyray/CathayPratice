@@ -32,7 +32,6 @@ const MATERIAL_MODULES = [
 
 @Component({
   selector: 'app-create001',
-  standalone: true, // 確保是 standalone
   imports: [CommonModule, ReactiveFormsModule, FormsModule, ...MATERIAL_MODULES], // 修正 imports 語法
   templateUrl: './create001.html',
   styleUrl: './create001.css',
