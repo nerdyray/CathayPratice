@@ -1,12 +1,13 @@
+
 export interface Data {
   idNum: string;
   chineseName: string;
   gender: string;
   education: string;
-  zipCode1: string;
+  zipCode_1: string;
   address1: string;
   telephone1: string;
-  zipCode2: string;
+  zipCode_2: string;
   address2: string;
   telephone2: string;
   mobile: string;
@@ -14,6 +15,7 @@ export interface Data {
   year?: number;
 }
 
-export interface TRANRQ {
-  data:Data
+export interface T001Tranrq {
+  data: Data
 }
+

@@ -62,10 +62,10 @@
           <div class="field-group">
             <label>中文姓名</label>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="name" placeholder="請輸入姓名">
+              <input matInput formControlName="chineseName" placeholder="請輸入姓名">
             </mat-form-field>
             <small class="error-msg"
-              *ngIf="createForm.get('name')?.invalid && (createForm.get('name')?.dirty || createForm.get('name')?.touched)">
+              *ngIf="createForm.get('chineseName')?.invalid && (createForm.get('chineseName')?.dirty || createForm.get('chineseName')?.touched)">
               此為必填資料
             </small>
           </div>
@@ -94,32 +94,32 @@
           <div class="field-group">
             <label>郵遞區號</label>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-select formControlName="resZip" placeholder="請選擇">
+              <mat-select formControlName="zipCode_2" placeholder="請選擇">
                 <mat-option value="103">103 台北市大同區</mat-option>
               </mat-select>
             </mat-form-field>
             <small class="error-msg"
-              *ngIf="createForm.get('resZip')?.invalid && (createForm.get('resZip')?.dirty || createForm.get('resZip')?.touched)">
+              *ngIf="createForm.get('zipCode_2')?.invalid && (createForm.get('zipCode_2')?.dirty || createForm.get('zipCode_2')?.touched)">
               此為必填資料
             </small>
           </div>
           <div class="field-group span-2">
             <label>戶籍地址</label>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="resAddress" placeholder="請輸入地址">
+              <input matInput formControlName="address1" placeholder="請輸入地址">
             </mat-form-field>
             <small class="error-msg"
-              *ngIf="createForm.get('resAddress')?.invalid && (createForm.get('resAddress')?.dirty || createForm.get('resAddress')?.touched)">
+              *ngIf="createForm.get('address1')?.invalid && (createForm.get('address1')?.dirty || createForm.get('address1')?.touched)">
               此為必填資料
             </small>
           </div>
           <div class="field-group">
             <label>戶籍電話</label>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="resPhone" placeholder="請輸入電話">
+              <input matInput formControlName="telephone1" placeholder="請輸入電話">
             </mat-form-field>
             <small class="error-msg"
-              *ngIf="createForm.get('resPhone')?.invalid && (createForm.get('resPhone')?.dirty || createForm.get('resPhone')?.touched)">
+              *ngIf="createForm.get('telephone1')?.invalid && (createForm.get('telephone1')?.dirty || createForm.get('telephone1')?.touched)">
               此為必填資料
             </small>
           </div>
@@ -129,7 +129,7 @@
           <div class="field-group">
             <label>郵遞區號</label>
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-select formControlName="curZip">
+              <mat-select formControlName="zipCode_1">
                 <mat-option value="103">103 台北市中山區</mat-option>
               </mat-select>
             </mat-form-field>
@@ -139,11 +139,11 @@
             <div class="flex-row">
               <mat-checkbox formControlName="isSameAddress">同戶籍地址</mat-checkbox>
               <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
-                <input matInput formControlName="curAddress" placeholder="請輸入地址">
+                <input matInput formControlName="address2" placeholder="請輸入地址">
               </mat-form-field>
             </div>
             <small class="error-msg"
-              *ngIf="createForm.get('curAddress')?.invalid && (createForm.get('curAddress')?.dirty || createForm.get('curAddress')?.touched)">
+              *ngIf="createForm.get('address2')?.invalid && (createForm.get('address2')?.dirty || createForm.get('address2')?.touched)">
               此為必填資料
             </small>
           </div>
@@ -152,11 +152,11 @@
             <div class="flex-row">
               <mat-checkbox formControlName="isSamePhone">同戶籍電話</mat-checkbox>
               <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
-                <input matInput formControlName="curPhone" placeholder="請輸入電話">
+                <input matInput formControlName="telephone2" placeholder="請輸入電話">
               </mat-form-field>
             </div>
             <small class="error-msg"
-              *ngIf="createForm.get('curPhone')?.invalid && (createForm.get('curPhone')?.dirty || createForm.get('curPhone')?.touched)">
+              *ngIf="createForm.get('telephone2')?.invalid && (createForm.get('telephone2')?.dirty || createForm.get('telephone2')?.touched)">
               此為必填資料
             </small>
           </div>
@@ -187,14 +187,14 @@
             <label>現居年限</label>
             <div class="slider-group">
               <mat-form-field appearance="outline" class="no-margin" style="width: 80px;" subscriptSizing="dynamic">
-                <input matInput type="number" formControlName="livingYears">
+                <input matInput type="number" formControlName="year">
               </mat-form-field>
               <mat-slider min="0" max="50" discrete color="primary">
-                <input matSliderThumb formControlName="livingYears">
+                <input matSliderThumb formControlName="year">
               </mat-slider>
             </div>
             <small class="error-msg"
-              *ngIf="createForm.get('livingYears')?.invalid && (createForm.get('livingYears')?.dirty || createForm.get('livingYears')?.touched)">
+              *ngIf="createForm.get('year')?.invalid && (createForm.get('year')?.dirty || createForm.get('year')?.touched)">
               此為必填資料
             </small>
           </div>

@@ -1,3 +1,4 @@
+import { Data } from './../../../interface/T001Tranrq';
 import { CustomerService } from './../../../services/customerService';
 import { Q003Tranrq } from './../../../interface/Q003Tranrq';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -14,6 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { Router } from '@angular/router';
+import { Customer } from '../../../interface/Customer';
 
 const MATERIAL_MODULES = [
   MatSidenavModule,
@@ -58,24 +60,24 @@ export class Create001 implements OnInit {
   initForm() {
     this.createForm = this.fb.group({
       idNum: ['', [Validators.required, Validators.pattern(/^[A-Z][12]\d{8}$/)]],
-      name: [{ value: '', disabled: true }, Validators.required],
+      chineseName: [{ value: '', disabled: true }, Validators.required],
       gender: [{ value: 'F', disabled: true }],
       education: [{ value: 'master', disabled: true }],
 
-      resZip: [{ value: '', disabled: true }, Validators.required],
-      resAddress: [{ value: '', disabled: true }, Validators.required],
-      resPhone: [{ value: '', disabled: true }, Validators.required],
+      zipCode_2: [{ value: '', disabled: true }, Validators.required],
+      address1: [{ value: '', disabled: true }, Validators.required],
+      telephone1: [{ value: '', disabled: true }, Validators.required],
 
-      curZip: [{ value: '103', disabled: true }],
-      curAddress: [{ value: '', disabled: true }],
-      curPhone: [{ value: '', disabled: true }],
+      zipCode_1: [{ value: '103', disabled: true }],
+      address2: [{ value: '', disabled: true }],
+      telephone2: [{ value: '', disabled: true }],
 
       isSameAddress: [{ value: false, disabled: true }],
       isSamePhone: [{ value: false, disabled: true }],
 
       mobile: [{ value: '', disabled: true }, Validators.required],
       email: [{ value: '123@gmail.com', disabled: true }, [Validators.email]],
-      livingYears: [{ value: 0, disabled: true }, Validators.required]
+      year: [{ value: 0, disabled: true }, Validators.required]
     });
 
 
@@ -84,12 +86,12 @@ export class Create001 implements OnInit {
     this.createForm.get('isSameAddress')?.valueChanges.subscribe(checked => {
       if (checked) {
         // 取得「戶籍地址」的值
-        const sourceValue = this.createForm.get('resAddress')?.value;
+        const sourceValue = this.createForm.get('address1')?.value;
         // 填入「現居地址」
-        this.createForm.get('curAddress')?.setValue(sourceValue);
+        this.createForm.get('address2')?.setValue(sourceValue);
         // 選用：若勾選後想讓欄位唯讀，可加上 .disable()
       } else {
-        this.createForm.get('curAddress')?.setValue('');
+        this.createForm.get('address2')?.setValue('');
       }
     });
 
@@ -97,11 +99,11 @@ export class Create001 implements OnInit {
     this.createForm.get('isSamePhone')?.valueChanges.subscribe(checked => {
       if (checked) {
         // 取得「戶籍電話」的值
-        const sourceValue = this.createForm.get('resPhone')?.value;
+        const sourceValue = this.createForm.get('telephone1')?.value;
         // 填入「現居電話」
-        this.createForm.get('curPhone')?.setValue(sourceValue);
+        this.createForm.get('telephone2')?.setValue(sourceValue);
       } else {
-        this.createForm.get('curPhone')?.setValue('');
+        this.createForm.get('telephone2')?.setValue('');
       }
     });
   }
@@ -145,9 +147,17 @@ export class Create001 implements OnInit {
     if (this.createForm.valid) {
       console.log('提交資料：', this.createForm.value);
     } else {
-      this.createForm.markAllAsTouched(); // 強制顯示紅字錯誤
+      this.createForm.markAllAsTouched();
       alert('表單有誤，請檢查紅色必填欄位');
     }
+    const rawData = this.createForm.getRawValue();
+    const customer: Data = { ...rawData };
+    this.customerService.addCustomer(customer).subscribe({
+      next: (res) => {
+        this.showSuccessToast = true;
+        this.cdr.detectChanges();
+      }
+    })
   }
 
   closeToast() {

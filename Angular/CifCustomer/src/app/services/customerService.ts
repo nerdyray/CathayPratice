@@ -1,8 +1,10 @@
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Q003Tranrq } from '../interface/Q003Tranrq';
-import { T001Tranrq } from '../interface/T001Tranrq';
+
+import { Data } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -23,13 +25,15 @@ export class CustomerService {
     return this.http.post(this.checkUrl, checkIdTranrq);
   }
 
-  addCustomer(requestBody: T001Tranrq): Observable<any> {
+  addCustomer(requestBody: Data): Observable<any> {
     const createTranrq = {
       MWHEADER: {
         MSGID: 'XXA-C-STORET001'
       },
-      TRANRQ: requestBody
+      TRANRQ: {
+        DATA: requestBody
+      }
     };
-    return this.http.post(this.checkUrl, createTranrq);
+    return this.http.post(this.createUrl, createTranrq);
   }
 }

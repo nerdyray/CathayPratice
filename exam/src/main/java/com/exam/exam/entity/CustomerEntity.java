@@ -1,6 +1,9 @@
 package com.exam.exam.entity;
 
 import jakarta.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -58,6 +61,7 @@ public class CustomerEntity {
     /**
      * 戶籍地郵遞區號。
      */
+    @JsonAlias("zipCode_1")
     @Column(name = "ZIP_CODE_1", length = 20)
     private String zipCode1;
 
@@ -76,6 +80,7 @@ public class CustomerEntity {
     /**
      * 現居地郵遞區號。
      */
+    @JsonAlias("zipCode_2")
     @Column(name = "ZIP_CODE_2", length = 20)
     private String zipCode2;
 

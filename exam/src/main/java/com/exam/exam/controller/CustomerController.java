@@ -47,15 +47,16 @@ public class CustomerController {
      * 建立新客戶。
      *
      * @param customerRequest 包含客戶資料的請求。
-     * @param err 綁定和驗證錯誤。
+     * @param err             綁定和驗證錯誤。
      * @return 包含交易結果的回應。
-     * @throws ErrorInputException 如果輸入資料驗證失敗。
+     * @throws ErrorInputException    如果輸入資料驗證失敗。
      * @throws DuplicateDataException 如果客戶資料已存在。
      */
     @PostMapping("create")
     public CustomerResponse<T001Tranrs> createCustomer(@Valid @RequestBody CustomerRequest<T001Tranrq> customerRequest,
             Errors err) throws ErrorInputException, DuplicateDataException {
         if (err.hasErrors()) {
+            System.err.println(err);
             throw new ErrorInputException();
         }
         return customerService.createCustomer(customerRequest);
@@ -104,9 +105,9 @@ public class CustomerController {
      * 更新現有客戶資料。
      *
      * @param customerRequest 包含要更新的客戶資料的請求。
-     * @param err 綁定和驗證錯誤。
+     * @param err             綁定和驗證錯誤。
      * @return 包含交易結果的回應。
-     * @throws ErrorInputException 如果輸入資料驗證失敗。
+     * @throws ErrorInputException   如果輸入資料驗證失敗。
      * @throws DataNotFoundException 如果找不到要更新的客戶。
      */
     @PostMapping("editInfo")
@@ -122,7 +123,7 @@ public class CustomerController {
      * 依訂單 ID 刪除客戶。
      *
      * @param customerRequest 包含訂單 ID 的請求。
-     * @param err 綁定和驗證錯誤。
+     * @param err             綁定和驗證錯誤。
      * @return 包含交易結果的回應。
      * @throws DataNotFoundException 如果找不到要刪除的客戶。
      * @throws DeleteFailedException 如果刪除操作失敗。

@@ -2,6 +2,8 @@ package com.exam.exam.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import jakarta.validation.groups.Default;
@@ -83,6 +85,7 @@ public class TranData implements Serializable {
     @Pattern(regexp = "^\\d+$", message = "郵遞區號僅能輸入數字")
     @Size(max = 20)
     @JsonProperty("zipCode_1")
+    // @JsonAlias("ZIP_CODE_1")
     private String zipCode1;
 
     /**
@@ -98,7 +101,7 @@ public class TranData implements Serializable {
      * 必填欄位，格式應為 "區碼-號碼" (例如: 02-12345678)。
      */
     @NotBlank(message = "戶籍電話為必填")
-    @Pattern(regexp = "^\\d{2}-\\d{7,8}$", message = "電話格式錯誤，應為區碼兩碼-號碼七或八碼 (例如: 02-12345678)")
+    @Pattern(regexp = "^\\d{2}\\d{7,8}$", message = "電話格式錯誤，應為區碼兩碼-號碼七或八碼 (例如: 02-12345678)")
     @Size(max = 20)
     @JsonProperty("telephone1")
     private String telephone1;
@@ -111,6 +114,8 @@ public class TranData implements Serializable {
     @Pattern(regexp = "^\\d+$", message = "郵遞區號僅能輸入數字")
     @Size(max = 20)
     @JsonProperty("zipCode_2")
+    // @JsonAlias("ZIP_CODE_2")
+
     private String zipCode2;
 
     /**
@@ -126,7 +131,7 @@ public class TranData implements Serializable {
      * 必填欄位，格式應為 "區碼-號碼"。
      */
     @NotBlank(message = "現居電話為必填")
-    @Pattern(regexp = "^\\d{2}-\\d{7,8}$", message = "電話格式錯誤，應為區碼兩碼-號碼七或八碼")
+    @Pattern(regexp = "^\\d{2}\\d{7,8}$", message = "電話格式錯誤，應為區碼兩碼-號碼七或八碼")
     @Size(max = 20)
     private String telephone2;
 
