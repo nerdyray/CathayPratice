@@ -1,7 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // 建議加入 CommonModule
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup } from '@angular/forms';
+
+// Material Modules
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator'; // 1. 確保引入 Paginator
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,11 +15,13 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
-import { Data } from '../../../interface/Q002Tranrq';
 import { MatDialog } from '@angular/material/dialog';
-import { CustomerService } from '../../../services/customerService';
-import { ConfirDelete } from '../../confir-delete/confir-delete';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+// 你的 Service & Interface
+import { Data } from '../../../interface/Q002Tranrq';
+import { CustomerService } from '../../../services/customerService';
+
 const MATERIAL_MODULES = [
   MatSidenavModule,
   MatListModule,
@@ -27,22 +32,28 @@ const MATERIAL_MODULES = [
   MatRadioModule,
   MatCheckboxModule,
   MatButtonModule,
-  MatSliderModule
+  MatSliderModule,
+  MatTableModule,
+  MatPaginatorModule // 2. 確保這裡有加
 ];
 
 @Component({
   selector: 'app-cif001',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, MATERIAL_MODULES],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, ...MATERIAL_MODULES],
   templateUrl: './cif001.html',
   styleUrl: './cif001.css',
 })
 export class Cif001 implements OnInit {
 
-  // 1. 查詢表單
-  searchForm: FormGroup;
-  yearValue: number = 0; // 滑桿用
+  // ★★★ 關鍵修正：這裡必須宣告變數，否則會報 does not exist 錯誤 ★★★
+  totalItems: number = 0;   // 對應 HTML [length]="totalItems"
+  pageSize: number = 5;     // 對應 HTML [pageSize]="pageSize"
+  pageIndex: number = 0;    // 對應 HTML [pageIndex]="pageIndex"
 
-  // 2. 表格設定
+  searchForm: FormGroup;
+
+  // 定義表格欄位 (對應 HTML 的 matColumnDef)
   displayedColumns: string[] = [
     'idNum',
     'chineseName',
@@ -51,8 +62,9 @@ export class Cif001 implements OnInit {
     'mobile',
     'email',
     'year',
-    'actions' // 這個如果沒寫，HTML 裡的 matColumnDef="actions" 就會報錯
+    'actions'
   ];
+
   dataSource = new MatTableDataSource<Data>([]);
 
   constructor(
@@ -61,7 +73,6 @@ export class Cif001 implements OnInit {
     private snackBar: MatSnackBar,
     private customerService: CustomerService
   ) {
-    // 初始化表單
     this.searchForm = this.fb.group({
       idNum: [''],
       chineseName: [''],
@@ -69,79 +80,71 @@ export class Cif001 implements OnInit {
       education: [''],
       mobile: [''],
       email: [''],
-      year: [0]
+      residenceYears: [0]
     });
   }
 
   ngOnInit(): void {
-    // 預設載入一些假資料方便測試 UI
-    this.loadDummyData();
+    this.loadData();
   }
 
-  // --- 核心功能：刪除流程 ---
+  // 按下查詢
+  onSearch(): void {
+    this.pageIndex = 0; // 查詢時回到第一頁
+    this.loadData(this.pageIndex, this.pageSize);
+  }
 
-  /**
-   * 步驟 1: 開啟刪除確認彈窗
-   * @param customer 當前選中的客戶資料
-   */
-  // openDeleteDialog(customer: Data): void {
-  //   const dialogRef = this.dialog.open(ConfirDelete, {
-  //     width: '500px',
-  //     disableClose: true, // 強制使用者點擊按鈕才能關閉
-  //     data: customer      // 將整筆資料傳給 Dialog 顯示姓名
-  //   });
+  // 按下清除
+  onClear(): void {
+    this.searchForm.reset({ residenceYears: 0 });
+    this.onSearch();
+  }
 
-  //   dialogRef.afterClosed().subscribe(confirmed => {
-  //     // 如果使用者點擊「確認」(回傳 true)
-  //     if (confirmed) {
-  //       this.executeDelete(customer['idNum']);
-  //     }
-  //   });
-  // }
+  // 載入資料
+  loadData(pageIdx: number = 0, pageSize: number = 5) {
+    // 1. 更新本地變數 (讓 HTML 分頁器同步)
+    this.pageIndex = pageIdx;
+    this.pageSize = pageSize;
 
-  /**
-   * 步驟 2: 執行 API 刪除並顯示 Toast
-   */
-  // executeDelete(id: string): void {
-  //   // 呼叫 Service
-  //   this.customerService.deleteCustomer(id).subscribe({
-  //     next: (res) => {
-  //       // 成功：顯示綠色 Toast，並重新查詢資料
-  //       this.showToast('刪除成功', 'success-snackbar');
-  //       this.refreshTable(id); // 從前端表格移除該筆資料 (或重新呼叫查詢 API)
-  //     },
-  //     error: (err) => {
-  //       // 失敗：顯示粉紅色 Toast
-  //       console.error(err);
-  //       this.showToast('刪除失敗：查無刪除失敗', 'fail-snackbar');
-  //     }
-  //   });
-  // }
+    // 2. 呼叫 API (注意 API 頁碼是 1 開始)
+    const apiPageNumber = (this.pageIndex || 0) + 1;
 
-  /**
-   * 顯示 SnackBar (Toast)
-   */
-  private showToast(message: string, panelClass: string) {
-    this.snackBar.open(message, '✕', {
-      duration: 3000,
-      horizontalPosition: 'left', // 左下角
-      verticalPosition: 'bottom',
-      panelClass: [panelClass]    // 套用自定義 CSS
+    console.log(`查詢: 第 ${apiPageNumber} 頁, 每頁 ${this.pageSize} 筆`);
+
+    this.customerService.listCustomer(apiPageNumber, this.pageSize).subscribe({
+      next: (res: any) => {
+        if (res && res.TRANRS) {
+          // 接資料列表
+          this.dataSource.data = res.TRANRS.items || [];
+
+          // ★★★ 接總筆數 (修正重點：這裡要有 totalItems 變數承接 totalCount) ★★★
+          this.totalItems = res.TRANRS.totalCount || 0;
+
+          console.log('資料載入成功，總筆數:', this.totalItems);
+        } else {
+          this.dataSource.data = [];
+          this.totalItems = 0;
+        }
+      },
+      error: (err) => {
+        console.error('API 錯誤', err);
+        this.dataSource.data = [];
+        this.totalItems = 0;
+      }
     });
   }
 
-  // --- 輔助功能 ---
-
-  loadDummyData() {
-    const data: Data[] = [
-      { idNum: 'A123456789', chineseName: 'Lily', gender: 'F', education: '學士', mobile: '0911111111', email: '123@123.com', year: 20 } as Data,
-      { idNum: 'B987654321', chineseName: 'Joan', gender: 'M', education: '碩士', mobile: '0922222222', email: '456@456.com', year: 5 } as Data
-    ];
-    this.dataSource.data = data;
+  // 分頁切換事件
+  onPageChange(event: PageEvent) {
+    this.loadData(event.pageIndex, event.pageSize);
   }
 
-  // refreshTable(deletedId: string) {
-  //   // 簡單實作：直接濾掉刪除的那筆，讓畫面不用整頁重整
-  //   this.dataSource.data = this.dataSource.data.filter(c => c.idNum !== deletedId);
-  // }
+  private showToast(message: string, panelClass: string) {
+    this.snackBar.open(message, '✕', {
+      duration: 3000,
+      horizontalPosition: 'left',
+      verticalPosition: 'bottom',
+      panelClass: [panelClass]
+    });
+  }
 }
