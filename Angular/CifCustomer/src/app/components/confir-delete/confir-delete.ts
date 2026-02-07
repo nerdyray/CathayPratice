@@ -1,3 +1,9 @@
+// confir-delete.ts
+//
+// 這個文件定義了 ConfirDelete 組件。
+// 目前整個文件內容都被註釋掉了，可能是在開發過程中暫時停用或重構。
+// 原始代碼似乎是一個用於顯示確認刪除對話框的 Angular Material 對話框組件。
+
 // import { Component, Inject } from '@angular/core';
 // import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 

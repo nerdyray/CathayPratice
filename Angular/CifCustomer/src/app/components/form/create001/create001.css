@@ -1,115 +1,119 @@
+/*
+ * create001.css
+ *
+ * 這個文件定義了 create001 組件的樣式。該組件主要用於 CIF (客戶信息文件) 的新增功能。
+ */
+
 /* 1. 全局容器設定 */
 .admin-container {
-  height: 100vh;
-  background-color: #f5f5f5;
+  height: 100vh; /* 設置容器高度為視窗的 100% */
+  background-color: #f5f5f5; /* 設置背景顏色 */
 }
 
 /* 2. 側邊選單樣式 */
 .side-menu {
-  width: 240px;
-  background-color: #f0f0f0;
-  border-right: 1px solid #ddd;
+  width: 240px; /* 側邊選單寬度 */
+  background-color: #f0f0f0; /* 背景顏色 */
+  border-right: 1px solid #ddd; /* 右邊框線 */
 
   .logo {
-    padding: 30px 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #444;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 30px 20px; /* 內邊距 */
+    font-size: 24px; /* 字體大小 */
+    font-weight: bold; /* 字體粗細 */
+    color: #444; /* 字體顏色 */
+    border-bottom: 1px solid #e0e0e0; /* 底部邊框線 */
   }
 
   mat-nav-list {
-    padding-top: 10px;
+    padding-top: 10px; /* 頂部內邊距 */
 
     .active {
-      background-color: #e0e0e0;
-      border-left: 5px solid #2e7d32;
-      font-weight: bold;
-      color: #2e7d32;
+      background-color: #e0e0e0; /* 活動項目背景顏色 */
+      border-left: 5px solid #2e7d32; /* 左邊框線 (作為活動狀態指示) */
+      font-weight: bold; /* 字體粗細 */
+      color: #2e7d32; /* 字體顏色 */
     }
   }
 }
 
 /* 3. 主內容區域 */
 .main-content {
-  padding: 20px 40px;
-  background-color: #f5f5f5;
+  padding: 20px 40px; /* 內邊距 */
+  background-color: #f5f5f5; /* 背景顏色 */
 
   .page-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    display: flex; /* 使用 Flexbox 布局 */
+    align-items: center; /* 垂直居中對齊 */
+    gap: 12px; /* 項目間距 */
+    margin-bottom: 20px; /* 底部外邊距 */
 
     .green-bar {
-      width: 5px;
-      height: 24px;
-      background-color: #2e7d32;
-      border-radius: 2px;
+      width: 5px; /* 綠色裝飾條寬度 */
+      height: 24px; /* 綠色裝飾條高度 */
+      background-color: #2e7d32; /* 綠色裝飾條顏色 */
+      border-radius: 2px; /* 邊框圓角 */
     }
 
     h2 {
-      margin: 0;
-      color: #333;
-      font-size: 1.4rem;
-      font-weight: bold;
+      margin: 0; /* 移除默認外邊距 */
+      color: #333; /* 字體顏色 */
+      font-size: 1.4rem; /* 字體大小 */
+      font-weight: bold; /* 字體粗細 */
     }
   }
 }
 
 /* 4. 表單卡片區 */
 .content-card {
-  background: white;
-  padding: 30px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: white; /* 背景顏色 */
+  padding: 30px; /* 內邊距 */
+  border: 1px solid #e0e0e0; /* 邊框線 */
+  border-radius: 8px; /* 邊框圓角 */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* 陰影效果 */
 
   .form-grid {
-    display: grid;
-    gap: 20px;
-    margin-bottom: 15px;
+    display: grid; /* 使用 Grid 布局 */
+    gap: 20px; /* 網格間距 */
+    margin-bottom: 15px; /* 底部外邊距 */
 
     &.four-cols {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr); /* 分為四等份欄位 */
     }
     &.address-row {
-      grid-template-columns: 1fr 2.5fr 1.5fr;
+      grid-template-columns: 1fr 2.5fr 1.5fr; /* 地址行特殊欄位比例 */
     }
   }
 
   .field-group {
-    display: flex;
-    flex-direction: column;
+    display: flex; /* 使用 Flexbox 布局 */
+    flex-direction: column; /* 垂直方向排列 */
 
     label {
-      font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #333;
+      font-weight: bold; /* 字體粗細 */
+      font-size: 14px; /* 字體大小 */
+      margin-bottom: 6px; /* 底部外邊距 */
+      color: #333; /* 字體顏色 */
     }
 
-    &.span-2 { grid-column: span 2; }
+    &.span-2 { grid-column: span 2; } /* 讓元素跨越兩欄 */
 
     /* 手動寫的 error-msg (用於非 mat-error 的地方) */
     .error-msg {
-      color: #d32f2f;
-      font-size: 12px;
-      margin-top: 4px; /* 修正：不要用負 margin，避免重疊 */
-      min-height: 15px;
+      color: #d32f2f; /* 錯誤訊息顏色 */
+      font-size: 12px; /* 字體大小 */
+      margin-top: 4px; /* 頂部外邊距 */
+      min-height: 15px; /* 最小高度，避免內容跳動 */
     }
   }
 
-  /* 🔥 關鍵修正：驗證按鈕組合 */
+  /* 驗證按鈕組合樣式 */
   .input-with-btn {
-    display: flex;
-    /* 改為 flex-start：讓元件靠上對齊。
-       這樣當 mat-form-field 因為錯誤訊息而變高時，按鈕還是會固定在上方，不會浮在中間 */
-    align-items: flex-start;
-    gap: 10px;
+    display: flex; /* 使用 Flexbox 布局 */
+    align-items: flex-start; /* 頂部對齊 */
+    gap: 10px; /* 項目間距 */
 
     mat-form-field {
-      flex: 1;
+      flex: 1; /* 佔滿剩餘空間 */
       /* 確保 mat-error 字體顏色正確 */
       ::ng-deep .mat-mdc-form-field-error {
         margin-left: 0; /* 調整錯誤訊息縮排(可選) */
@@ -117,78 +121,74 @@
     }
 
     .verify-btn {
-      /* 設定跟 Input 框差不多高 */
-      height: 56px;
-      /* 微調 margin 讓它跟 Input 的框線水平對齊 */
-      margin-top: 0px;
-      border-color: #2e7d32;
-      color: #2e7d32;
+      height: 56px; /* 按鈕高度，與輸入框保持一致 */
+      margin-top: 0px; /* 調整頂部外邊距 */
+      border-color: #2e7d32; /* 邊框顏色 */
+      color: #2e7d32; /* 字體顏色 */
     }
   }
 
-  /* Checkbox 與 Input 組合 */
+  /* Checkbox 與 Input 組合樣式 */
   .flex-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
+    display: flex; /* 使用 Flexbox 布局 */
+    align-items: flex-start; /* 頂部對齊 */
+    gap: 15px; /* 項目間距 */
 
     mat-checkbox {
-      margin-top: 8px; /* 對齊 Input 文字 */
-      white-space: nowrap;
+      margin-top: 8px; /* 頂部外邊距，與輸入框文字對齊 */
+      white-space: nowrap; /* 防止文字換行 */
     }
-    .flex-1 { flex: 1; }
+    .flex-1 { flex: 1; } /* 佔滿剩餘空間 */
   }
 
-  .no-margin { margin-bottom: 0; }
+  .no-margin { margin-bottom: 0; } /* 移除底部外邊距 */
   mat-slider {
-    width: 100%;
-    margin-top: -10px;
+    width: 100%; /* 寬度佔滿 */
+    margin-top: -10px; /* 頂部負外邊距 */
   }
 
   .slider-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; /* 使用 Flexbox 布局 */
+      align-items: center; /* 垂直居中對齊 */
+      gap: 10px; /* 項目間距 */
       mat-form-field {
-          margin-bottom: 0;
+          margin-bottom: 0; /* 移除底部外邊距 */
       }
       mat-slider {
-          flex: 1;
-          margin-top: 0;
+          flex: 1; /* 佔滿剩餘空間 */
+          margin-top: 0; /* 移除頂部外邊距 */
       }
   }
 
-  /* ❌ 絕對不要加這一段，加了 mat-error 就會全部消失！
-     ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
-  */
+  /* 這個註釋塊說明了不應添加的樣式，因為它會隱藏錯誤訊息 */
 }
 
 /* 5. 底部按鈕區 */
 .actions {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  display: flex; /* 使用 Flexbox 布局 */
+  justify-content: center; /* 水平居中對齊 */
+  gap: 20px; /* 項目間距 */
+  margin-top: 40px; /* 頂部外邊距 */
+  padding-top: 20px; /* 頂部內邊距 */
+  border-top: 1px solid #eee; /* 頂部邊框線 */
 
   button {
-    min-width: 120px;
-    height: 40px;
-    border-radius: 20px;
+    min-width: 120px; /* 最小寬度 */
+    height: 40px; /* 高度 */
+    border-radius: 20px; /* 邊框圓角 */
   }
 
   .save-btn {
-    background-color: #ccc;
-    color: white;
+    background-color: #ccc; /* 默認背景顏色 */
+    color: white; /* 字體顏色 */
 
     &:not([disabled]) {
-      background-color: #2e7d32 !important;
+      background-color: #2e7d32 !important; /* 非禁用狀態下的背景顏色 */
     }
   }
 
   .outline-green {
-    color: #2e7d32;
-    border: 1px solid #2e7d32;
+    color: #2e7d32; /* 字體顏色 */
+    border: 1px solid #2e7d32; /* 邊框線 */
   }
 }

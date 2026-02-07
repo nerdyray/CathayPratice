@@ -1,21 +1,34 @@
+<!--
+  cif001.html
+
+  這個模板定義了 CIF 客戶查詢列表的用戶界面。
+  它包含一個客戶查詢表單、一個顯示查詢結果的 Angular Material 表格，以及一個分頁器。
+-->
+
+<!-- 查詢區塊，包含查詢條件表單 -->
 <div class="search-section mat-elevation-z2">
   <div class="section-title">
     <div class="green-bar"></div>
     <h3>CIF 查詢列表</h3>
   </div>
 
+  <!-- 查詢表單，使用響應式表單 (searchForm) 並綁定提交事件 -->
   <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <!-- 表單網格布局 -->
     <div class="form-grid">
+      <!-- 身份證字號輸入框 -->
       <mat-form-field appearance="outline">
         <mat-label>身分證字號</mat-label>
         <input matInput formControlName="idNum">
       </mat-form-field>
 
+      <!-- 中文姓名輸入框 -->
       <mat-form-field appearance="outline">
         <mat-label>中文姓名</mat-label>
         <input matInput formControlName="chineseName">
       </mat-form-field>
 
+      <!-- 性別單選組 -->
       <div class="field-wrapper">
         <label class="field-label">性別</label>
         <mat-radio-group formControlName="gender" color="primary">
@@ -24,6 +37,7 @@
         </mat-radio-group>
       </div>
 
+      <!-- 現居年限滑塊及輸入框 -->
       <div class="field-wrapper">
         <label class="field-label">現居年限</label>
         <div class="slider-container">
@@ -34,6 +48,7 @@
         </div>
       </div>
 
+      <!-- 學歷選擇框 -->
       <mat-form-field appearance="outline">
         <mat-label>學歷</mat-label>
         <mat-select formControlName="education" placeholder="請選擇學歷">
@@ -43,17 +58,20 @@
         </mat-select>
       </mat-form-field>
 
+      <!-- 行動電話輸入框 -->
       <mat-form-field appearance="outline">
         <mat-label>行動電話</mat-label>
         <input matInput formControlName="mobile">
       </mat-form-field>
 
+      <!-- 電子郵件輸入框 -->
       <mat-form-field appearance="outline">
         <mat-label>電子郵件</mat-label>
         <input matInput formControlName="email">
       </mat-form-field>
     </div>
 
+    <!-- 表單操作按鈕區 -->
     <div class="form-actions">
       <button mat-flat-button color="primary" type="submit" class="btn-search">查詢</button>
       <button mat-stroked-button color="primary" type="button" (click)="onClear()">清除</button>
@@ -61,19 +79,24 @@
   </form>
 </div>
 
+<!-- 表格容器 -->
 <div class="table-container">
+  <!-- Angular Material 表格 -->
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 customer-table">
 
+    <!-- 身份證字號列定義 -->
     <ng-container matColumnDef="idNum">
       <th mat-header-cell *matHeaderCellDef> 身分證字號 </th>
       <td mat-cell *matCellDef="let element"> {{element.idNum}} </td>
     </ng-container>
 
+    <!-- 中文姓名列定義 -->
     <ng-container matColumnDef="chineseName">
       <th mat-header-cell *matHeaderCellDef> 中文姓名 </th>
       <td mat-cell *matCellDef="let element"> {{element.chineseName}} </td>
     </ng-container>
 
+    <!-- 性別列定義，並進行顯示轉換 -->
     <ng-container matColumnDef="gender">
       <th mat-header-cell *matHeaderCellDef> 性別 </th>
       <td mat-cell *matCellDef="let element">
@@ -81,26 +104,31 @@
       </td>
     </ng-container>
 
+    <!-- 學歷列定義 -->
     <ng-container matColumnDef="education">
       <th mat-header-cell *matHeaderCellDef> 學歷 </th>
       <td mat-cell *matCellDef="let element"> {{element.education}} </td>
     </ng-container>
 
+    <!-- 行動電話列定義 -->
     <ng-container matColumnDef="mobile">
       <th mat-header-cell *matHeaderCellDef> 行動電話 </th>
       <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
     </ng-container>
 
+    <!-- 電子郵件列定義 -->
     <ng-container matColumnDef="email">
       <th mat-header-cell *matHeaderCellDef> 電子郵件 </th>
       <td mat-cell *matCellDef="let element"> {{element.email}} </td>
     </ng-container>
 
+    <!-- 居住年限列定義 -->
     <ng-container matColumnDef="year">
       <th mat-header-cell *matHeaderCellDef> 居住年限 </th>
       <td mat-cell *matCellDef="let element"> {{element.year}} </td>
     </ng-container>
 
+    <!-- 操作列定義，包含修改按鈕 -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef class="text-center"> 操作 </th>
       <td mat-cell *matCellDef="let element" class="text-center">
@@ -108,15 +136,19 @@
       </td>
     </ng-container>
 
+    <!-- 表頭行，設置為固定 (sticky) -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <!-- 表格數據行 -->
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
 
+  <!-- 當沒有資料時顯示的訊息 -->
   <div *ngIf="dataSource.data.length === 0" class="no-data-msg">
     查無資料
   </div>
 
+  <!-- 分頁器 -->
   <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="[5, 10, 20]"
     (page)="onPageChange($event)" showFirstLastButtons aria-label="選取分頁">
   </mat-paginator>
