@@ -23,6 +23,6 @@ public class T003Tranrq implements Serializable {
      * 限制為最多 999 的整數。
      */
     @Digits(integer = 999, fraction = 0)
-    @JsonProperty("orderId")
+    @JsonProperty("order_id")
     private Integer orderId;
 }

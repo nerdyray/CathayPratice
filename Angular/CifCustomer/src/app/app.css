@@ -1,6 +1,39 @@
-/*
- * app.css
- *
- * 這個文件用於定義應用程式的全局樣式。
- * 目前為空，可以根據需要在此添加全局樣式。
- */
+/* 1. 讓容器佔滿整個瀏覽器視窗高度 */
+.app-container {
+  height: 100vh; /* Viewport Height 100% */
+  background-color: #f5f5f5; /* 整體背景設為淺灰 */
+}
+
+/* 2. 左側邊欄樣式 */
+.app-sidebar {
+  width: 250px; /* 設定固定寬度 */
+  background-color: #f0f0f0; /* 側邊欄背景色 (比內容區稍微深一點點或淺一點) */
+  border-right: 1px solid #e0e0e0; /* 右邊界線 */
+}
+
+/* 3. 側邊欄標題 "CIF 管理系統" */
+.sidebar-header {
+  padding: 24px 16px; /* 內距：上下 24px，左右 16px */
+  font-size: 24px;    /* 字體加大 */
+  font-weight: bold;  /* 粗體 */
+  color: #424242;     /* 深灰色字體 */
+  border-bottom: 1px solid #e0e0e0; /* 標題下方的分隔線 */
+}
+
+/* 4. 調整連結選中時的樣式 (routerLinkActive) */
+.active-link {
+  background-color: #e0e0e0; /* 選中時的背景色 */
+  color: #2e7d32 !important; /* 選中時文字變綠色 (配合你的主題) */
+  font-weight: bold;
+}
+
+/* 修正 icon 與文字的間距 */
+mat-icon {
+  margin-right: 8px;
+}
+
+/* 5. 右側內容區 */
+.app-content {
+  background-color: #f5f5f5; /* 確保右邊也是灰色背景 */
+  padding: 0; /* 內距由各個頁面自己控制 */
+}

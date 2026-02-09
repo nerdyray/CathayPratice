@@ -9,10 +9,10 @@ export interface Data {
   chineseName: string;  // 中文姓名，字符串類型
   gender: string;       // 性別，字符串類型
   education: string;    // 學歷，字符串類型
-  zipCode1: string;     // 戶籍地址郵遞區號，字符串類型
+  zipCode_1: string;     // 戶籍地址郵遞區號，字符串類型
   address1: string;     // 戶籍地址，字符串類型
   telephone1: string;   // 戶籍電話，字符串類型
-  zipCode2: string;     // 現居地址郵遞區號，字符串類型
+  zipCode_2: string;     // 現居地址郵遞區號，字符串類型
   address2: string;     // 現居地址，字符串類型
   telephone2: string;   // 現居電話，字符串類型
   mobile: string;       // 行動電話，字符串類型

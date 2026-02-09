@@ -1,0 +1,103 @@
+/*
+ * search001.css
+ *
+ * 這個文件定義了 search001 組件的樣式。該組件主要用於 CIF (客戶信息文件) 的查詢列表功能中的查詢表單。
+ */
+
+/* 查詢區塊的樣式設定 */
+.search-section {
+  background: #fff; /* 白色背景 */
+  padding: 20px; /* 內邊距 */
+  margin-bottom: 20px; /* 與下方表格的距離 */
+  border-radius: 4px; /* 輕微圓角 */
+
+  /* 區塊標題樣式 */
+  .section-title {
+    display: flex; /* 使用 Flexbox 布局 */
+    align-items: center; /* 垂直居中對齊 */
+    margin-bottom: 15px; /* 底部外邊距 */
+
+    /* 綠色裝飾條 */
+    .green-bar {
+      width: 4px; /* 寬度 */
+      height: 20px; /* 高度 */
+      background-color: #4CAF50; /* 綠色 */
+      margin-right: 10px; /* 右邊距 */
+    }
+
+    h3 {
+      margin: 0; /* 移除默認外邊界 */
+      font-size: 18px; /* 字體大小 */
+      font-weight: 500; /* 字體粗細 */
+      color: #333; /* 字體顏色 */
+    }
+  }
+}
+
+/* 表單網格布局樣式 */
+.form-grid {
+  display: grid; /* 使用 Grid 布局 */
+  grid-template-columns: repeat(4, 1fr); /* 切成四等份欄位 */
+  gap: 16px; /* 欄位間距 */
+  align-items: start; /* 頂部對齊 */
+
+  /* 媒體查詢：當螢幕寬度小於 960px 時，改為兩欄布局 */
+  @media (max-width: 960px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* 媒體查詢：當螢幕寬度小於 600px (手機版) 時，改為單欄布局 */
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 針對非 mat-form-field 的自訂欄位 (例如性別單選、Slider) 的通用包裝器樣式 */
+.field-wrapper {
+  display: flex; /* 使用 Flexbox 布局 */
+  flex-direction: column; /* 垂直方向排列 */
+  padding-top: 4px; /* 頂部內邊距 */
+
+  .field-label {
+    font-size: 12px; /* 標籤字體大小 */
+    color: rgba(0,0,0,0.6); /* 標籤顏色 (淺灰色) */
+    margin-bottom: 8px; /* 標籤底部外邊距 */
+    font-family: Roboto, "Helvetica Neue", sans-serif; /* 字體設定 */
+  }
+}
+
+/* Slider 區域的樣式微調 */
+.slider-container {
+  display: flex; /* 使用 Flexbox 布局 */
+  flex-direction: column; /* 垂直方向排列 */
+  align-items: center; /* 將內容水平居中 */
+
+  /* 數值顯示樣式 */
+  .year-display {
+    font-size: 16px; /* 字體大小 */
+    font-weight: 500; /* 字體粗細 */
+    color: #333; /* 字體顏色 */
+    margin-bottom: 8px; /* 與滑塊的間距 */
+  }
+
+  mat-slider {
+    width: 100%; /* 寬度佔滿 */
+    margin-left: -8px; /* 修正 material slider 預設邊距，使其與輸入框對齊 */
+  }
+}
+
+/* 按鈕區置中樣式 */
+.form-actions {
+  display: flex; /* 使用 Flexbox 布局 */
+  justify-content: center; /* 水平居中對齊 */
+  gap: 16px; /* 按鈕間距 */
+  margin-top: 20px; /* 頂部外邊距 */
+  padding-top: 10px; /* 頂部內邊距 */
+  border-top: 1px solid #eee; /* 頂部邊框線 */
+
+  /* 查詢按鈕的樣式 */
+  .btn-search {
+    background-color: #4CAF50; /* 綠色背景 */
+    color: white; /* 白色字體 */
+  }
+}

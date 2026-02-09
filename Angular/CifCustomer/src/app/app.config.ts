@@ -13,6 +13,7 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   // 提供者陣列，包含應用程式級別的服務
   providers: [
+    provideRouter(routes), // 3. 這裡加入 provideRouter(routes)
     // 提供瀏覽器全局錯誤監聽器，用於捕獲和處理應用程式中的未捕獲錯誤
     provideBrowserGlobalErrorListeners(),
     // 提供應用程式的路由功能，使用在 app.routes.ts 中定義的路由

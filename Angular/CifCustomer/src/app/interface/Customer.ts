@@ -8,10 +8,10 @@ export interface Customer {
   chineseName: string;  // 中文姓名，必填，字符串類型
   gender: string;       // 性別 (例如 'M' 代表男，'F' 代表女)，必填，字符串類型
   education: string;    // 學歷，必填，字符串類型
-  zipCode1: string;     // 戶籍地址郵遞區號，必填，字符串類型
+  zipCode_1: string;     // 戶籍地址郵遞區號，必填，字符串類型
   address1: string;     // 戶籍地址，必填，字符串類型
   telephone1: string;   // 戶籍電話，必填，字符串類型
-  zipCode2: string;     // 現居地址郵遞區號，必填，字符串類型
+  zipCode_2: string;     // 現居地址郵遞區號，必填，字符串類型
   address2: string;     // 現居地址，必填，字符串類型
   telephone2: string;   // 現居電話，必填，字符串類型
   mobile: string;       // 行動電話，必填，字符串類型

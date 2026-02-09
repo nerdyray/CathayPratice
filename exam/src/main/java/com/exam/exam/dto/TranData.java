@@ -32,6 +32,9 @@ public class TranData implements Serializable {
     public interface T002Interface extends Default {
     }
 
+    public interface Q002Interface extends Default {
+    }
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +43,7 @@ public class TranData implements Serializable {
      * 在修改情境 (T002Interface) 中為必填欄位。
      */
     @JsonProperty("orderId")
-    @NotNull(groups = T002Interface.class) // 如果你有做分組驗證，可以把這行打開
+    @NotNull(groups = { T002Interface.class, Q002Interface.class }) // 如果你有做分組驗證，可以把這行打開
     private Integer orderId;
 
     /**

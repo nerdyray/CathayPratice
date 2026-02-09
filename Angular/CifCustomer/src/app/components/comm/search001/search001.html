@@ -1,0 +1,68 @@
+<div class="search-section mat-elevation-z2">
+    <div class="section-title">
+      <div class="green-bar"></div>
+      <h3>CIF 查詢列表</h3>
+    </div>
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>身分證字號</mat-label>
+          <input matInput formControlName="idNum" placeholder="請輸入身分證字號">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>中文姓名</mat-label>
+          <input matInput formControlName="chineseName" placeholder="請輸入姓名">
+        </mat-form-field>
+
+        <div class="field-wrapper">
+          <label class="field-label">性別</label>
+          <mat-radio-group formControlName="gender" color="primary">
+            <mat-radio-button value="">不拘</mat-radio-button>
+            <mat-radio-button value="M">男</mat-radio-button>
+            <mat-radio-button value="F">女</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="field-wrapper">
+          <label class="field-label">現居年限 (至少)</label>
+          <div class="slider-container">
+            <span class="year-display">{{ searchForm.get('year')?.value }} 年</span>
+
+            <mat-slider min="0" max="100" step="1" showTickMarks discrete>
+              <input matSliderThumb [formControl]="$any(searchForm.get('year'))">
+            </mat-slider>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>學歷</mat-label>
+          <mat-select formControlName="education" placeholder="請選擇學歷">
+            <mat-option value="">不拘</mat-option>
+            <mat-option value="學士">學士</mat-option>
+            <mat-option value="碩士">碩士</mat-option>
+            <mat-option value="博士">博士</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>行動電話</mat-label>
+          <input matInput formControlName="mobile" placeholder="請輸入電話">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>電子郵件</mat-label>
+          <input matInput formControlName="email" placeholder="請輸入Email">
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" type="submit" class="btn-search">
+          <mat-icon>search</mat-icon> 查詢
+        </button>
+        <button mat-stroked-button color="warn" type="button" (click)="onClear()">
+          <mat-icon>refresh</mat-icon> 清除
+        </button>
+      </div>
+    </form>
+</div>

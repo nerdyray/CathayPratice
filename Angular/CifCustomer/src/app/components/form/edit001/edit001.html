@@ -1,0 +1,135 @@
+<div class="edit-container">
+
+
+  <mat-card>
+
+    <div class="section-title">
+      <div class="title-bar"></div>
+      <span>CIF 修改功能</span>
+    </div>
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-grid">
+
+        <div style="display: flex; flex-direction: column; margin-top: 4px;">
+          <label style="font-size: 12px; color: rgba(0,0,0,0.6);">身份證字號</label>
+          <span style="font-size: 16px; margin-top: 8px; font-weight: 500;">
+            {{ editForm.get('idNum')?.value }}
+          </span>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>中文姓名</mat-label>
+          <input matInput formControlName="chineseName">
+          <mat-error *ngIf="editForm.get('chineseName')?.hasError('required')">必填</mat-error>
+        </mat-form-field>
+
+        <div class="radio-group-container">
+          <label class="radio-group-label">性別</label>
+          <mat-radio-group formControlName="gender" color="primary">
+            <mat-radio-button value="m">男</mat-radio-button>
+            <mat-radio-button value="f">女</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>學歷</mat-label>
+          <mat-select formControlName="education">
+            <mat-option value="學士">學士</mat-option>
+            <mat-option value="碩士">碩士</mat-option>
+            <mat-option value="博士">博士</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>郵遞區號</mat-label>
+          <mat-select formControlName="zipCode_1">
+            <mat-option value="100">100 臺北市中正區</mat-option>
+            <mat-option value="103">103 臺北市大同區</mat-option>
+            <mat-option value="104">104 臺北市中山區</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-2">
+          <mat-label>戶籍地址</mat-label>
+          <input matInput formControlName="address1">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>戶籍電話</mat-label>
+          <input matInput formControlName="telephone1">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>郵遞區號</mat-label>
+          <mat-select formControlName="zipCode_2">
+            <mat-option value="100">100 臺北市中正區</mat-option>
+            <mat-option value="103">103 臺北市大同區</mat-option>
+            <mat-option value="104">104 臺北市中山區</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="checkbox-input-group col-span-2">
+          <mat-checkbox formControlName="sameAsAddress1" color="primary">同戶籍地址</mat-checkbox>
+          <mat-form-field appearance="outline">
+            <mat-label>現居地址</mat-label>
+            <input matInput formControlName="address2">
+          </mat-form-field>
+        </div>
+
+        <div class="checkbox-input-group">
+          <mat-checkbox formControlName="sameAsTelephone1" color="primary">同戶籍電話</mat-checkbox>
+          <mat-form-field appearance="outline">
+            <mat-label>現居電話</mat-label>
+            <input matInput formControlName="telephone2">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>行動電話</mat-label>
+          <input matInput formControlName="mobile">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-span-1">
+          <mat-label>電子郵件</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+
+        <div class="field-wrapper">
+          <label class="field-label">現居年限 (至少)</label>
+          <div class="slider-container">
+            <span class="year-display">{{ editForm.get('year')?.value }} 年</span>
+
+            <mat-slider min="0" max="100" step="1" showTickMarks discrete>
+              <input matSliderThumb [formControl]="$any(editForm.get('year'))">
+            </mat-slider>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="form-actions">
+        <button mat-flat-button class="btn-save" type="submit">
+          儲存
+        </button>
+        <button mat-stroked-button class="btn-clear" type="button" (click)="onClear()">
+          清除
+        </button>
+        <button mat-stroked-button class="btn-return" type="button" (click)="onReturn()">
+          返回
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+  <!-- 成功提示訊息 -->
+  @if (showSuccessToast){
+  <div class="toast toast-success">
+    <div class="toast-indicator"></div>
+    <div class="toast-content">
+      <div class="toast-title">Success</div>
+      <div class="toast-message">修改資料成功</div>
+    </div>
+    <button class="toast-close" (click)="closeToast()">×</button>
+  </div>
+  }

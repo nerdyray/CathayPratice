@@ -5,252 +5,234 @@
   它包含一個側邊導航欄、主要內容區域、客戶資料表單以及提交和清除按鈕。
 -->
 
-<!-- 整個管理介面的容器，使用 Angular Material 的側邊導航容器 -->
-<mat-sidenav-container class="admin-container">
-  <!-- 側邊導航欄 -->
-  <mat-sidenav mode="side" opened class="side-menu">
-    <!-- Logo 或標題 -->
-    <div class="logo">CIF 管理系統</div>
-    <!-- 導航列表 -->
-    <mat-nav-list>
-      <!-- 查詢功能連結 -->
-      <a mat-list-item href="#">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span matListItemTitle>查詢</span>
-      </a>
-      <!-- 新增功能連結 (當前活動) -->
-      <a mat-list-item href="#" class="active">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span matListItemTitle>新增</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
 
-  <!-- 主要內容區域 -->
-  <mat-sidenav-content class="main-content">
-    <!-- 頁面標題區域 -->
-    <div class="page-header">
-      <span class="green-bar"></span>
-      <h2>CIF 新增功能</h2>
-    </div>
 
-    <!-- 表單內容卡片區 -->
-    <div class="content-card">
-      <!-- 客戶資料新增表單，使用響應式表單 (createForm) 並綁定提交事件 -->
-      <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
 
-        <!-- 第一部分表單網格：身份證字號 -->
-        <div class="form-grid four-cols">
-          <div class="field-group">
-            <label>身份證字號</label>
-            <div class="input-with-btn">
-              <!-- 身份證字號輸入框 -->
-              <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                <input matInput formControlName="idNum" placeholder="請輸入身份證字號">
-                <!-- 錯誤訊息：必填 -->
-                <mat-error *ngIf="createForm.get('idNum')?.hasError('required')">
-                  請輸入身份證字號
-                </mat-error>
-                <!-- 錯誤訊息：格式不正確 -->
-                <mat-error
-                  *ngIf="createForm.get('idNum')?.hasError('pattern') && !createForm.get('idNum')?.hasError('required')">
-                  身份證格式不正確
-                </mat-error>
-                <!-- 錯誤訊息：已存在 -->
-                <mat-error *ngIf="createForm.get('idNum')?.hasError('duplicate')">
-                  此身份證字號已存在，無法重複註冊
-                </mat-error>
-                <!-- 錯誤訊息：服務器連線異常 -->
-                <mat-error *ngIf="createForm.get('idNum')?.hasError('serverError')">
-                  連線異常，請稍後再試
-                </mat-error>
-              </mat-form-field>
+<!-- 主要內容區域 -->
+<mat-sidenav-content class="main-content">
+  <!-- 頁面標題區域 -->
+  <div class="page-header">
+    <span class="green-bar"></span>
+    <h2>CIF 新增功能</h2>
+  </div>
 
-              <!-- 驗證按鈕 -->
-              <button type="button" mat-stroked-button class="verify-btn" (click)="onVerify()"
-                [disabled]="isVerifying || (createForm.get('idNum')?.invalid && !createForm.get('idNum')?.hasError('duplicate'))">
-                @if(!isVerifying) {
-                <span>驗證</span>
-                } @else {
-                <span>驗證中...</span>
-                }
-              </button>
-            </div>
+  <!-- 表單內容卡片區 -->
+  <div class="content-card">
+    <!-- 客戶資料新增表單，使用響應式表單 (createForm) 並綁定提交事件 -->
+    <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+
+      <!-- 第一部分表單網格：身份證字號 -->
+      <div class="form-grid four-cols">
+        <div class="field-group">
+          <label>身份證字號</label>
+          <div class="input-with-btn">
+            <!-- 身份證字號輸入框 -->
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <input matInput formControlName="idNum" placeholder="請輸入身份證字號">
+              <!-- 錯誤訊息：必填 -->
+              <mat-error *ngIf="createForm.get('idNum')?.hasError('required')">
+                請輸入身份證字號
+              </mat-error>
+              <!-- 錯誤訊息：格式不正確 -->
+              <mat-error
+                *ngIf="createForm.get('idNum')?.hasError('pattern') && !createForm.get('idNum')?.hasError('required')">
+                身份證格式不正確
+              </mat-error>
+              <!-- 錯誤訊息：已存在 -->
+              <mat-error *ngIf="createForm.get('idNum')?.hasError('duplicate')">
+                此身份證字號已存在，無法重複註冊
+              </mat-error>
+              <!-- 錯誤訊息：服務器連線異常 -->
+              <mat-error *ngIf="createForm.get('idNum')?.hasError('serverError')">
+                連線異常，請稍後再試
+              </mat-error>
+            </mat-form-field>
+
+            <!-- 驗證按鈕 -->
+            <button type="button" mat-stroked-button class="verify-btn" (click)="onVerify()"
+              [disabled]="isVerifying || (createForm.get('idNum')?.invalid && !createForm.get('idNum')?.hasError('duplicate'))">
+              @if(!isVerifying) {
+              <span>驗證</span>
+              } @else {
+              <span>驗證中...</span>
+              }
+            </button>
           </div>
         </div>
-        <!-- 第二部分表單網格：中文姓名、性別、學歷 -->
-        <div class="form-grid four-cols">
-          <div class="field-group">
-            <label>中文姓名</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="chineseName" placeholder="請輸入姓名">
-            </mat-form-field>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('chineseName')?.invalid && (createForm.get('chineseName')?.dirty || createForm.get('chineseName')?.touched)">
-              此為必填資料
-            </small>
-          </div>
+      </div>
+      <!-- 第二部分表單網格：中文姓名、性別、學歷 -->
+      <div class="form-grid four-cols">
+        <div class="field-group">
+          <label>中文姓名</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput formControlName="chineseName" placeholder="請輸入姓名">
+          </mat-form-field>
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('chineseName')?.invalid && (createForm.get('chineseName')?.dirty || createForm.get('chineseName')?.touched)">
+            此為必填資料
+          </small>
+        </div>
 
-          <div class="field-group">
-            <label>性別</label>
-            <div class="radio-group-container">
-              <mat-radio-group formControlName="gender" color="primary">
-                <mat-radio-button value="M">男</mat-radio-button>
-                <mat-radio-button value="F">女</mat-radio-button>
-              </mat-radio-group>
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label>學歷</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-select formControlName="education">
-                <mat-option value="master">碩士</mat-option>
-              </mat-select>
-            </mat-form-field>
+        <div class="field-group">
+          <label>性別</label>
+          <div class="radio-group-container">
+            <mat-radio-group formControlName="gender" color="primary">
+              <mat-radio-button value="M">男</mat-radio-button>
+              <mat-radio-button value="F">女</mat-radio-button>
+            </mat-radio-group>
           </div>
         </div>
 
-        <!-- 第三部分表單網格：戶籍地址相關 -->
-        <div class="form-grid address-row">
-          <div class="field-group">
-            <label>郵遞區號</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-select formControlName="zipCode_2" placeholder="請選擇">
-                <mat-option value="103">103 台北市大同區</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('zipCode_2')?.invalid && (createForm.get('zipCode_2')?.dirty || createForm.get('zipCode_2')?.touched)">
-              此為必填資料
-            </small>
-          </div>
-          <div class="field-group span-2">
-            <label>戶籍地址</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="address1" placeholder="請輸入地址">
-            </mat-form-field>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('address1')?.invalid && (createForm.get('address1')?.dirty || createForm.get('address1')?.touched)">
-              此為必填資料
-            </small>
-          </div>
-          <div class="field-group">
-            <label>戶籍電話</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="telephone1" placeholder="請輸入電話">
-            </mat-form-field>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('telephone1')?.invalid && (createForm.get('telephone1')?.dirty || createForm.get('telephone1')?.touched)">
-              此為必填資料
-            </small>
-          </div>
+        <div class="field-group">
+          <label>學歷</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="education">
+              <mat-option value="master">碩士</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+      </div>
 
-        <!-- 第四部分表單網格：現居地址相關 -->
-        <div class="form-grid address-row">
-          <div class="field-group">
-            <label>郵遞區號</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-select formControlName="zipCode_1">
-                <mat-option value="103">103 台北市中山區</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="field-group span-2">
-            <label>現居地址</label>
-            <div class="flex-row">
-              <!-- 同戶籍地址勾選框 -->
-              <mat-checkbox formControlName="isSameAddress">同戶籍地址</mat-checkbox>
-              <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
-                <input matInput formControlName="address2" placeholder="請輸入地址">
-              </mat-form-field>
-            </div>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('address2')?.invalid && (createForm.get('address2')?.dirty || createForm.get('address2')?.touched)">
-              此為必填資料
-            </small>
-          </div>
-          <div class="field-group">
-            <label>現居電話</label>
-            <div class="flex-row">
-              <!-- 同戶籍電話勾選框 -->
-              <mat-checkbox formControlName="isSamePhone">同戶籍電話</mat-checkbox>
-              <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
-                <input matInput formControlName="telephone2" placeholder="請輸入電話">
-              </mat-form-field>
-            </div>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('telephone2')?.invalid && (createForm.get('telephone2')?.dirty || createForm.get('telephone2')?.touched)">
-              此為必填資料
-            </small>
-          </div>
+      <!-- 第三部分表單網格：戶籍地址相關 -->
+      <div class="form-grid address-row">
+        <div class="field-group">
+          <label>郵遞區號</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="zipCode_2" placeholder="請選擇">
+              <mat-option value="103">103 台北市大同區</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('zipCode_2')?.invalid && (createForm.get('zipCode_2')?.dirty || createForm.get('zipCode_2')?.touched)">
+            此為必填資料
+          </small>
         </div>
+        <div class="field-group span-2">
+          <label>戶籍地址</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput formControlName="address1" placeholder="請輸入地址">
+          </mat-form-field>
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('address1')?.invalid && (createForm.get('address1')?.dirty || createForm.get('address1')?.touched)">
+            此為必填資料
+          </small>
+        </div>
+        <div class="field-group">
+          <label>戶籍電話</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput formControlName="telephone1" placeholder="請輸入電話">
+          </mat-form-field>
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('telephone1')?.invalid && (createForm.get('telephone1')?.dirty || createForm.get('telephone1')?.touched)">
+            此為必填資料
+          </small>
+        </div>
+      </div>
 
-        <!-- 第五部分表單網格：行動電話、電子郵件、現居年限 -->
-        <div class="form-grid address-row">
-          <div class="field-group">
-            <label>行動電話</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="mobile" placeholder="請輸入手機">
+      <!-- 第四部分表單網格：現居地址相關 -->
+      <div class="form-grid address-row">
+        <div class="field-group">
+          <label>郵遞區號</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-select formControlName="zipCode_1">
+              <mat-option value="103">103 台北市中山區</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="field-group span-2">
+          <label>現居地址</label>
+          <div class="flex-row">
+            <!-- 同戶籍地址勾選框 -->
+            <mat-checkbox formControlName="isSameAddress">同戶籍地址</mat-checkbox>
+            <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
+              <input matInput formControlName="address2" placeholder="請輸入地址">
             </mat-form-field>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('mobile')?.invalid && (createForm.get('mobile')?.dirty || createForm.get('mobile')?.touched)">
-              此為必填資料
-            </small>
           </div>
-          <div class="field-group">
-            <label>電子郵件</label>
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <input matInput formControlName="email">
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('address2')?.invalid && (createForm.get('address2')?.dirty || createForm.get('address2')?.touched)">
+            此為必填資料
+          </small>
+        </div>
+        <div class="field-group">
+          <label>現居電話</label>
+          <div class="flex-row">
+            <!-- 同戶籍電話勾選框 -->
+            <mat-checkbox formControlName="isSamePhone">同戶籍電話</mat-checkbox>
+            <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
+              <input matInput formControlName="telephone2" placeholder="請輸入電話">
             </mat-form-field>
-            <!-- 錯誤訊息：Email 格式不正確 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('email')?.invalid && (createForm.get('email')?.dirty || createForm.get('email')?.touched)">
-              Email 格式不正確
-            </small>
           </div>
-          <div class="field-group">
-            <label>現居年限</label>
-            <div class="slider-group">
-              <!-- 現居年限數字輸入框 -->
-              <mat-form-field appearance="outline" class="no-margin" style="width: 80px;" subscriptSizing="dynamic">
-                <input matInput type="number" formControlName="year">
-              </mat-form-field>
-              <!-- 現居年限滑塊 -->
-              <mat-slider min="0" max="50" discrete color="primary">
-                <input matSliderThumb formControlName="year">
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('telephone2')?.invalid && (createForm.get('telephone2')?.dirty || createForm.get('telephone2')?.touched)">
+            此為必填資料
+          </small>
+        </div>
+      </div>
+
+      <!-- 第五部分表單網格：行動電話、電子郵件、現居年限 -->
+      <div class="form-grid address-row">
+        <div class="field-group">
+          <label>行動電話</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput formControlName="mobile" placeholder="請輸入手機">
+          </mat-form-field>
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('mobile')?.invalid && (createForm.get('mobile')?.dirty || createForm.get('mobile')?.touched)">
+            此為必填資料
+          </small>
+        </div>
+        <div class="field-group">
+          <label>電子郵件</label>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input matInput formControlName="email">
+          </mat-form-field>
+          <!-- 錯誤訊息：Email 格式不正確 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('email')?.invalid && (createForm.get('email')?.dirty || createForm.get('email')?.touched)">
+            Email 格式不正確
+          </small>
+        </div>
+        <div class="field-group">
+          <label>現居年限</label>
+          <div class="field-wrapper">
+            <label class="field-label">現居年限 (至少)</label>
+            <div class="slider-container">
+              <span class="year-display">{{ createForm.get('year')?.value }} 年</span>
+
+              <mat-slider min="0" max="100" step="1" showTickMarks discrete>
+                <input matSliderThumb [formControl]="$any(createForm.get('year'))">
               </mat-slider>
             </div>
-            <!-- 錯誤訊息：必填 -->
-            <small class="error-msg"
-              *ngIf="createForm.get('year')?.invalid && (createForm.get('year')?.dirty || createForm.get('year')?.touched)">
-              此為必填資料
-            </small>
           </div>
+          <!-- 錯誤訊息：必填 -->
+          <small class="error-msg"
+            *ngIf="createForm.get('year')?.invalid && (createForm.get('year')?.dirty || createForm.get('year')?.touched)">
+            此為必填資料
+          </small>
         </div>
+      </div>
 
-        <!-- 底部操作按鈕區 -->
-        <div class="actions">
-          <!-- 儲存按鈕 -->
-          <button mat-flat-button color="primary" [disabled]="createForm.invalid" class="save-btn">儲存</button>
-          <!-- 清除按鈕 -->
-          <button type="button" mat-stroked-button class="outline-green" (click)="createForm.reset()">清除</button>
-          <!-- 返回按鈕 -->
-          <button type="button" mat-stroked-button class="outline-green">返回</button>
-        </div>
+      <!-- 底部操作按鈕區 -->
+      <div class="actions">
+        <!-- 儲存按鈕 -->
+        <button mat-flat-button color="primary" [disabled]="createForm.invalid" class="save-btn">儲存</button>
+        <!-- 清除按鈕 -->
+        <button type="button" mat-stroked-button class="outline-green" (click)="createForm.reset()">清除</button>
+        <!-- 返回按鈕 -->
+        <button type="button" mat-stroked-button class="outline-green">返回</button>
+      </div>
 
-      </form>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    </form>
+  </div>
+</mat-sidenav-content>
+
 
 <!-- 通知訊息顯示區域 -->
 <div class="notification-demo-area">

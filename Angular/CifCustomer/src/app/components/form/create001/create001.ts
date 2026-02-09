@@ -25,6 +25,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { Router } from '@angular/router';
 // 導入 Customer 接口，定義客戶數據的結構
 import { Customer } from '../../../interface/Customer';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 // 定義一個常數陣列，包含所有會用到的 Angular Material 模組，方便在 @Component 的 imports 中引用
 const MATERIAL_MODULES = [
@@ -48,7 +49,7 @@ const MATERIAL_MODULES = [
   selector: 'app-create001', // 組件的 CSS 選擇器
   standalone: true, // 表示這是獨立組件，不需要 NgModules
   // 導入所需的模組，包括 CommonModule、響應式表單模組和所有 Material 模組
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, ...MATERIAL_MODULES],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule, FormsModule, ...MATERIAL_MODULES],
   templateUrl: './create001.html', // 組件的 HTML 模板文件路徑
   styleUrl: './create001.css', // 組件的 CSS 樣式文件路徑
 })
@@ -216,11 +217,5 @@ export class Create001 implements OnInit {
     })
   }
 
-  /**
-   * 關閉提示訊息 (Toast)。
-   * 此方法目前只是一個佔位符，尚未實現具體邏輯。
-   */
-  closeToast() {
-    throw new Error('Method not implemented.');
-  }
+
 }

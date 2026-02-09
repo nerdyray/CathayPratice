@@ -1,4 +1,3 @@
-
 // 導入 HttpClient 模組，用於發送 HTTP 請求
 import { HttpClient } from '@angular/common/http';
 // 導入 Injectable 裝飾器，標記這個類為一個可被注入的服務
@@ -12,6 +11,7 @@ import { Q003Tranrq } from '../interface/Q003Tranrq';
 import { Data as Q002Data } from '../interface/Q002Tranrq';
 // 導入 T001Tranrq 接口中的 Data，定義客戶新增的數據結構
 import { Data as T001Data } from '../interface/T001Tranrq';
+import { Data as T002Data } from '../interface/T002Tranrq';
 
 
 /**
@@ -22,19 +22,14 @@ import { Data as T001Data } from '../interface/T001Tranrq';
   providedIn: 'root',
 })
 export class CustomerService {
-  /**
-   * deleteCustomer 方法尚未實現。
-   * @param id 要刪除的客戶ID。
-   * @throws Error 始終拋出錯誤，因為該方法未實現。
-   */
-  deleteCustomer(id: string) {
-    throw new Error('Method not implemented.');
-  }
+
 
   // API 端點定義
   private checkUrl = 'http://localhost:8080/cif/checkId'; // 檢查身份證字號是否重複的 API
   private createUrl = 'http://localhost:8080/cif/create';       // 新增客戶的 API
   private listUrl = 'http://localhost:8080/cif/filter';         // 查詢客戶列表的 API (過濾)
+  private deleteUrl = 'http://localhost:8080/cif/deleteInfo';         // 查詢客戶列表的 API (過濾)
+  private editUrl = 'http://localhost:8080/cif/editInfo';
 
   /**
    * 構造函數，注入 HttpClient 服務。
@@ -79,12 +74,13 @@ export class CustomerService {
   }
 
   /**
-   * 搜尋所有客戶列表，支持分頁。
+   * 搜尋所有客戶列表，支持分頁和查詢條件。
    * @param pageNum 頁碼 (從 1 開始)。
    * @param pageSize 每頁顯示的筆數。
+   * @param searchParams 查詢參數。
    * @returns 包含後端響應的 Observable。
    */
-  listCustomer(pageNum: number, pageSize: number): Observable<any> {
+  listCustomer(pageNum: number, pageSize: number, searchParams: any): Observable<any> {
     console.log('搜尋所有資料');
     // 構建請求主體，包含消息頭、分頁資訊、數據過濾條件和排序資訊
     const requestBody = {
@@ -96,15 +92,14 @@ export class CustomerService {
           pageNumber: pageNum, // 直接使用傳入的頁碼
           pageSize: pageSize   // 直接使用傳入的每頁筆數
         },
-        // 雖然目前沒有實質的搜尋條件，但必須符合規格書結構
         DATA: {
-          idNum: "",
-          chineseName: "",
-          gender: "",
-          education: "",
-          mobile: "",
-          email: "",
-          year: 0
+          idNum: searchParams.idNum || "",
+          chineseName: searchParams.chineseName || "",
+          gender: searchParams.gender || "",
+          education: searchParams.education || "",
+          mobile: searchParams.mobile || "",
+          email: searchParams.email || "",
+          year: searchParams.year || 0 // 注意這裡將 year 映射到 year
         } as Q002Data, // 類型斷言為 Q002Data 以符合結構
         SORTINFO: {
           sortBy: "DESC",       // 排序方向：降序
@@ -115,4 +110,37 @@ export class CustomerService {
     // 發送 POST 請求到 list API
     return this.http.post(this.listUrl, requestBody);
   }
+  /**
+   * 刪除客戶
+   * @param orderId 訂單 ID
+   */
+  deleteCustomer(orderId: number): Observable<any> {
+    // 組裝 Request Body
+    const requestBody = {
+      MWHEADER: {
+        MSGID: " XXA-C-CIFT003"
+      },
+      TRANRQ: {
+        order_id: orderId
+      }
+    };
+
+    // 發送 POST 請求 (通常 API 雖然是刪除動作，但若是透過 Transaction Request Body 傳遞，常使用 POST)
+    return this.http.post(this.deleteUrl, requestBody);
+  }
+
+  editeCustomer(requestBody: T002Data): Observable<any> {
+    // 構建請求主體，包含消息頭和交易請求數據
+    const editTranrq = {
+      MWHEADER: {
+        MSGID: 'XXA-C-STORET002'
+      },
+      TRANRQ: {
+        DATA: requestBody // 將傳入的客戶數據放入請求主體
+      }
+    };
+    // 發送 POST 請求到 create API
+    return this.http.post(this.editUrl, editTranrq);
+  }
 }
+

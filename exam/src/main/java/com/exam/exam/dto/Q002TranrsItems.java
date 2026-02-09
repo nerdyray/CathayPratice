@@ -3,6 +3,8 @@ package com.exam.exam.dto;
 import java.io.Serial;
 import java.io.Serializable;
 
+import com.exam.exam.dto.TranData.Q002Interface;
+import com.exam.exam.dto.TranData.T002Interface;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -14,6 +16,8 @@ public class Q002TranrsItems implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty("orderId")
+    private Integer orderId;
     /**
      * 身分證字號。
      */
