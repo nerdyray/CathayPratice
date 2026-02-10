@@ -23,7 +23,7 @@
 
       <!-- 第一部分表單網格：身份證字號 -->
       <div class="form-grid four-cols">
-        <div class="field-group">
+        <div class="field-group id-field">
           <label>身份證字號</label>
           <div class="input-with-btn">
             <!-- 身份證字號輸入框 -->
@@ -89,6 +89,8 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="education">
               <mat-option value="master">碩士</mat-option>
+              <mat-option value="master">學士</mat-option>
+              <mat-option value="master">博士</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -99,9 +101,7 @@
         <div class="field-group">
           <label>郵遞區號</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-select formControlName="zipCode_2" placeholder="請選擇">
-              <mat-option value="103">103 台北市大同區</mat-option>
-            </mat-select>
+            <input matInput formControlName="zipCode_2" placeholder="請輸入郵遞區碼">
           </mat-form-field>
           <!-- 錯誤訊息：必填 -->
           <small class="error-msg"
@@ -138,9 +138,7 @@
         <div class="field-group">
           <label>郵遞區號</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-select formControlName="zipCode_1">
-              <mat-option value="103">103 台北市中山區</mat-option>
-            </mat-select>
+            <input matInput formControlName="zipCode_1" placeholder="請輸入郵遞區碼">
           </mat-form-field>
         </div>
         <div class="field-group span-2">
@@ -244,7 +242,7 @@
       <div class="toast-title">Fail</div>
       <div class="toast-message">請確認必填資料!</div>
     </div>
-    <button class="toast-close" (click)="closeToast()">×</button>
+    <!-- <button class="toast-close" (click)="closeToast()">×</button> -->
   </div>
   }
 
@@ -256,7 +254,7 @@
       <div class="toast-title">Success</div>
       <div class="toast-message">新增資料成功</div>
     </div>
-    <button class="toast-close" (click)="closeToast()">×</button>
+    <!-- <button class="toast-close" (click)="closeToast()">×</button> -->
   </div>
   }
 </div>

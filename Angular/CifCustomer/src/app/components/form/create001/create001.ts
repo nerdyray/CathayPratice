@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
 // 導入 Customer 接口，定義客戶數據的結構
 import { Customer } from '../../../interface/Customer';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // 定義一個常數陣列，包含所有會用到的 Angular Material 模組，方便在 @Component 的 imports 中引用
 const MATERIAL_MODULES = [
@@ -75,6 +76,7 @@ export class Create001 implements OnInit {
     private customerService: CustomerService,
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   /**
@@ -102,19 +104,22 @@ export class Create001 implements OnInit {
       // 戶籍地址相關欄位：初始禁用，必填
       zipCode_2: [{ value: '', disabled: true }, Validators.required],
       address1: [{ value: '', disabled: true }, Validators.required],
-      telephone1: [{ value: '', disabled: true }, Validators.required],
+      telephone1: [{ value: '', disabled: true }, Validators.required, Validators.minLength(10),
+      Validators.maxLength(10)],
 
       // 現居地址相關欄位：初始禁用
-      zipCode_1: [{ value: '103', disabled: true }],
+      zipCode_1: [{ value: '', disabled: true }],
       address2: [{ value: '', disabled: true }],
-      telephone2: [{ value: '', disabled: true }],
+      telephone2: [{ value: '', disabled: true }, Validators.minLength(10),
+      Validators.maxLength(10)],
 
       // 「同戶籍地址/電話」的勾選框：初始禁用，默認為 false
       isSameAddress: [{ value: false, disabled: true }],
       isSamePhone: [{ value: false, disabled: true }],
 
       // 行動電話：初始禁用，必填
-      mobile: [{ value: '', disabled: true }, Validators.required],
+      mobile: [{ value: '', disabled: true }, Validators.required, Validators.minLength(10),
+      Validators.maxLength(10)],
       // 電子郵件：初始禁用，默認為 '123@gmail.com'，並進行 Email 格式驗證
       email: [{ value: '123@gmail.com', disabled: true }, [Validators.email]],
       // 現居年限：初始禁用，默認為 0，必填
@@ -166,19 +171,18 @@ export class Create001 implements OnInit {
         if (returnCode === '0000') {
           // 如果後端返回 '0000'，表示資料已存在，驗證失敗 (重複)
           idNum?.setErrors({ duplicate: true });
-          console.log('驗證失敗：資料已存在');
+          this.showToast('資料已存在', false);
         } else {
           // 如果返回其他代碼 (例如 404, E001)，表示查無資料，驗證通過
           idNum?.setErrors(null); // 清除所有錯誤
           this.createForm.enable(); // 啟用整個表單供用戶輸入
-          console.log('驗證成功：查無資料，可註冊');
+          this.showToast('身分證不存在可以註冊', true);
         }
         this.isVerifying = false; // 驗證結束，設置驗證狀態為非進行中
         this.cdr.detectChanges(); // 手動觸發變更偵測，更新 UI
       },
       error: (err) => {
         // 處理 API 錯誤
-        console.error('帳號已存在:', err); // 在開發者工具中印出錯誤
         this.showErrorToast = true;      // 顯示錯誤提示給使用者
         this.isVerifying = false; // 驗證結束，設置驗證狀態為非進行中
       }
@@ -198,11 +202,11 @@ export class Create001 implements OnInit {
    */
   onSubmit() {
     if (this.createForm.valid) {
-      console.log('提交資料：', this.createForm.value);
+      this.showToast('新增成功', true);
     } else {
       // 如果表單無效，將所有控制項標記為 touched，以觸發錯誤訊息顯示
       this.createForm.markAllAsTouched();
-      alert('表單有誤，請檢查紅色必填欄位');
+      this.showToast('請確認必填資料！', false);
     }
     // 獲取表單的原始值 (包括禁用的控制項)
     const rawData = this.createForm.getRawValue();
@@ -216,6 +220,14 @@ export class Create001 implements OnInit {
       }
     })
   }
-
+  // 顯示訊息的方法
+  showToast(message: string, isSuccess: boolean) {
+    this.snackBar.open(message, '關閉', {
+      duration: 3000,               // 3 秒後自動關閉
+      horizontalPosition: 'right',  // 顯示在右側
+      verticalPosition: 'top',      // 顯示在上方
+      panelClass: isSuccess ? ['success-snackbar'] : ['fail-snackbar'] // 顏色控制
+    });
+  }
 
 }

@@ -14,9 +14,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
-import { MatSidenavContainer, MatSidenav } from "@angular/material/sidenav";
+import { MatSidenavContainer, MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
 import { MatNavList } from "@angular/material/list";
 import { Router } from '@angular/router'; // 引入 Router 以便在儲存後跳回
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
@@ -33,12 +34,12 @@ const MATERIAL_MODULES = [
 @Component({
   selector: 'app-edit001',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule, ...MATERIAL_MODULES, MatSidenavContainer, MatSidenav, MatNavList],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule, ...MATERIAL_MODULES, MatSidenavContainer, MatSidenav, MatNavList, MatSidenavContent],
   templateUrl: './edit001.html',
   styleUrl: './edit001.css',
 })
 export class Edit001 implements OnInit {
-  showSuccessToast = false; // 控制「成功」提示訊息的顯示狀態
+
   editForm: FormGroup;
 
   // 模擬後端資料 (Key 直接對應)
@@ -63,6 +64,7 @@ export class Edit001 implements OnInit {
   constructor(private fb: FormBuilder,
     private router: Router, // 注入 Router
     private customerService: CustomerService,
+    private snackBar: MatSnackBar
 
 
   ) {
@@ -137,9 +139,11 @@ export class Edit001 implements OnInit {
       const payload = this.editForm.getRawValue();
       this.customerService.editeCustomer(payload).subscribe({
         next: (res) => {
-          this.showSuccessToast = true;
+          this.showToast('修改成功！', true);
         }
       })
+    } else {
+      this.showToast('請確認必填資料！', false);
     }
   }
 
@@ -152,5 +156,12 @@ export class Edit001 implements OnInit {
   onReturn(): void {
     this.router.navigate(['/cif001']);
   }
-
+  showToast(message: string, isSuccess: boolean) {
+    this.snackBar.open(message, '關閉', {
+      duration: 3000,               // 3 秒後自動關閉
+      horizontalPosition: 'right',  // 顯示在右側
+      verticalPosition: 'top',      // 顯示在上方
+      panelClass: isSuccess ? ['success-snackbar'] : ['fail-snackbar'] // 顏色控制
+    });
+  }
 }

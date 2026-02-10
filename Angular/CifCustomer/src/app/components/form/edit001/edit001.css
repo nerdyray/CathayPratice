@@ -1,129 +1,116 @@
-/* edit001.css */
-
-/* 容器樣式 */
-.edit-container {
-  padding: 20px;
-  background-color: #f5f5f5; /* 淺灰背景 */
+/* 1. 確保外層容器並排 */
+.admin-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f5f5f5;
 }
 
-/* 卡片樣式 */
-mat-card {
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+/* 2. 側邊欄固定寬度 */
+.side-menu {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: #f0f0f0;
+  border-right: 1px solid #ddd;
+}
+
+/* 3. 主內容區：強制移除 Material 的自動推擠 */
+.main-content {
+  flex: 1;
+  margin-left: 0 !important; /* 核心修正：移除莫名空白 */
+  padding: 24px 40px; /* 統一間距 */
+  background-color: #f5f5f5;
+  overflow-y: auto;
+
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    .green-bar {
+      width: 5px;
+      height: 24px;
+      background-color: #2e7d32;
+      border-radius: 2px;
+    }
+
+    h2 {
+      margin: 0;
+      color: #333;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  }
+}
+
+/* 4. 白色卡片：對標圖二的清爽風格 */
+.content-card {
   background: white;
-  padding: 20px;
+  padding: 30px 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  .form-grid {
+    display: grid;
+    gap: 20px 24px;
+    margin-bottom: 20px;
+
+    &.four-cols { grid-template-columns: repeat(4, 1fr); }
+    &.address-row { grid-template-columns: 1fr 2.5fr 1.5fr; }
+  }
+
+  /* 唯讀的身分證字號 */
+  .readonly-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    padding: 10px 0;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    label {
+      font-weight: bold;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+    &.span-2 { grid-column: span 2; }
+  }
+
+  /* Checkbox 與 Input 組合 */
+  .flex-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    mat-checkbox { white-space: nowrap; }
+    .flex-1 { flex: 1; }
+  }
 }
 
-/* 標題區塊：綠色直條 + 文字 */
-.section-title {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-
-.title-bar {
-  width: 5px;
-  height: 24px;
-  background-color: #4CAF50; /* 綠色條 */
-  margin-right: 10px;
-  border-radius: 2px;
-}
-
-/* 表單網格系統：定義 4 欄 */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 等分 */
-  gap: 16px; /* 欄位間距 */
-  align-items: start; /* 靠上對齊 */
-}
-
-/* 跨欄位樣式 */
-.col-span-2 {
-  grid-column: span 2;
-}
-
-.col-span-3 {
-  grid-column: span 3;
-}
-
-/* 複合欄位 (Checkbox + Input) */
-.checkbox-input-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 100%; /* 確保高度一致 */
-}
-
-.checkbox-input-group mat-checkbox {
-  margin-top: -15px; /* 微調 Checkbox 位置以對齊 Input */
-  white-space: nowrap; /* 防止文字換行 */
-  font-size: 14px;
-  color: #555;
-}
-
-.checkbox-input-group mat-form-field {
-  flex-grow: 1; /* Input 佔滿剩餘空間 */
-}
-
-/* 性別 Radio Group */
-.radio-group-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 56px; /* 與 Input 高度對齊 */
-}
-
-.radio-group-label {
-  font-size: 12px;
-  color: rgba(0,0,0,0.6);
-  margin-bottom: 4px;
-}
-
-mat-radio-group {
-  display: flex;
-  gap: 16px;
-}
-
-/* 現居年限區塊 */
-.year-slider-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.year-input-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.year-input {
-  width: 80px;
-}
-
-/* 按鈕區塊 */
-.form-actions {
+/* 5. 膠囊型按鈕區 */
+.actions {
   display: flex;
   justify-content: center;
   gap: 20px;
   margin-top: 40px;
-  padding-bottom: 20px;
-}
+  padding-top: 24px;
+  border-top: 1px solid #eee;
 
-/* 自定義按鈕樣式 (綠色系) */
-.btn-save {
-  background-color: #4CAF50 !important; /* 綠色背景 */
-  color: white !important;
-  border-radius: 20px !important; /* 圓角 */
-  padding: 0 40px !important;
-}
+  button {
+    min-width: 120px;
+    height: 42px;
+    border-radius: 21px; /* 膠囊形狀 */
+  }
 
-.btn-clear, .btn-return {
-  background-color: white !important;
-  color: #4CAF50 !important; /* 綠色文字 */
-  border: 1px solid #4CAF50 !important; /* 綠色邊框 */
-  border-radius: 20px !important;
-  padding: 0 40px !important;
+  .save-btn {
+    background-color: #2e7d32 !important;
+    color: white;
+  }
+  .outline-green {
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+  }
 }

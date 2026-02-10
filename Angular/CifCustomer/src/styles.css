@@ -1,2 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* 成功訊息樣式 */
+.success-snackbar {
+  --mdc-snackbar-container-color: #4caf50; /* 背景綠色 */
+  --mdc-snackbar-label-text-color: white;  /* 文字白色 */
+}
+
+/* 失敗訊息樣式 */
+.fail-snackbar {
+  --mdc-snackbar-container-color: #f44336; /* 背景紅色 */
+  --mdc-snackbar-label-text-color: white;  /* 文字白色 */
+}

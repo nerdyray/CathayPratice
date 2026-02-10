@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavContainer, MatSidenav } from "@angular/material/sidenav";
 import { MatNavList } from "@angular/material/list";
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 const MATERIAL_MODULES = [
   MatIconModule,
   MatFormFieldModule,
@@ -33,6 +34,7 @@ const MATERIAL_MODULES = [
   styleUrl: './search001.css', // 注意：新版 Angular CLI 預設可能是 styleUrl (單數) 或 styleUrls (複數)，請依您的專案設定
 })
 export class Search001 implements OnInit {
+
   searchForm: FormGroup;
 
   // 修改：發送的是表單的「值 (Value)」，而不是整個 FormGroup 物件
@@ -67,15 +69,7 @@ export class Search001 implements OnInit {
    */
   onClear(): void {
     // 重置表單，將字串欄位設為空字串，數字欄位設為 0
-    this.searchForm.reset({
-      idNum: '',
-      chineseName: '',
-      gender: '',
-      education: '',
-      mobile: '',
-      email: '',
-      year: 0
-    });
+    this.searchForm.reset();
 
     // 清除後，自動觸發查詢 (等於查詢全部資料)
     this.onSearch();
