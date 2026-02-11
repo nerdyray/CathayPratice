@@ -87,7 +87,7 @@ public class TranData implements Serializable {
     @NotBlank(message = "郵遞區號1為必填")
     @Pattern(regexp = "^\\d+$", message = "郵遞區號僅能輸入數字")
     @Size(max = 20)
-    @JsonProperty("zipCode_1")
+    @JsonProperty("zipCode1")
     // @JsonAlias("ZIP_CODE_1")
     private String zipCode1;
 
@@ -116,7 +116,7 @@ public class TranData implements Serializable {
     @NotBlank(message = "郵遞區號2為必填")
     @Pattern(regexp = "^\\d+$", message = "郵遞區號僅能輸入數字")
     @Size(max = 20)
-    @JsonProperty("zipCode_2")
+    @JsonProperty("zipCode2")
     // @JsonAlias("ZIP_CODE_2")
 
     private String zipCode2;

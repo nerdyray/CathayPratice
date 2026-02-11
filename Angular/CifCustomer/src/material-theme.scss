@@ -1,37 +1,38 @@
 
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
+// 導入 Angular Material 的 Sass 模組
 @use '@angular/material' as mat;
 
+// HTML 根元素的樣式設定
 html {
-  height: 100%;
+  height: 100%; // 設定 HTML 元素高度為 100%
+
+  // 包含 Angular Material 的主題設定
+  // 這個 Sass mixin 會定義 CSS 變量，用於根據 Material 3 設計規範來設定 Angular Material 組件的樣式。
+  // 更多關於主題設定和如何在應用程式的自訂組件中使用它的資訊，請參考 https://material.angular.dev/guide/theming
   @include mat.theme((
     color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      primary: mat.$azure-palette, // 設定主要顏色為 Azure 調色板
+      tertiary: mat.$blue-palette, // 設定第三顏色為 Blue 調色板
     ),
-    typography: Roboto,
-    density: 0,
+    typography: Roboto, // 設定字體為 Roboto
+    density: 0,         // 設定密度為 0 (預設)
   ));
 }
 
+// Body 元素的樣式設定
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
+  // 預設應用程式為淺色主題。可以將其更改為 `dark` 以啟用深色主題，
+  // 或設置為 `light dark` 以根據用戶的系統設定自動調整。
   color-scheme: light;
 
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
+  // 使用 Angular Material 的系統級 CSS 變量設定應用程式的預設背景、字體和文本顏色。
+  // 更多關於這些變量的資訊，請參考 https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);   // 背景顏色
+  color: var(--mat-sys-on-surface);           // 文本顏色
+  font: var(--mat-sys-body-medium);           // 字體設定
 
-  // Reset the user agent margin.
+  // 重置瀏覽器預設的 margin。
   margin: 0;
   height: 100%;
 }
+

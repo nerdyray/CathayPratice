@@ -44,11 +44,23 @@
           <td mat-cell *matCellDef="let element"> {{element.email}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="zipCode1">
+          <th mat-header-cell *matHeaderCellDef>郵遞區號 </th>
+          <td mat-cell *matCellDef="let element"> {{element.zipCode1}} </td>
+        </ng-container>
+        <ng-container matColumnDef="address1">
+          <th mat-header-cell *matHeaderCellDef>戶籍地址 </th>
+          <td mat-cell *matCellDef="let element"> {{element.address1}} </td>
+        </ng-container>
+        <ng-container matColumnDef="telephone1">
+          <th mat-header-cell *matHeaderCellDef> 戶籍電話 </th>
+          <td mat-cell *matCellDef="let element"> {{element.telephone1}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="year">
           <th mat-header-cell *matHeaderCellDef> 居住年限 </th>
           <td mat-cell *matCellDef="let element"> {{element.year}} 年 </td>
         </ng-container>
-
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 180px;"> 功能 </th>
           <td mat-cell *matCellDef="let element" style="text-align: center;">
@@ -56,7 +68,7 @@
               (click)="onEdit(element)">
               修改
             </button>
-            <button mat-flat-button color="warn" (click)="onDelete(element.orderId)">
+            <button mat-flat-button color="warn" (click)="onDelete(element)">
               刪除
             </button>
           </td>

@@ -102,7 +102,7 @@ export class Create001 implements OnInit {
       education: [{ value: 'master', disabled: true }],
 
       // 戶籍地址相關欄位：初始禁用，必填
-      zipCode_2: [{ value: '', disabled: true }, Validators.required],
+      zipCode2: [{ value: '', disabled: true }, Validators.required],
       address1: [{ value: '', disabled: true }, Validators.required],
       telephone1: [{ value: '', disabled: true }, Validators.required, Validators.minLength(10),
       Validators.maxLength(10)],

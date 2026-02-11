@@ -1,3 +1,5 @@
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirDelete } from '../../confir-delete/confir-delete';
 import { MWHEADER } from './../../../interface/Q003Tranrs';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -24,7 +26,8 @@ const MATERIAL_MODULES = [
   MatButtonModule,
   MatTableModule,
   MatPaginatorModule,
-  MatButtonModule
+  MatButtonModule,
+  MatDialogModule
 ];
 
 @Component({
@@ -43,13 +46,14 @@ export class Cif001 implements OnInit {
   dataSource = new MatTableDataSource<Data>([]);
 
   // 表格欄位
-  displayedColumns: string[] = ['idNum', 'chineseName', 'gender', 'education', 'mobile', 'email', 'year', 'actions'];
+  displayedColumns: string[] = ['idNum', 'chineseName', 'gender', 'education', 'mobile', 'email', 'address1', 'zipCode1', 'year', 'actions'];
 
   // 分頁器
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   totalItems = 0;
 
   constructor(
+    private dialog: MatDialog,
     private router: Router, // 2. 注入 Router
     private customerService: CustomerService,
     private snackBar: MatSnackBar,
@@ -98,17 +102,31 @@ export class Cif001 implements OnInit {
     // 注意這裡要對應路由中的 'cif/edit'
     this.router.navigate(['/cif/edit'], { state: { customerData: element } });
   }
-  onDelete(orderId: number): void {
-    console.log('點擊刪除:', orderId);
-    this.customerService.deleteCustomer(orderId).subscribe({
-      next: (res: any) => {
-        if (res.MWHEADER.RETURNCODE !== '0000') {
-          this.showToast(res.MWHEADER.RETURNDESC, res.MWHEADER.RETURNCODE);
-          return;
-        }
-        this.loadData();
+  onDelete(element: any): void {
+    const dialogRef = this.dialog.open(ConfirDelete, {
+      width: '400px',
+      data: { idNum: element.idNum, chineseName: element.chineseName }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('點擊刪除:', element.orderId);
+        this.customerService.deleteCustomer(element.orderId).subscribe({
+          next: (res: any) => {
+            if (res.MWHEADER.RETURNCODE !== '0000') {
+              this.showToast(res.MWHEADER.RETURNDESC, 'error-snackbar');
+              return;
+            }
+            this.showToast('刪除成功', 'success-snackbar');
+            this.loadData();
+          },
+          error: (err) => {
+            console.error('API Error:', err);
+            this.showToast('刪除失敗', 'error-snackbar');
+          }
+        });
       }
-    })
+    });
   }
   /**
    * 接收 Search001 的搜尋事件 (前端過濾)

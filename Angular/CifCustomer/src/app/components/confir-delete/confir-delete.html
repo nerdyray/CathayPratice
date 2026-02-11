@@ -2,8 +2,23 @@
   confir-delete.html
 
   這個模板是用於顯示確認刪除組件的用戶界面。
-  目前只包含一個簡單的段落，指示組件正在工作。
   實際的刪除確認對話框邏輯可能在 TypeScript 文件中被註釋掉。
 -->
-<p>confir-delete works!</p>
+<!-- 對話框頭部，包含關閉按鈕 -->
+<div class="dialog-header">
+  <button mat-icon-button class="close-btn" (click)="onNoClick()">
+    <mat-icon>close</mat-icon> <!-- 關閉圖標 -->
+  </button>
+</div>
 
+<!-- 對話框內容，顯示警告訊息 -->
+<mat-dialog-content class="dialog-content">
+  <h1 class="warning-title">確定要刪除 【 {{data.idNum}} {{data.chineseName}} 】 嗎？</h1>
+  <p class="warning-subtitle">刪除的客戶資料無法復原，請確認是否刪除。</p>
+</mat-dialog-content>
+
+<!-- 對話框操作按鈕，包含取消和確認按鈕 -->
+<mat-dialog-actions align="center" class="dialog-actions">
+  <button mat-button class="btn-cancel" (click)="onNoClick()">取消</button>
+  <button mat-flat-button color="warn" class="btn-confirm" [mat-dialog-close]="true">確認</button>
+</mat-dialog-actions>

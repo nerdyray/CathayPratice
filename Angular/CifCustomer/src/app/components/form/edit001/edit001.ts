@@ -49,10 +49,10 @@ export class Edit001 implements OnInit {
     "chineseName": "測測",
     "gender": "m",
     "education": "大學",
-    "zipCode_1": "100",
+    "zipCode1": "100",
     "address1": "台北市中正區忠孝東路一段1號",
     "telephone1": "02-23456789",
-    "zipCode_2": "100",
+    "zipCode2": "100",
     "address2": "台北市中正區忠孝東路一段1號",
     "telephone2": "02-23456789",
     "mobile": "0912345678",
@@ -77,12 +77,12 @@ export class Edit001 implements OnInit {
       education: [''],
 
       // 戶籍 (1)
-      zipCode_1: [''],
+      zipCode1: [''],
       address1: [''],
       telephone1: [''],
 
       // 現居 (2)
-      zipCode_2: [''],
+      zipCode2: [''],
       address2: [''],
       telephone2: [''],
 
@@ -114,7 +114,7 @@ export class Edit001 implements OnInit {
     this.editForm.get('sameAsAddress1')?.valueChanges.subscribe(checked => {
       if (checked) {
         this.editForm.patchValue({
-          zipCode_2: this.editForm.get('zipCode_1')?.value,
+          zipCode2: this.editForm.get('zipCode_1')?.value,
           address2: this.editForm.get('address1')?.value
         });
       }

@@ -1,47 +1,39 @@
 
-
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
-import { MatIcon } from "@angular/material/icon";
+// 導入 MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose
+// 這些是 Angular Material 對話框相關的模組和服務
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose, MatDialogModule } from '@angular/material/dialog';
+// 導入 MatIcon 模組，用於顯示 Material Icon
+import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from '@angular/material/button';
 
-
-
+/**
+ * ConfirDelete 組件，用於顯示一個確認刪除的對話框。
+ * 它接收要刪除的客戶資料，並提供取消和確認刪除的選項。
+ */
 @Component({
-  selector: 'app-delete-confirm',
-  template: `
-    <div class="dialog-header">
-      <button mat-icon-button class="close-btn" (click)="onNoClick()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-
-    <mat-dialog-content class="dialog-content">
-      <h1 class="warning-title">確定要刪除 【 {{data.idNum}} {{data.chineseName}} 】 嗎？</h1>
-      <p class="warning-subtitle">刪除的客戶資料無法復原，請確認是否刪除。</p>
-    </mat-dialog-content>
-
-    <mat-dialog-actions align="center" class="dialog-actions">
-      <button mat-button class="btn-cancel" (click)="onNoClick()">取消</button>
-      <button mat-flat-button color="warn" class="btn-confirm" [mat-dialog-close]="true">確認</button>
-    </mat-dialog-actions>
-  `,
-  styles: [`
-    .dialog-header { display: flex; justify-content: flex-end; }
-    .dialog-content { text-align: center; padding: 20px 40px; }
-    .warning-title { color: #d32f2f; font-size: 24px; font-weight: bold; margin-bottom: 16px; }
-    .warning-subtitle { color: #666; font-size: 16px; }
-    .dialog-actions { padding-bottom: 30px; gap: 20px; }
-    .btn-cancel { border: 1px solid #28a745; color: #28a745; width: 120px; border-radius: 20px; }
-    .btn-confirm { background-color: #f44336; width: 120px; border-radius: 20px; }
-  `],
-  imports: [MatIcon, MatDialogContent, MatDialogActions, MatDialogClose]
+  selector: 'app-confir-delete', // 組件的 CSS 選擇器
+  templateUrl: './confir-delete.html',
+  styleUrls: ['./confir-delete.css'],
+  standalone: true,
+  // 導入對話框模板中使用的 Material 模組
+  imports: [MatIconModule, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, MatDialogModule]
 })
 export class ConfirDelete {
+  /**
+   * 構造函數，注入 MatDialogRef 和 MAT_DIALOG_DATA。
+   * @param dialogRef 對話框的引用，用於關閉對話框。
+   * @param data 傳入對話框的數據，例如要刪除的客戶的 idNum 和 chineseName。
+   */
   constructor(
     public dialogRef: MatDialogRef<ConfirDelete>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
+  /**
+   * 處理「取消」按鈕點擊事件或關閉按鈕點擊事件。
+   * 關閉對話框而不返回任何結果。
+   */
   onNoClick(): void {
     this.dialogRef.close();
   }

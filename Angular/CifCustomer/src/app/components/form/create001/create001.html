@@ -101,11 +101,11 @@
         <div class="field-group">
           <label>郵遞區號</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <input matInput formControlName="zipCode_2" placeholder="請輸入郵遞區碼">
+            <input matInput formControlName="zipCode2" placeholder="請輸入郵遞區碼">
           </mat-form-field>
           <!-- 錯誤訊息：必填 -->
           <small class="error-msg"
-            *ngIf="createForm.get('zipCode_2')?.invalid && (createForm.get('zipCode_2')?.dirty || createForm.get('zipCode_2')?.touched)">
+            *ngIf="createForm.get('zipCode2')?.invalid && (createForm.get('zipCode2')?.dirty || createForm.get('zipCode2')?.touched)">
             此為必填資料
           </small>
         </div>
