@@ -1,12 +1,12 @@
-
 import { Component, Inject } from '@angular/core';
-// 導入 MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose
-// 這些是 Angular Material 對話框相關的模組和服務
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogContent, MatDialogActions, MatDialogClose, MatDialogModule } from '@angular/material/dialog';
-// 導入 MatIcon 模組，用於顯示 Material Icon
-import { MatIcon, MatIconModule } from "@angular/material/icon";
+import { CommonModule } from '@angular/common';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialogClose, MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatIconModule } from '@angular/material/icon';
+export interface DialogData {
+  idNum: string;
+  chineseName: string;
+}
 /**
  * ConfirDelete 組件，用於顯示一個確認刪除的對話框。
  * 它接收要刪除的客戶資料，並提供取消和確認刪除的選項。
@@ -17,7 +17,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./confir-delete.css'],
   standalone: true,
   // 導入對話框模板中使用的 Material 模組
-  imports: [MatIconModule, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, MatDialogModule]
+  imports: [MatIconModule, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, MatDialogModule, CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule]
 })
 export class ConfirDelete {
   /**
@@ -27,14 +30,10 @@ export class ConfirDelete {
    */
   constructor(
     public dialogRef: MatDialogRef<ConfirDelete>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
-  /**
-   * 處理「取消」按鈕點擊事件或關閉按鈕點擊事件。
-   * 關閉對話框而不返回任何結果。
-   */
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }

@@ -111,21 +111,40 @@ export class Edit001 implements OnInit {
       console.warn('無傳入資料，可能需要重新查詢或返回列表');
     }
     // 監聽：同戶籍地址
+
     this.editForm.get('sameAsAddress1')?.valueChanges.subscribe(checked => {
       if (checked) {
         this.editForm.patchValue({
-          zipCode2: this.editForm.get('zipCode_1')?.value,
+          zipCode2: this.editForm.get('zipCode1')?.value, // ⚠️ 注意：原本是 zipCode_1，應該是筆誤
           address2: this.editForm.get('address1')?.value
-        });
+        }, { emitEvent: false });
       }
     });
 
-    // 監聽：同戶籍電話
+    //  監聽 address1 變化
+    this.editForm.get('address1')?.valueChanges.subscribe(() => {
+      if (this.editForm.get('sameAsAddress1')?.value) {
+        this.editForm.patchValue({
+          address2: this.editForm.get('address1')?.value
+        }, { emitEvent: false });
+      }
+    });
+
+    //  監聽「同戶籍電話」checkbox
     this.editForm.get('sameAsTelephone1')?.valueChanges.subscribe(checked => {
       if (checked) {
         this.editForm.patchValue({
           telephone2: this.editForm.get('telephone1')?.value
-        });
+        }, { emitEvent: false });
+      }
+    });
+
+    // 監聽 telephone1 變化
+    this.editForm.get('telephone1')?.valueChanges.subscribe(() => {
+      if (this.editForm.get('sameAsTelephone1')?.value) {
+        this.editForm.patchValue({
+          telephone2: this.editForm.get('telephone1')?.value
+        }, { emitEvent: false });
       }
     });
   }

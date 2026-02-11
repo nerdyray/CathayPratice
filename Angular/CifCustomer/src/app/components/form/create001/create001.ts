@@ -102,24 +102,25 @@ export class Create001 implements OnInit {
       education: [{ value: 'master', disabled: true }],
 
       // 戶籍地址相關欄位：初始禁用，必填
-      zipCode2: [{ value: '', disabled: true }, Validators.required],
+      zipCode1: [{ value: '', disabled: true }, Validators.required],
       address1: [{ value: '', disabled: true }, Validators.required],
-      telephone1: [{ value: '', disabled: true }, Validators.required, Validators.minLength(10),
-      Validators.maxLength(10)],
+      telephone1: [{ value: '02', disabled: true }, [Validators.required, Validators.minLength(1), Validators.maxLength(10)]],
 
       // 現居地址相關欄位：初始禁用
-      zipCode_1: [{ value: '', disabled: true }],
+      zipCode2: [{ value: '', disabled: true }, Validators.required],
       address2: [{ value: '', disabled: true }],
-      telephone2: [{ value: '', disabled: true }, Validators.minLength(10),
-      Validators.maxLength(10)],
+      telephone2: [{ value: '02', disabled: true }],
 
       // 「同戶籍地址/電話」的勾選框：初始禁用，默認為 false
       isSameAddress: [{ value: false, disabled: true }],
       isSamePhone: [{ value: false, disabled: true }],
 
       // 行動電話：初始禁用，必填
-      mobile: [{ value: '', disabled: true }, Validators.required, Validators.minLength(10),
-      Validators.maxLength(10)],
+      // ✅ 方式 1：使用陣列包裹多個同步驗證器
+      mobile: [
+        { value: '09', disabled: true },
+        [Validators.required, Validators.minLength(10), Validators.maxLength(10)]
+      ],
       // 電子郵件：初始禁用，默認為 '123@gmail.com'，並進行 Email 格式驗證
       email: [{ value: '123@gmail.com', disabled: true }, [Validators.email]],
       // 現居年限：初始禁用，默認為 0，必填
@@ -127,28 +128,44 @@ export class Create001 implements OnInit {
     });
 
     // 訂閱 'isSameAddress' 欄位的變化，實現「同戶籍地址」的聯動邏輯
+    // ✅ 監聽「同戶籍地址」checkbox 的變化
     this.createForm.get('isSameAddress')?.valueChanges.subscribe(checked => {
       if (checked) {
-        // 如果勾選，將戶籍地址的值設置到現居地址
-        const sourceValue = this.createForm.get('address1')?.value;
-        this.createForm.get('address2')?.setValue(sourceValue);
-        // 可以選擇在此處禁用現居地址欄位：this.createForm.get('address2')?.disable();
-      } else {
-        // 如果取消勾選，清空現居地址
-        this.createForm.get('address2')?.setValue('');
-        // 可以選擇在此處啟用現居地址欄位：this.createForm.get('address2')?.enable();
+        const address1Value = this.createForm.get('address1')?.value;
+        const zipCode1Value = this.createForm.get('zipCode1')?.value;
+        this.createForm.patchValue({
+          address2: address1Value,
+          zipCode2: zipCode1Value
+        }, { emitEvent: false });
       }
     });
 
-    // 訂閱 'isSamePhone' 欄位的變化，實現「同戶籍電話」的聯動邏輯
+    // 監聽 address1 變化（當勾選時同步）
+    this.createForm.get('address1')?.valueChanges.subscribe(val => {
+      if (this.createForm.get('isSameAddress')?.value) {
+        this.createForm.get('address2')?.setValue(val, { emitEvent: false });
+      }
+    });
+
+    // 監聽 zipCode1 變化（當勾選時同步）
+    this.createForm.get('zipCode1')?.valueChanges.subscribe(val => {
+      if (this.createForm.get('isSameAddress')?.value) {
+        this.createForm.get('zipCode2')?.setValue(val, { emitEvent: false });
+      }
+    });
+
+    // 監聽「同戶籍電話」checkbox 的變化
     this.createForm.get('isSamePhone')?.valueChanges.subscribe(checked => {
       if (checked) {
-        // 如果勾選，將戶籍電話的值設置到現居電話
-        const sourceValue = this.createForm.get('telephone1')?.value;
-        this.createForm.get('telephone2')?.setValue(sourceValue);
-      } else {
-        // 如果取消勾選，清空現居電話
-        this.createForm.get('telephone2')?.setValue('');
+        const telephone1Value = this.createForm.get('telephone1')?.value;
+        this.createForm.get('telephone2')?.setValue(telephone1Value, { emitEvent: false });
+      }
+    });
+
+    // 監聽 telephone1 變化（當勾選時同步）
+    this.createForm.get('telephone1')?.valueChanges.subscribe(val => {
+      if (this.createForm.get('isSamePhone')?.value) {
+        this.createForm.get('telephone2')?.setValue(val, { emitEvent: false });
       }
     });
   }
@@ -156,27 +173,29 @@ export class Create001 implements OnInit {
   /**
    * 處理身份證字號的驗證動作。
    * 調用 CustomerService 來檢查身份證字號是否已存在。
-   */
+  */
   onVerify() {
     const idNum = this.createForm.get('idNum');
     // 如果身份證字號無效，則直接返回
-    if (idNum?.invalid) return;
-
-    this.isVerifying = true; // 設置驗證狀態為進行中
-
+    if (idNum?.invalid) {
+      this.isVerifying = true; // 設置驗證狀態為進行中
+      return;
+    }
     // 呼叫 CustomerService 的 checkId 方法來驗證身份證字號
     this.customerService.checkId({ idNum: idNum?.value }).subscribe({
       next: (res) => {
         const returnCode = res.MWHEADER.RETURNCODE;
-        if (returnCode === '0000') {
-          // 如果後端返回 '0000'，表示資料已存在，驗證失敗 (重複)
+        if (returnCode !== '0000') {
+          this.createForm.enable();// 啟用整個表單供用戶輸入
+          this.createForm.get('idNum')?.disable();
+          idNum?.setErrors(null); // 清除所有錯誤
+
+          // this.createForm.get('isSameAddress')?.enable();
+          this.showToast('身分證不存在可以註冊', true);
+        } else {
           idNum?.setErrors({ duplicate: true });
           this.showToast('資料已存在', false);
-        } else {
           // 如果返回其他代碼 (例如 404, E001)，表示查無資料，驗證通過
-          idNum?.setErrors(null); // 清除所有錯誤
-          this.createForm.enable(); // 啟用整個表單供用戶輸入
-          this.showToast('身分證不存在可以註冊', true);
         }
         this.isVerifying = false; // 驗證結束，設置驗證狀態為非進行中
         this.cdr.detectChanges(); // 手動觸發變更偵測，更新 UI
@@ -213,11 +232,12 @@ export class Create001 implements OnInit {
     // 將原始數據映射到客戶數據接口
     const customer: Data = { ...rawData };
     // 呼叫 CustomerService 的 addCustomer 方法來新增客戶
-    this.customerService.addCustomer(customer).subscribe({
+    this.customerService.addCustomer(rawData).subscribe({
       next: (res) => {
-        this.showSuccessToast = true; // 顯示成功提示訊息
-        this.cdr.detectChanges(); // 手動觸發變更偵測，更新 UI
-      }
+        this.showToast('新增成功', true); // 在這裡才提示成功
+        this.showSuccessToast = true;
+        this.cdr.detectChanges();
+      },
     })
   }
   // 顯示訊息的方法
