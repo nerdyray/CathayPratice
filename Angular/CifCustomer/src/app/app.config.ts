@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 
 // 從當前目錄導入應用程式的路由定義
 import { routes } from './app.routes';
+import { Interceptor } from './comm/interceptor';
 
 /**
  * 應用程式的配置物件。
@@ -14,6 +15,10 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   // 提供者陣列，包含應用程式級別的服務
   providers: [
+    provideHttpClient(
+      // 只需要在這裡寫一次，全站所有的 http 請求都會被攔截
+      withInterceptors([Interceptor])
+    ),
     provideRouter(routes), // 3. 這裡加入 provideRouter(routes)
     // 提供瀏覽器全局錯誤監聽器，用於捕獲和處理應用程式中的未捕獲錯誤
     provideBrowserGlobalErrorListeners(),

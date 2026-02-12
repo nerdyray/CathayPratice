@@ -25,11 +25,11 @@ export class CustomerService {
 
 
   // API 端點定義
-  private checkUrl = 'http://localhost:8080/cif/checkId'; // 檢查身份證字號是否重複的 API
-  private createUrl = 'http://localhost:8080/cif/create';       // 新增客戶的 API
-  private listUrl = 'http://localhost:8080/cif/filter';         // 查詢客戶列表的 API (過濾)
-  private deleteUrl = 'http://localhost:8080/cif/deleteInfo';         // 刪除客戶的 API
-  private editUrl = 'http://localhost:8080/cif/editInfo';       // 編輯客戶的 API
+  private checkUrl = 'checkId'; // 檢查身份證字號是否重複的 API
+  private createUrl = 'create';       // 新增客戶的 API
+  private listUrl = 'filter';         // 查詢客戶列表的 API (過濾)
+  private deleteUrl = 'deleteInfo';         // 刪除客戶的 API
+  private editUrl = 'editInfo';       // 編輯客戶的 API
 
   /**
    * 構造函數，注入 HttpClient 服務。
@@ -81,7 +81,6 @@ export class CustomerService {
    * @returns 包含後端響應的 Observable。
    */
   listCustomer(pageNum: number, pageSize: number, searchParams: any): Observable<any> {
-    console.log('搜尋所有資料');
     // 構建請求主體，包含消息頭、分頁資訊、數據過濾條件和排序資訊
     const requestBody = {
       // 訊息標頭，用於識別交易類型

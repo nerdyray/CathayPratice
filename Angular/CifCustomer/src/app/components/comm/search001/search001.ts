@@ -9,16 +9,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { MatRadioButton } from "@angular/material/radio";
-import { MatSlider } from "@angular/material/slider";
+import { MatRadioButton, MatRadioModule } from "@angular/material/radio";
+import { MatSlider, MatSliderModule } from "@angular/material/slider";
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // 將所有用到的 Angular Material 模組集合到一個常數中，方便管理
 const MATERIAL_MODULES = [
-  MatIconModule,
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
+  MatRadioModule,
   MatButtonModule,
+  MatIconModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatSliderModule
 ];
 
 /**

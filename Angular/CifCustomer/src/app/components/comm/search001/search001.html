@@ -36,12 +36,12 @@
       </div>
 
       <!-- 現居年限滑塊 -->
-      <div class="field-wrapper">
-        <label class="field-label">現居年限 (至少)</label>
-        <div class="slider-container">
-          <span class="year-display">{{ searchForm.get('year')?.value || 0 }} 年</span>
-          <mat-slider min="0" max="100" step="1" showTickMarks discrete>
-            <input matSliderThumb formControlName="year">
+      <div class="field-group span-2">
+        <label>現居年限 (至少)</label>
+        <div class="slider-group">
+          <span class="year-display">{{ searchForm.get('year')?.value }}</span>
+          <mat-slider min="0" max="100" step="1" discrete>
+            <input matSliderThumb [formControl]="$any(searchForm.get('year'))">
           </mat-slider>
         </div>
       </div>

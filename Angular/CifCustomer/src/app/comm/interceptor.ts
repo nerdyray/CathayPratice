@@ -1,7 +1,7 @@
 // 導入 HttpInterceptorFn 類型，這是 Angular HTTP 攔截器函數的簽名
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs'; // 導入 catchError 和 throwError
+import { catchError, delay, finalize, throwError } from 'rxjs'; // 導入 catchError 和 throwError
 import { LoaderService } from '../services/loader';
 
 /**
@@ -13,21 +13,24 @@ import { LoaderService } from '../services/loader';
  * @returns 返回一個 Observable，包含被修改或原始的 HTTP 事件流。
  */
 export const Interceptor: HttpInterceptorFn = (req, next) => {
+  //共同路徑
+  const baseUrl = 'http://localhost:8080/cif/';
   // 1. 注入全域讀取狀態計數器Service
   const loaderService = inject(LoaderService);
   // 2. 利用不可變性 clone 請求，並統一加上 API 前綴與 Header
   // 這樣你的身分證 Service 就不需要寫全網址
   const apiReq = req.clone({
-    url: `http://localhost:8080/cif`,
+    url: `${baseUrl}${req.url}`,
     setHeaders: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer YOUR_TOKEN' // 全域性加上 Token
     }
   });
   // 3. 啟動讀取狀態：計數器 +1
   loaderService.show();
 
-  return next(req).pipe(
+  return next(apiReq).pipe(
+    //故意設定讓API請求顯示0.8秒
+    delay(800),
     catchError((error: HttpErrorResponse) => {
       let errorMessage = '';
       if (error.error instanceof ErrorEvent) {
@@ -44,6 +47,9 @@ export const Interceptor: HttpInterceptorFn = (req, next) => {
       console.error(errorMessage);
       // 重新拋出錯誤，以便服務或組件層可以進一步處理
       return throwError(() => new Error(errorMessage));
+    }),
+    finalize(() => {
+      loaderService.hide();
     })
   );
 };

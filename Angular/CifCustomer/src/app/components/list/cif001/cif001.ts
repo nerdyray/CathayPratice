@@ -97,8 +97,6 @@ export class Cif001 implements OnInit {
           // 3. 將分頁器與數據源關聯
           this.dataSource.paginator = this.paginator;
           this.totalItems = this.originalData.length;
-
-          console.log('資料載入成功:', this.originalData);
         } else {
           // 如果沒有數據，清空表格
           this.dataSource.data = [];
@@ -136,7 +134,7 @@ export class Cif001 implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       // 如果用戶在對話框中點擊了「確認」(result 為 true)
       if (result) {
-        console.log('點擊刪除:', element.orderId);
+
         // 調用 service 的 deleteCustomer 方法
         this.customerService.deleteCustomer(element.orderId).subscribe({
           next: (res: any) => {
@@ -162,7 +160,6 @@ export class Cif001 implements OnInit {
    * @param criteria - 從 Search001 組件傳來的搜尋條件對象
    */
   onSearchFromChild(criteria: any): void {
-    console.log('前端過濾條件:', criteria);
 
     // 使用 Array.prototype.filter 方法，根據搜尋條件過濾 originalData
     const filteredResult = this.originalData.filter(item => {
