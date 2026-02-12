@@ -14,10 +14,11 @@ import { MatButtonModule } from '@angular/material/button';
 
 // Components & Services
 import { Search001 } from '../../comm/search001/search001';
-import { CustomerService } from '../../../services/customerService'; // 假設你的 Service 路徑
-import { Data } from '../../../interface/Q002Tranrq'; // 假設你的資料介面
+import { CustomerService } from '../../../services/customerService';
+import { Data } from '../../../interface/Q002Tranrq';
 import { Router } from '@angular/router';
 
+// 集合所有需要使用的 Angular Material 模組，方便管理
 const MATERIAL_MODULES = [
   MatTableModule,
   MatPaginatorModule,
@@ -29,7 +30,10 @@ const MATERIAL_MODULES = [
   MatButtonModule,
   MatDialogModule
 ];
-
+/**
+ * Cif001 組件
+ * 負責顯示客戶列表、處理分頁、搜尋、編輯和刪除功能。
+ */
 @Component({
   selector: 'app-cif001',
   standalone: true,
@@ -39,89 +43,114 @@ const MATERIAL_MODULES = [
 })
 export class Cif001 implements OnInit {
 
-  // 1. 原始資料備份 (從後端撈回來的完整資料)
+  // 用於備份從後端獲取的完整原始數據，以便在前端進行過濾
   originalData: Data[] = [];
 
-  // 2. 表格資料來源 (MatTableDataSource 內建了過濾和分頁功能)
+  // Angular Material 表格的數據源，提供過濾、排序和分頁功能
   dataSource = new MatTableDataSource<Data>([]);
 
-  // 表格欄位
+  // 定義表格要顯示的欄位名稱和順序
   displayedColumns: string[] = ['idNum', 'chineseName', 'gender', 'education', 'mobile', 'email', 'address1', 'zipCode1', 'year', 'actions'];
 
-  // 分頁器
+  // 透過 @ViewChild 獲取模板中對分頁器元件的引用
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // 數據總筆數，用於分頁器
   totalItems = 0;
-
+  /**
+   * 組件的構造函數
+   * @param dialog 用於打開 Material Design 對話框的服務
+   * @param router 用於程式化導航的服務
+   * @param customerService 用於與客戶相關 API 互動的服務
+   * @param snackBar 用於顯示短暫訊息（Toast）的服務
+   * @param cdr 用於手動觸發變更檢測的服務
+   */
   constructor(
     private dialog: MatDialog,
-    private router: Router, // 2. 注入 Router
+    private router: Router,
     private customerService: CustomerService,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
 
   ) { }
-
+  /**
+   * Angular 生命週期鉤子，在組件初始化時調用。
+   */
   ngOnInit(): void {
-    // 初始化時呼叫後端 API 載入資料
+    // 初始化時從後端加載客戶數據
     this.loadData();
   }
 
   /**
-   * 從後端 API 取得資料
-   * 注意：為了讓前端能做搜尋，這裡假設 API 回傳的是「全部資料」或「大筆資料」
+   * 從後端服務加載客戶數據。
+   * 注意：目前的實現方式是獲取大量數據到前端進行過濾，這在數據量大時可能影響性能。
+   * 優化方向：應改為每次搜尋或換頁時，都帶著過濾條件和分頁參數請求後端。
    */
   loadData() {
-    // 呼叫 Service (這裡參數傳 1, 1000 假設一次撈取較多資料，視實際需求調整)
+    // 呼叫 service，此處傳入的分頁參數 (1, 1000) 旨在一次獲取大量數據
     this.customerService.listCustomer(1, 1000, {}).subscribe({
       next: (res: any) => {
         if (res && res.TRANRS && res.TRANRS.items) {
-          // 1. 保存原始資料
+          // 1. 備份原始數據
           this.originalData = res.TRANRS.items;
-
-          // 2. 初始化表格資料
+          // 2. 將數據填充到表格數據源中
           this.dataSource.data = this.originalData;
-          this.dataSource.paginator = this.paginator; // 綁定分頁器
+          // 3. 將分頁器與數據源關聯
+          this.dataSource.paginator = this.paginator;
           this.totalItems = this.originalData.length;
 
           console.log('資料載入成功:', this.originalData);
         } else {
+          // 如果沒有數據，清空表格
           this.dataSource.data = [];
           this.originalData = [];
         }
       },
       error: (err) => {
-        console.error('API Error:', err);
+        console.error('API 錯誤:', err);
         this.showToast('資料載入失敗', 'error-snackbar');
       }
     });
   }
   /**
-    * 點擊修改：將整筆資料透過路由狀態傳遞到編輯頁
-    */
+   * 處理編輯按鈕的點擊事件。
+   * 導航到編輯頁面，並透過路由狀態 (state) 傳遞該筆客戶的完整資料。
+   * @param element - 表格中被點擊的該行數據對象
+   */
   onEdit(element: any): void {
-    // 注意這裡要對應路由中的 'cif/edit'
+    // 導航到 '/cif/edit' 路由，並將 customerData 附加到 state 中
     this.router.navigate(['/cif/edit'], { state: { customerData: element } });
   }
+
+  /**
+   * 處理刪除按鈕的點擊事件。
+   * 打開一個確認對話框，如果用戶確認刪除，則調用後端 API 執行刪除操作。
+   * @param element - 表格中被點擊的該行數據對象
+   */
   onDelete(element: any): void {
+    // 打開確認刪除的對話框
     const dialogRef = this.dialog.open(ConfirDelete, {
       width: '400px',
-      data: { idNum: element.idNum, chineseName: element.chineseName }
+      data: { idNum: element.idNum, chineseName: element.chineseName } // 傳遞客戶資訊給對話框顯示
     });
-
+    // 訂閱對話框關閉後的事件
     dialogRef.afterClosed().subscribe(result => {
+      // 如果用戶在對話框中點擊了「確認」(result 為 true)
       if (result) {
         console.log('點擊刪除:', element.orderId);
+        // 調用 service 的 deleteCustomer 方法
         this.customerService.deleteCustomer(element.orderId).subscribe({
           next: (res: any) => {
+            // 檢查後端返回的操作碼
             if (res.MWHEADER.RETURNCODE !== '0000') {
-              this.showToast(res.MWHEADER.RETURNDESC, 'error-snackbar');
+              this.showToast(res.MWHEADER.RETURNDESC, 'error-snackbar'); // 顯示後端返回的錯誤訊息
               return;
             }
+            // 刪除成功後，顯示成功訊息並重新加載數據以更新表格
             this.showToast('刪除成功', 'success-snackbar');
             this.loadData();
           },
           error: (err) => {
-            console.error('API Error:', err);
+            console.error('API 刪除錯誤:', err);
             this.showToast('刪除失敗', 'error-snackbar');
           }
         });
@@ -129,56 +158,48 @@ export class Cif001 implements OnInit {
     });
   }
   /**
-   * 接收 Search001 的搜尋事件 (前端過濾)
+   * 接收子組件 (Search001) 觸發的搜尋事件，並在前端進行數據過濾。
+   * @param criteria - 從 Search001 組件傳來的搜尋條件對象
    */
   onSearchFromChild(criteria: any): void {
     console.log('前端過濾條件:', criteria);
 
-    // 根據 criteria 過濾 originalData
+    // 使用 Array.prototype.filter 方法，根據搜尋條件過濾 originalData
     const filteredResult = this.originalData.filter(item => {
-      // 1. 身分證 (模糊)
+      // 逐一檢查每個搜尋條件是否滿足
       const matchId = criteria.idNum ? (item.idNum || '').includes(criteria.idNum) : true;
-
-      // 2. 姓名 (模糊)
       const matchName = criteria.chineseName ? (item.chineseName || '').includes(criteria.chineseName) : true;
-
-      // 3. 性別 (精確，若選 "不拘" 則 criteria.gender 為空字串，回傳 true)
       const matchGender = criteria.gender ? item.gender === criteria.gender : true;
-
-      // 4. 學歷 (模糊，假設資料庫也是存字串)
       const matchEdu = criteria.education ? (item.education || '').includes(criteria.education) : true;
-
-      // 5. 手機 (模糊)
       const matchMobile = criteria.mobile ? (item.mobile || '').includes(criteria.mobile) : true;
-
-      // 6. Email (模糊)
       const matchEmail = criteria.email ? (item.email || '').includes(criteria.email) : true;
-
-      // 7. 現居年限 (大於等於)
-      // 注意：要先確認 item.year 是否為數字
       const matchYear = (criteria.year !== null && criteria.year !== undefined) ?
         Number(item.year || 0) >= criteria.year : true;
-
+      // 所有條件都必須為 true，該筆數據才算匹配
       return matchId && matchName && matchGender && matchEdu && matchMobile && matchEmail && matchYear;
     });
 
-    // 更新表格資料
+    // 將過濾後的結果更新到表格數據源
     this.dataSource.data = filteredResult;
 
-    // 如果有分頁器，搜尋後要跳回第一頁
+    // 如果表格正在使用分頁器，搜尋後應將分頁器跳回第一頁
     if (this.paginator) {
       this.paginator.firstPage();
     }
-
-    // 查無資料提示
+    // 如果過濾後沒有任何結果，顯示提示訊息
     if (filteredResult.length === 0) {
       this.showToast('查無符合條件的資料', 'warning-snackbar');
     }
   }
 
+  /**
+   * 顯示一個 SnackBar (Toast) 訊息。
+   * @param message - 要顯示的訊息文字
+   * @param panelClass - 用於控制樣式的 CSS class (例如 'success-snackbar', 'error-snackbar')
+   */
   private showToast(message: string, panelClass: string) {
     this.snackBar.open(message, '關閉', {
-      duration: 3000,
+      duration: 3000, // 3 秒後自動關閉
       panelClass: [panelClass]
     });
   }

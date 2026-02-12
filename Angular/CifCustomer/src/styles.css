@@ -1,13 +1,36 @@
-/* 您可以在此文件中添加全局樣式，也可以導入其他樣式文件 */
+/**
+ * styles.css
+ *
+ * 全局樣式文件。在此處定義的樣式會影響整個應用程式的所有組件。
+ * 您也可以在此導入其他樣式文件。
+ */
 
-/* 成功訊息樣式 */
+/* =================================
+   Angular Material 組件客製化
+   ================================= */
+
+/*
+ * MatSnackBar (提示訊息) 樣式覆寫
+ * 我們可以通過定義 panelClass 並在此處設置樣式，來客製化 SnackBar 的外觀。
+ */
+
+/* 成功訊息的樣式 */
 .success-snackbar {
-  --mdc-snackbar-container-color: #4caf50; /* 背景綠色 */
-  --mdc-snackbar-label-text-color: white;  /* 文字白色 */
+  --mdc-snackbar-container-color: #4CAF50; /* 背景顏色：綠色 */
+  --mat-snack-bar-button-color: white;     /* 按鈕文字顏色：白色 */
+  --mdc-snackbar-supporting-text-color: white; /* 主要文字顏色：白色 */
 }
 
-/* 失敗訊息樣式 */
+/* 失敗訊息的樣式 */
 .fail-snackbar {
-  --mdc-snackbar-container-color: #f44336; /* 背景紅色 */
-  --mdc-snackbar-label-text-color: white;  /* 文字白色 */
+  --mdc-snackbar-container-color: #f44336; /* 背景顏色：紅色 */
+  --mat-snack-bar-button-color: white;     /* 按鈕文字顏色：白色 */
+  --mdc-snackbar-supporting-text-color: white; /* 主要文字顏色：白色 */
+}
+
+/* 警告訊息的樣式 */
+.warning-snackbar {
+    --mdc-snackbar-container-color: #ff9800; /* 背景顏色：橘色 */
+    --mat-snack-bar-button-color: white;     /* 按鈕文字顏色：白色 */
+    --mdc-snackbar-supporting-text-color: white; /* 主要文字顏色：白色 */
 }

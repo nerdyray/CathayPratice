@@ -28,8 +28,8 @@ export class CustomerService {
   private checkUrl = 'http://localhost:8080/cif/checkId'; // 檢查身份證字號是否重複的 API
   private createUrl = 'http://localhost:8080/cif/create';       // 新增客戶的 API
   private listUrl = 'http://localhost:8080/cif/filter';         // 查詢客戶列表的 API (過濾)
-  private deleteUrl = 'http://localhost:8080/cif/deleteInfo';         // 查詢客戶列表的 API (過濾)
-  private editUrl = 'http://localhost:8080/cif/editInfo';
+  private deleteUrl = 'http://localhost:8080/cif/deleteInfo';         // 刪除客戶的 API
+  private editUrl = 'http://localhost:8080/cif/editInfo';       // 編輯客戶的 API
 
   /**
    * 構造函數，注入 HttpClient 服務。
@@ -84,14 +84,18 @@ export class CustomerService {
     console.log('搜尋所有資料');
     // 構建請求主體，包含消息頭、分頁資訊、數據過濾條件和排序資訊
     const requestBody = {
+      // 訊息標頭，用於識別交易類型
       MWHEADER: {
         MSGID: "XXA-C-CIFQ002"
       },
+      // 交易請求主體
       TRANRQ: {
+        // 分頁相關資訊
         PAGE: {
-          pageNumber: pageNum, // 直接使用傳入的頁碼
-          pageSize: pageSize   // 直接使用傳入的每頁筆數
+          pageNumber: pageNum, // 當前頁碼
+          pageSize: pageSize   // 每頁筆數
         },
+        // 查詢條件數據
         DATA: {
           idNum: searchParams.idNum || "",
           chineseName: searchParams.chineseName || "",
@@ -101,6 +105,7 @@ export class CustomerService {
           email: searchParams.email || "",
           year: searchParams.year || 0 // 注意這裡將 year 映射到 year
         } as Q002Data, // 類型斷言為 Q002Data 以符合結構
+        // 排序相關資訊
         SORTINFO: {
           sortBy: "DESC",       // 排序方向：降序
           sortColumn: "ORDER_ID"// 排序欄位：訂單ID
@@ -129,7 +134,12 @@ export class CustomerService {
     return this.http.post(this.deleteUrl, requestBody);
   }
 
-  editeCustomer(requestBody: T002Data): Observable<any> {
+  /**
+   * 編輯客戶資料。
+   * @param requestBody 包含要更新的客戶資料。
+   * @returns 包含後端響應的 Observable。
+   */
+  editCustomer(requestBody: T002Data): Observable<any> {
     // 構建請求主體，包含消息頭和交易請求數據
     const editTranrq = {
       MWHEADER: {
@@ -139,7 +149,7 @@ export class CustomerService {
         DATA: requestBody // 將傳入的客戶數據放入請求主體
       }
     };
-    // 發送 POST 請求到 create API
+    // 發送 POST 請求到 edit API
     return this.http.post(this.editUrl, editTranrq);
   }
 }

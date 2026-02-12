@@ -4,9 +4,9 @@ import { Data } from './../../../interface/T001Tranrq';
 import { CustomerService } from './../../../services/customerService';
 // 導入 Q003Tranrq，用於身份證驗證請求的數據結構
 import { Q003Tranrq } from './../../../interface/Q003Tranrq';
-// 導入 Angular 核心模組中的 ChangeDetectorRef (變更偵測) 和 Component (組件裝飾器)、OnInit (生命週期鉤子)
+// 導入 Angular 核心模組
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-// 導入 Angular 表單模組中的 FormBuilder (用於構建響應式表單)、FormGroup (表單組)、Validators (驗證器)、ReactiveFormsModule 和 FormsModule
+// 導入 Angular 表單相關模組
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 // 導入 CommonModule，提供常用指令如 ngIf, ngFor
 import { CommonModule } from '@angular/common';
@@ -21,14 +21,12 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
-// 導入 Angular 路由模組中的 Router，用於頁面導航
-import { Router } from '@angular/router';
-// 導入 Customer 接口，定義客戶數據的結構
-import { Customer } from '../../../interface/Customer';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+// 導入 Angular 路由模組，用於頁面導航
+import { Router, RouterLink } from '@angular/router';
+// 導入 MatSnackBar，用於顯示提示訊息
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-// 定義一個常數陣列，包含所有會用到的 Angular Material 模組，方便在 @Component 的 imports 中引用
+// 將所有用到的 Angular Material 模組集合到一個常數中，方便管理
 const MATERIAL_MODULES = [
   MatSidenavModule,
   MatListModule,
@@ -43,33 +41,34 @@ const MATERIAL_MODULES = [
 ];
 
 /**
- * Create001 組件，用於客戶資料的新增功能。
- * 處理表單的初始化、驗證、數據提交以及與後端服務的交互。
+ * Create001 組件
+ * 負責處理新增客戶資料的表單功能，包括表單的初始化、驗證、與後端服務的數據提交。
  */
 @Component({
-  selector: 'app-create001', // 組件的 CSS 選擇器
-  standalone: true, // 表示這是獨立組件，不需要 NgModules
-  // 導入所需的模組，包括 CommonModule、響應式表單模組和所有 Material 模組
+  selector: 'app-create001',
+  standalone: true,
   imports: [RouterLink, CommonModule, ReactiveFormsModule, FormsModule, ...MATERIAL_MODULES],
-  templateUrl: './create001.html', // 組件的 HTML 模板文件路徑
-  styleUrl: './create001.css', // 組件的 CSS 樣式文件路徑
+  templateUrl: './create001.html',
+  styleUrl: './create001.css',
 })
 export class Create001 implements OnInit {
 
-  createForm!: FormGroup; // 聲明表單組，用於管理表單控制項和其狀態
-  // 正則表達式，用於驗證字串，允許中文、英文、數字和部分符號
+  // 響應式表單的 FormGroup 實例
+  createForm!: FormGroup;
+  // 用於驗證字串的正則表達式，允許中文、英文、數字和部分符號
   PATTERN_STRING_WITH_NUM: RegExp = /^[\u4e00-\u9fa5a-zA-Z0-9\s\-\.\,]+$/;
-  showErrorToast = false;   // 控制「錯誤」提示訊息的顯示狀態
-  showSuccessToast = false; // 控制「成功」提示訊息的顯示狀態
-  submited = false;         // 標記表單是否已送出
-  isVerifying = false; // 用來控制身份證驗證按鈕的 Loading 狀態
+  // 標記表單是否已送出，用於控制 UI 狀態
+  submited = false;
+  // 控制「身份證驗證」按鈕的加載狀態
+  isVerifying = false;
 
   /**
-   * 構造函數，注入所需的服務。
+   * 組件的構造函數
    * @param fb FormBuilder 服務，用於輕鬆創建 FormGroup 和 FormControl。
    * @param customerService 客戶服務，用於調用後端 API。
    * @param cdr ChangeDetectorRef 服務，用於手動觸發 Angular 的變更偵測。
    * @param router Router 服務，用於處理導航。
+   * @param snackBar MatSnackBar 服務，用於顯示提示訊息。
    */
   constructor(
     private fb: FormBuilder,
@@ -81,9 +80,9 @@ export class Create001 implements OnInit {
 
   /**
    * Angular 的生命週期鉤子，在組件初始化時調用。
-   * 在此處調用 initForm() 來初始化表單。
    */
   ngOnInit(): void {
+    // 初始化表單結構和驗證規則
     this.initForm();
   }
 
@@ -92,77 +91,72 @@ export class Create001 implements OnInit {
    */
   initForm() {
     this.createForm = this.fb.group({
-      // 身份證字號：必填，並符合特定的正則表達式格式
+      // 身份證字號：必填，並符合台灣身份證的正則表達式格式
       idNum: ['', [Validators.required, Validators.pattern(/^[A-Z][12]\d{8}$/)]],
-      // 中文姓名：初始禁用，必填
+      // 中文姓名：必填，初始狀態為禁用
       chineseName: [{ value: '', disabled: true }, Validators.required],
       // 性別：初始禁用，默認為 'F' (女)
       gender: [{ value: 'F', disabled: true }],
       // 學歷：初始禁用，默認為 'master' (碩士)
       education: [{ value: 'master', disabled: true }],
 
-      // 戶籍地址相關欄位：初始禁用，必填
+      // 戶籍地址相關欄位
       zipCode1: [{ value: '', disabled: true }, Validators.required],
       address1: [{ value: '', disabled: true }, Validators.required],
       telephone1: [{ value: '02', disabled: true }, [Validators.required, Validators.minLength(1), Validators.maxLength(10)]],
 
-      // 現居地址相關欄位：初始禁用
+      // 現居地址相關欄位
       zipCode2: [{ value: '', disabled: true }, Validators.required],
       address2: [{ value: '', disabled: true }],
       telephone2: [{ value: '02', disabled: true }],
 
-      // 「同戶籍地址/電話」的勾選框：初始禁用，默認為 false
+      // 「同戶籍地址/電話」的勾選框
       isSameAddress: [{ value: false, disabled: true }],
       isSamePhone: [{ value: false, disabled: true }],
 
-      // 行動電話：初始禁用，必填
-      // ✅ 方式 1：使用陣列包裹多個同步驗證器
-      mobile: [
-        { value: '09', disabled: true },
-        [Validators.required, Validators.minLength(10), Validators.maxLength(10)]
-      ],
-      // 電子郵件：初始禁用，默認為 '123@gmail.com'，並進行 Email 格式驗證
+      // 行動電話：必填，且長度為 10
+      mobile: [{ value: '09', disabled: true }, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+      // 電子郵件：需要符合 email 格式
       email: [{ value: '123@gmail.com', disabled: true }, [Validators.email]],
-      // 現居年限：初始禁用，默認為 0，必填
+      // 現居年限：必填
       year: [{ value: 0, disabled: true }, Validators.required]
     });
 
-    // 訂閱 'isSameAddress' 欄位的變化，實現「同戶籍地址」的聯動邏輯
-    // ✅ 監聽「同戶籍地址」checkbox 的變化
+    // --- 表單內欄位的聯動邏輯 ---
+
+    // 監聽 'isSameAddress' 勾選框的變化
     this.createForm.get('isSameAddress')?.valueChanges.subscribe(checked => {
       if (checked) {
+        // 如果勾選，將戶籍地址的值同步到現居地址
         const address1Value = this.createForm.get('address1')?.value;
         const zipCode1Value = this.createForm.get('zipCode1')?.value;
         this.createForm.patchValue({
           address2: address1Value,
           zipCode2: zipCode1Value
-        }, { emitEvent: false });
+        }, { emitEvent: false }); // emitEvent: false 避免觸發無窮迴圈
       }
     });
 
-    // 監聽 address1 變化（當勾選時同步）
+    // 當戶籍地址變動時，如果「同戶籍地址」被勾選，則同步更新現居地址
     this.createForm.get('address1')?.valueChanges.subscribe(val => {
       if (this.createForm.get('isSameAddress')?.value) {
         this.createForm.get('address2')?.setValue(val, { emitEvent: false });
       }
     });
-
-    // 監聽 zipCode1 變化（當勾選時同步）
     this.createForm.get('zipCode1')?.valueChanges.subscribe(val => {
       if (this.createForm.get('isSameAddress')?.value) {
         this.createForm.get('zipCode2')?.setValue(val, { emitEvent: false });
       }
     });
 
-    // 監聽「同戶籍電話」checkbox 的變化
+    // 監聽 'isSamePhone' 勾選框的變化
     this.createForm.get('isSamePhone')?.valueChanges.subscribe(checked => {
       if (checked) {
+        // 如果勾選，將戶籍電話的值同步到現居電話
         const telephone1Value = this.createForm.get('telephone1')?.value;
         this.createForm.get('telephone2')?.setValue(telephone1Value, { emitEvent: false });
       }
     });
-
-    // 監聽 telephone1 變化（當勾選時同步）
     this.createForm.get('telephone1')?.valueChanges.subscribe(val => {
       if (this.createForm.get('isSamePhone')?.value) {
         this.createForm.get('telephone2')?.setValue(val, { emitEvent: false });
@@ -171,82 +165,93 @@ export class Create001 implements OnInit {
   }
 
   /**
-   * 處理身份證字號的驗證動作。
-   * 調用 CustomerService 來檢查身份證字號是否已存在。
+   * 處理身份證字號的驗證。
+   * 調用後端服務檢查該身份證號碼是否已存在於資料庫中。
   */
   onVerify() {
     const idNum = this.createForm.get('idNum');
-    // 如果身份證字號無效，則直接返回
+    // 如果身份證號碼本身格式無效，則不執行後續操作
     if (idNum?.invalid) {
-      this.isVerifying = true; // 設置驗證狀態為進行中
+      this.isVerifying = true; // 顯示加載狀態
       return;
     }
-    // 呼叫 CustomerService 的 checkId 方法來驗證身份證字號
+    // 調用後端 API 進行驗證
     this.customerService.checkId({ idNum: idNum?.value }).subscribe({
       next: (res) => {
         const returnCode = res.MWHEADER.RETURNCODE;
+        // 如果後端返回非 '0000'，表示可註冊
         if (returnCode !== '0000') {
-          this.createForm.enable();// 啟用整個表單供用戶輸入
-          this.createForm.get('idNum')?.disable();
-          idNum?.setErrors(null); // 清除所有錯誤
-
-          // this.createForm.get('isSameAddress')?.enable();
+          this.createForm.enable(); // 啟用表單所有欄位
+          this.createForm.get('idNum')?.disable(); // 鎖定已驗證的身份證號碼欄位
+          idNum?.setErrors(null); // 清除可能存在的錯誤狀態
           this.showToast('身分證不存在可以註冊', true);
         } else {
-          idNum?.setErrors({ duplicate: true });
+          // 如果返回 '0000'，表示資料已存在
+          idNum?.setErrors({ duplicate: true }); // 設置一個 'duplicate' 錯誤
           this.showToast('資料已存在', false);
-          // 如果返回其他代碼 (例如 404, E001)，表示查無資料，驗證通過
         }
-        this.isVerifying = false; // 驗證結束，設置驗證狀態為非進行中
-        this.cdr.detectChanges(); // 手動觸發變更偵測，更新 UI
+        this.isVerifying = false; // 結束加載狀態
+        this.cdr.detectChanges(); // 手動觸發變更檢測以更新 UI
       },
       error: (err) => {
-        // 處理 API 錯誤
-        this.showErrorToast = true;      // 顯示錯誤提示給使用者
-        this.isVerifying = false; // 驗證結束，設置驗證狀態為非進行中
+        // 處理 API 調用失敗的情況
+        this.showToast('驗證失敗，請稍後再試', false);
+        this.isVerifying = false; // 結束加載狀態
       }
     })
   }
 
   /**
-   * 重置表單為初始狀態。
+   * 重置整個表單回到初始狀態。
    */
   onReset() {
     this.createForm.reset();
   }
 
   /**
-   * 處理表單提交動作。
+   * 處理表單的最終提交。
    * 檢查表單有效性，如果有效則提交數據，否則顯示錯誤提示。
    */
   onSubmit() {
-    if (this.createForm.valid) {
-      this.showToast('新增成功', true);
-    } else {
-      // 如果表單無效，將所有控制項標記為 touched，以觸發錯誤訊息顯示
+    // 步驟 1：檢查整個表單的有效性
+    if (this.createForm.invalid) {
+      // 如果表單無效，將所有欄位標記為 'touched'，以觸發 Material Design 的錯誤提示
       this.createForm.markAllAsTouched();
       this.showToast('請確認必填資料！', false);
+      return; // 終止提交
     }
-    // 獲取表單的原始值 (包括禁用的控制項)
+
+    // 步驟 2：獲取表單的原始數據 (包括被禁用的欄位)
     const rawData = this.createForm.getRawValue();
-    // 將原始數據映射到客戶數據接口
-    const customer: Data = { ...rawData };
-    // 呼叫 CustomerService 的 addCustomer 方法來新增客戶
+
+    // 步驟 3：調用後端服務提交數據
     this.customerService.addCustomer(rawData).subscribe({
       next: (res) => {
-        this.showToast('新增成功', true); // 在這裡才提示成功
-        this.showSuccessToast = true;
+        // API 請求成功後的回調
+        this.showToast('新增成功', true);
         this.cdr.detectChanges();
+        // 可選：成功後跳轉到列表頁或其他頁面
+        // this.router.navigate(['/cif/list']);
       },
-    })
+      error: (err) => {
+        // API 請求失敗後的回調
+        this.showToast('新增失敗，請稍後再試', false);
+        console.error('新增客戶失敗:', err);
+      }
+    });
   }
-  // 顯示訊息的方法
+
+  /**
+   * 顯示一個 SnackBar (Toast) 提示訊息。
+   * @param message 要顯示的訊息
+   * @param isSuccess 訊息類型是否為成功 (true: 成功, false: 失敗)
+   */
   showToast(message: string, isSuccess: boolean) {
     this.snackBar.open(message, '關閉', {
-      duration: 3000,               // 3 秒後自動關閉
-      horizontalPosition: 'right',  // 顯示在右側
-      verticalPosition: 'top',      // 顯示在上方
-      panelClass: isSuccess ? ['success-snackbar'] : ['fail-snackbar'] // 顏色控制
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: isSuccess ? ['success-snackbar'] : ['fail-snackbar'] // 根據成功或失敗應用不同的 CSS class
     });
   }
 

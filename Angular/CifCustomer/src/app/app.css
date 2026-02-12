@@ -1,39 +1,52 @@
-/* 1. 讓容器佔滿整個瀏覽器視窗高度 */
+/**
+ * app.css
+ *
+ * 這個文件定義了根組件 App (app.html) 的樣式。
+ * 它負責構建應用的主體佈局，包括側邊導航和主內容區域。
+ */
+
+/* =================================
+   1. 主容器
+   ================================= */
 .app-container {
-  height: 100vh; /* Viewport Height 100% */
-  background-color: #f5f5f5; /* 整體背景設為淺灰 */
+  height: 100vh; /* vh (Viewport Height) 單位，100vh 表示容器高度佔滿整個瀏覽器可視區域。 */
+  background-color: #f5f5f5; /* 設置一個淺灰色的全局背景 */
 }
 
-/* 2. 左側邊欄樣式 */
+/* =================================
+   2. 側邊導航欄 (Sidebar)
+   ================================= */
 .app-sidebar {
-  width: 250px; /* 設定固定寬度 */
-  background-color: #f0f0f0; /* 側邊欄背景色 (比內容區稍微深一點點或淺一點) */
-  border-right: 1px solid #e0e0e0; /* 右邊界線 */
+  width: 250px; /* 設置一個固定的寬度 */
+  background-color: #ffffff; /* 側邊欄使用白色背景，使其更突出 */
+  border-right: 1px solid #e0e0e0; /* 右側邊框線，用於分隔 */
 }
 
-/* 3. 側邊欄標題 "CIF 管理系統" */
+/* 側邊欄頂部的標題 */
 .sidebar-header {
-  padding: 24px 16px; /* 內距：上下 24px，左右 16px */
-  font-size: 24px;    /* 字體加大 */
-  font-weight: bold;  /* 粗體 */
-  color: #424242;     /* 深灰色字體 */
+  padding: 24px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
   border-bottom: 1px solid #e0e0e0; /* 標題下方的分隔線 */
 }
 
-/* 4. 調整連結選中時的樣式 (routerLinkActive) */
+/* 當前活動路由的連結樣式 (由 routerLinkActive 指令添加) */
 .active-link {
-  background-color: #e0e0e0; /* 選中時的背景色 */
-  color: #2e7d32 !important; /* 選中時文字變綠色 (配合你的主題) */
+  background-color: #e8f5e9; /* 選中時的背景色 (淡綠色) */
+  color: #2e7d32 !important; /* 選中時文字變為深綠色，!important 確保覆蓋默認樣式 */
   font-weight: bold;
 }
 
-/* 修正 icon 與文字的間距 */
-mat-icon {
-  margin-right: 8px;
+/* 統一樣式：讓導航列表中的圖標和文字之間有固定間距 */
+.app-sidebar mat-icon {
+  margin-right: 12px;
 }
 
-/* 5. 右側內容區 */
+/* =================================
+   3. 主內容區域
+   ================================= */
 .app-content {
-  background-color: #f5f5f5; /* 確保右邊也是灰色背景 */
-  padding: 0; /* 內距由各個頁面自己控制 */
+  background-color: #f5f5f5; /* 確保內容區背景色與主容器一致 */
+  padding: 0; /* 移除容器的內邊距，讓各個頁面組件自己控制其內部間距 */
 }

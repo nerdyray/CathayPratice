@@ -1,26 +1,37 @@
-<!-- 關閉按鈕 -->
+<!-- 右上角的關閉按鈕 -->
 <button mat-icon-button class="close-btn" (click)="onNoClick()">
   <mat-icon>close</mat-icon>
 </button>
 
-<!-- 對話框內容 -->
+<!-- 對話框主要內容區域 -->
 <mat-dialog-content class="dialog-content">
-  <!-- 主要訊息 -->
+  <!--
+    主要警告訊息
+    使用 {{data.idNum}} 和 {{data.chineseName}} 來顯示從父組件傳入的動態數據。
+  -->
   <h2 class="warning-title">
     確定要刪除 <span class="highlight">{{data.idNum}} {{data.chineseName}}</span> 嗎？
   </h2>
 
-  <!-- 副標題說明 -->
+  <!-- 副標題，提供額外說明 -->
   <p class="warning-subtitle">
     刪除的客戶資料無法復原，請確認是否刪除。
   </p>
 </mat-dialog-content>
 
-<!-- 對話框操作按鈕 -->
+<!-- 對話框底部的操作按鈕區域 -->
 <mat-dialog-actions class="dialog-actions">
+  <!--
+    取消按鈕
+    (click)="onNoClick()" 會調用組件中的 onNoClick 方法，該方法會關閉對話框並返回 false。
+  -->
   <button mat-stroked-button class="btn-cancel" (click)="onNoClick()">
     取消
   </button>
+  <!--
+    確認按鈕
+    [mat-dialog-close]="true" 是一個方便的指令，點擊時會自動關閉對話框並返回 true。
+  -->
   <button mat-flat-button class="btn-confirm" [mat-dialog-close]="true">
     確認
   </button>

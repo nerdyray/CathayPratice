@@ -1,4 +1,5 @@
 // 導入 Angular 應用程式的配置類型和相關功能
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 // 導入 Angular 路由功能
 import { provideRouter } from '@angular/router';

@@ -1,27 +1,40 @@
+<!-- 主內容容器 -->
 <div class="main-content">
 
+  <!-- 頁面標題 -->
   <div class="page-header">
     <div class="green-bar"></div>
     <h2>查詢 CIF 資料</h2>
   </div>
 
+  <!-- 主要內容卡片 -->
   <div class="content-card">
+    <!-- 搜尋條件組件 -->
+    <!-- (searchEvent) 是一個輸出事件，當在 app-search001 內部觸發搜尋時，會調用父組件的 onSearchFromChild($event) 方法 -->
     <app-search001 (searchEvent)="onSearchFromChild($event)"></app-search001>
 
+    <!-- 表格容器，mat-elevation-z2 提供了陰影效果 -->
     <div class="table-container mat-elevation-z2" style="margin-top: 20px;">
 
+      <!-- Angular Material 表格 -->
+      <!-- [dataSource] 綁定了組件中 `dataSource` 變數，作為表格的數據來源 -->
       <table mat-table [dataSource]="dataSource">
 
+        <!-- 定義 'idNum' 欄位 -->
         <ng-container matColumnDef="idNum">
+          <!-- 表頭 -->
           <th mat-header-cell *matHeaderCellDef> 身分證字號 </th>
+          <!-- 單元格 -->
           <td mat-cell *matCellDef="let element"> {{element.idNum}} </td>
         </ng-container>
 
+        <!-- 定義 'chineseName' 欄位 -->
         <ng-container matColumnDef="chineseName">
           <th mat-header-cell *matHeaderCellDef> 姓名 </th>
           <td mat-cell *matCellDef="let element"> {{element.chineseName}} </td>
         </ng-container>
 
+        <!-- 定義 'gender' 欄位，並使用三元運算符轉換顯示的文字 -->
         <ng-container matColumnDef="gender">
           <th mat-header-cell *matHeaderCellDef> 性別 </th>
           <td mat-cell *matCellDef="let element">
@@ -29,62 +42,80 @@
           </td>
         </ng-container>
 
+        <!-- 定義 'education' 欄位 -->
         <ng-container matColumnDef="education">
           <th mat-header-cell *matHeaderCellDef> 學歷 </th>
           <td mat-cell *matCellDef="let element"> {{element.education}} </td>
         </ng-container>
 
+        <!-- 定義 'mobile' 欄位 -->
         <ng-container matColumnDef="mobile">
           <th mat-header-cell *matHeaderCellDef> 手機 </th>
           <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
         </ng-container>
 
+        <!-- 定義 'email' 欄位 -->
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef> Email </th>
           <td mat-cell *matCellDef="let element"> {{element.email}} </td>
         </ng-container>
 
+        <!-- 定義 'zipCode1' 欄位 -->
         <ng-container matColumnDef="zipCode1">
           <th mat-header-cell *matHeaderCellDef>郵遞區號 </th>
           <td mat-cell *matCellDef="let element"> {{element.zipCode1}} </td>
         </ng-container>
+
+        <!-- 定義 'address1' 欄位 -->
         <ng-container matColumnDef="address1">
           <th mat-header-cell *matHeaderCellDef>戶籍地址 </th>
           <td mat-cell *matCellDef="let element"> {{element.address1}} </td>
         </ng-container>
+
+        <!-- 定義 'telephone1' 欄位 -->
         <ng-container matColumnDef="telephone1">
           <th mat-header-cell *matHeaderCellDef> 戶籍電話 </th>
           <td mat-cell *matCellDef="let element"> {{element.telephone1}} </td>
         </ng-container>
 
+        <!-- 定義 'year' 欄位 -->
         <ng-container matColumnDef="year">
           <th mat-header-cell *matHeaderCellDef> 居住年限 </th>
           <td mat-cell *matCellDef="let element"> {{element.year}} 年 </td>
         </ng-container>
+
+        <!-- 定義 'actions' 功能欄位 (修改/刪除) -->
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 180px;"> 功能 </th>
           <td mat-cell *matCellDef="let element" style="text-align: center;">
+            <!-- 修改按鈕，點擊時觸發 onEdit 方法 -->
             <button mat-flat-button color="accent" style="margin-right: 8px; background-color: #f59e0b; color: white;"
               (click)="onEdit(element)">
               修改
             </button>
+            <!-- 刪除按鈕，點擊時觸發 onDelete 方法 -->
             <button mat-flat-button color="warn" (click)="onDelete(element)">
               刪除
             </button>
           </td>
         </ng-container>
 
+        <!-- 定義表頭行，*matHeaderRowDef 指定了要顯示的欄位順序 -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- 定義數據行，*matRowDef 遍歷 dataSource 中的每一行數據 -->
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
+        <!-- 當表格沒有數據時，顯示這一行 -->
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="8" style="text-align: center; padding: 20px; color: gray;">
+          <td class="mat-cell" colspan="11" style="text-align: center; padding: 20px; color: gray;">
             目前無資料
           </td>
         </tr>
 
       </table>
 
+      <!-- Angular Material 分頁器 -->
+      <!-- [pageSizeOptions] 定義了每頁顯示筆數的選項 -->
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of customer elements">
       </mat-paginator>
 

@@ -1,87 +1,83 @@
-/* 1. 全局容器：確保側邊欄與內容區並排 */
-.admin-container {
-  display: flex;
-  height: 100vh;
-  background-color: #f5f5f5;
-  overflow: hidden;
-}
+/**
+ * create001.css
+ *
+ * 這個文件定義了 create001 組件 (新增客戶表單) 的專屬樣式。
+ */
 
-/* 2. 側邊選單：固定寬度 */
-.side-menu {
-  width: 240px; /* 必須與查詢畫面一致 */
-  flex-shrink: 0;
-  background-color: #f0f0f0;
-  border-right: 1px solid #ddd;
-}
-
-/* 3. 主內容區域：修正 Material 造成的額外空白 */
+/* =================================
+   1. 頁面佈局與容器
+   ================================= */
+/* 確保主內容區域能正確填滿剩餘空間並支持滾動 */
 .main-content {
-  flex: 1;
-  /* 強制移除 Material 自動產生的 margin，改由 flex 控制 */
-  margin-left: 0 !important;
-
-  /* 統一間距：上下 24px，左右 40px */
+  flex: 1; /* flex: 1 會讓這個元素佔據父容器 (flex container) 的所有剩餘空間 */
   padding: 24px 40px;
   background-color: #f5f5f5;
-  overflow-y: auto;
-
-  .page-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    /* 確保標題與下方的卡片左側對齊 */
-    padding-left: 0;
-
-    .green-bar {
-      width: 5px;
-      height: 24px;
-      background-color: #2e7d32;
-      border-radius: 2px;
-    }
-
-    h2 {
-      margin: 0;
-      color: #333;
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
-  }
+  overflow-y: auto; /* 當內容超出時，只在垂直方向顯示滾動條 */
 }
 
-/* 4. 表單卡片區：統一寬度與內距 */
+/* 頁面標題樣式 */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.green-bar {
+  width: 5px;
+  height: 24px;
+  background-color: #2e7d32;
+  border-radius: 2px;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* =================================
+   2. 內容卡片與表單網格
+   ================================= */
 .content-card {
   background: white;
-  padding: 32px 40px; /* 增加內距，讓表單看起來更精緻 */
+  padding: 32px 40px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  /* 確保卡片填滿容器 */
   width: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box; /* 確保 padding 和 border 不會增加元素的總寬度 */
+}
 
-  .form-grid {
-    display: grid;
-    gap: 20px 24px;
-    margin-bottom: 20px;
+/* 表單網格系統 */
+.form-grid {
+  display: grid;
+  gap: 20px 24px; /* 行間距 20px，欄間距 24px */
+  margin-bottom: 20px;
 
-    &.four-cols {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    &.address-row {
-      grid-template-columns: 1fr 2.5fr 1.5fr;
-    }
+  /* 四欄佈局 */
+  &.four-cols {
+    grid-template-columns: repeat(4, 1fr);
   }
-
-  /* 針對身分證欄位的優化 */
-  .id-field {
-    grid-column: span 2; /* 讓身分證佔兩欄，平衡第一行的視覺 */
+  /* 地址行的特殊欄位比例 */
+  &.address-row {
+    grid-template-columns: 1fr 2.5fr 1.5fr;
   }
 }
 
-/* 5. 修正 Radio Button 容器 */
+/* 身分證欄位特殊處理，使其佔據兩欄以平衡視覺 */
+.id-field {
+  grid-column: span 2;
+}
+
+
+/* =================================
+   3. 表單欄位與元素
+   ================================= */
+/* 單選按鈕 (Radio Button) 的容器，用於垂直對齊 */
 .radio-group-container {
-  height: 56px; /* 與 Input 高度對齊 */
+  height: 56px; /* 與 Material Design 的輸入框高度保持一致 */
   display: flex;
   align-items: center;
 
@@ -91,7 +87,40 @@
   }
 }
 
-/* 6. 底部按鈕區 */
+/* 包含按鈕的輸入框組合 (例如：身分證驗證) */
+.input-with-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    mat-form-field {
+      flex: 1; /* 讓輸入框填滿可用空間 */
+    }
+}
+
+.verify-btn {
+    height: 56px; /* 與輸入框高度一致 */
+    border-color: #2e7d32;
+    color: #2e7d32;
+}
+
+/* 包含勾選框的組合 (例如：同戶籍地址) */
+.flex-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+
+  mat-checkbox {
+    margin-top: 8px; /* 微調勾選框位置，使其與輸入框文字對齊 */
+    white-space: nowrap;
+  }
+  .flex-1 { flex: 1; }
+}
+
+
+/* =================================
+   4. 底部操作按鈕
+   ================================= */
 .actions {
   display: flex;
   justify-content: center;
@@ -105,6 +134,4 @@
     height: 40px;
     border-radius: 20px;
   }
-
-
 }

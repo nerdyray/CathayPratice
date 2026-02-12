@@ -1,14 +1,24 @@
+<!-- 主要內容容器 -->
 <mat-sidenav-content class="main-content">
 
+  <!-- 頁面標題 -->
   <div class="page-header">
     <span class="green-bar"></span>
     <h2>CIF 修改功能</h2>
   </div>
 
+  <!-- 內容卡片，包含整個表單 -->
   <div class="content-card">
+    <!--
+      響應式表單容器
+      [formGroup]="editForm" 將此 form 元素與 TypeScript 中的 editForm 物件綁定。
+      (ngSubmit)="onSubmit()" 當表單提交時，調用 onSubmit 方法。
+    -->
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
 
+      <!-- 區域 1: 個人基本資料 (身份證、姓名、性別、學歷) -->
       <div class="form-grid four-cols">
+        <!-- 身份證字號 (唯讀) -->
         <div class="field-group">
           <label>身份證字號</label>
           <div class="readonly-text">
@@ -16,6 +26,7 @@
           </div>
         </div>
 
+        <!-- 中文姓名 -->
         <div class="field-group">
           <label>中文姓名</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -24,6 +35,7 @@
           </mat-form-field>
         </div>
 
+        <!-- 性別 -->
         <div class="field-group">
           <label>性別</label>
           <div class="radio-group-container">
@@ -34,6 +46,7 @@
           </div>
         </div>
 
+        <!-- 學歷 -->
         <div class="field-group">
           <label>學歷</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
@@ -46,6 +59,7 @@
         </div>
       </div>
 
+      <!-- 區域 2: 戶籍地址 -->
       <div class="form-grid address-row">
         <div class="field-group">
           <label>郵遞區號</label>
@@ -69,6 +83,7 @@
         </div>
       </div>
 
+      <!-- 區域 3: 現居地址，包含 "同戶籍地址" 的邏輯 -->
       <div class="form-grid address-row">
         <div class="field-group">
           <label>郵遞區號</label>
@@ -98,6 +113,7 @@
         </div>
       </div>
 
+      <!-- 區域 4: 聯絡資訊和居住年限 -->
       <div class="form-grid four-cols">
         <div class="field-group">
           <label>行動電話</label>
@@ -124,13 +140,17 @@
         </div>
       </div>
 
+      <!-- 底部操作按鈕區域 -->
       <div class="actions">
+        <!-- 儲存按鈕：觸發表單提交。當表單無效時禁用。 -->
         <button mat-flat-button class="save-btn" type="submit" [disabled]="editForm.invalid">
           儲存
         </button>
+        <!-- 清除按鈕：點擊時調用 onClear 方法 -->
         <button mat-stroked-button class="outline-green" type="button" (click)="onClear()">
           清除
         </button>
+        <!-- 返回按鈕：點擊時調用 onReturn 方法 -->
         <button mat-stroked-button class="outline-green" type="button" (click)="onReturn()">
           返回
         </button>
