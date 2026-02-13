@@ -35,7 +35,8 @@
                 請輸入身份證字號
               </mat-error>
               <!-- 錯誤訊息：格式不正確時顯示 -->
-              <mat-error *ngIf="createForm.get('idNum')?.hasError('pattern') && !createForm.get('idNum')?.hasError('required')">
+              <mat-error
+                *ngIf="createForm.get('idNum')?.hasError('pattern') && !createForm.get('idNum')?.hasError('required')">
                 身份證格式不正確
               </mat-error>
               <!-- 錯誤訊息：API 驗證後發現重複時顯示 -->
@@ -45,10 +46,9 @@
             </mat-form-field>
 
             <!-- 身份證驗證按鈕 -->
-            <button type="button" mat-stroked-button class="verify-btn" (click)="onVerify()"
-              [disabled]="isVerifying || createForm.get('idNum')?.invalid">
-              <span *ngIf="!isVerifying">驗證</span>
-              <span *ngIf="isVerifying">驗證中...</span>
+            <button type="button" mat-stroked-button class="verify-btn" (click)="onVerify()" [disabled]="isVerifying">驗證
+              <!-- <span *ngIf="!isVerifying">驗證</span>
+              <span *ngIf="isVerifying">驗證中...</span> -->
             </button>
           </div>
         </div>
@@ -61,18 +61,24 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input matInput formControlName="chineseName" placeholder="請輸入姓名">
           </mat-form-field>
-          <small class="error-msg" *ngIf="createForm.get('chineseName')?.invalid && (createForm.get('chineseName')?.dirty || createForm.get('chineseName')?.touched)">
-            此為必填資料
-          </small>
+          <!-- 錯誤訊息：必填時顯示 -->
+          <mat-error
+            *ngIf="createForm.get('chineseName')?.hasError('required')&&createForm.get('chineseName')?.touched">
+            請輸入姓名
+          </mat-error>
         </div>
 
         <div class="field-group">
           <label>性別</label>
           <div class="radio-group-container">
             <mat-radio-group formControlName="gender" color="primary">
-              <mat-radio-button value="M">男</mat-radio-button>
-              <mat-radio-button value="F">女</mat-radio-button>
+              <mat-radio-button value="m">男</mat-radio-button>
+              <mat-radio-button value="f">女</mat-radio-button>
             </mat-radio-group>
+            <!-- 錯誤訊息：必填時顯示 -->
+            <mat-error *ngIf="createForm.get('gender')?.hasError('required')&&createForm.get('gender')?.touched">
+              請選擇性別
+            </mat-error>
           </div>
         </div>
 
@@ -80,11 +86,14 @@
           <label>學歷</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-select formControlName="education">
-              <mat-option value="master">碩士</mat-option>
-              <mat-option value="bachelor">學士</mat-option>
-              <mat-option value="doctor">博士</mat-option>
+              <mat-option value="大學">大學</mat-option>
+              <mat-option value="碩士">碩士</mat-option>
+              <mat-option value="博士">博士</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-error *ngIf="createForm.get('education')?.hasError('required')&&createForm.get('education')?.touched">
+            請選擇學歷
+          </mat-error>
         </div>
       </div>
 
@@ -95,27 +104,27 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input matInput formControlName="zipCode1" placeholder="請輸入郵遞區碼">
           </mat-form-field>
-          <small class="error-msg" *ngIf="createForm.get('zipCode1')?.invalid && (createForm.get('zipCode1')?.dirty || createForm.get('zipCode1')?.touched)">
-            此為必填資料
-          </small>
+          <mat-error *ngIf="createForm.get('zipCode1')?.hasError('required')&&createForm.get('zipCode1')?.touched">
+            請輸入郵遞區號
+          </mat-error>
         </div>
         <div class="field-group span-2">
           <label>戶籍地址</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input matInput formControlName="address1" placeholder="請輸入地址">
           </mat-form-field>
-          <small class="error-msg" *ngIf="createForm.get('address1')?.invalid && (createForm.get('address1')?.dirty || createForm.get('address1')?.touched)">
-            此為必填資料
-          </small>
+          <mat-error *ngIf="createForm.get('address1')?.hasError('required')&&createForm.get('address1')?.touched">
+            請輸入戶籍地址
+          </mat-error>
         </div>
         <div class="field-group">
           <label>戶籍電話</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input matInput formControlName="telephone1" placeholder="請輸入電話">
           </mat-form-field>
-          <small class="error-msg" *ngIf="createForm.get('telephone1')?.invalid && (createForm.get('telephone1')?.dirty || createForm.get('telephone1')?.touched)">
-            此為必填資料
-          </small>
+          <mat-error *ngIf="createForm.get('telephone1')?.hasError('required')&&createForm.get('telephone1')?.touched">
+            請輸入戶籍電話
+          </mat-error>
         </div>
       </div>
 
@@ -126,6 +135,9 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input matInput formControlName="zipCode2" placeholder="請輸入郵遞區碼">
           </mat-form-field>
+          <mat-error *ngIf="createForm.get('zipCode2')?.hasError('required')&&createForm.get('zipCode2')?.touched">
+            此為必填
+          </mat-error>
         </div>
         <div class="field-group span-2">
           <label>現居地址</label>
@@ -136,9 +148,9 @@
               <input matInput formControlName="address2" placeholder="請輸入地址">
             </mat-form-field>
           </div>
-          <small class="error-msg" *ngIf="createForm.get('address2')?.invalid && (createForm.get('address2')?.dirty || createForm.get('address2')?.touched)">
-            此為必填資料
-          </small>
+          <mat-error *ngIf="createForm.get('address2')?.hasError('required')&&createForm.get('address2')?.touched">
+            此為必填
+          </mat-error>
         </div>
         <div class="field-group">
           <label>現居電話</label>
@@ -148,6 +160,10 @@
             <mat-form-field appearance="outline" class="flex-1" subscriptSizing="dynamic">
               <input matInput formControlName="telephone2" placeholder="請輸入電話">
             </mat-form-field>
+            <mat-error
+              *ngIf="createForm.get('telephone2')?.hasError('required')&&createForm.get('telephone2')?.touched">
+              此為必填
+            </mat-error>
           </div>
         </div>
       </div>
@@ -159,18 +175,19 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input matInput formControlName="mobile" placeholder="請輸入手機">
           </mat-form-field>
-          <small class="error-msg" *ngIf="createForm.get('mobile')?.invalid && (createForm.get('mobile')?.dirty || createForm.get('mobile')?.touched)">
-            此為必填資料
-          </small>
+          <mat-error *ngIf="createForm.get('mobile')?.hasError('required')&&createForm.get('mobile')?.touched">
+            此為必填
+          </mat-error>
         </div>
         <div class="field-group">
           <label>電子郵件</label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <input matInput formControlName="email">
           </mat-form-field>
-          <small class="error-msg" *ngIf="createForm.get('email')?.invalid && (createForm.get('email')?.dirty || createForm.get('email')?.touched)">
+          <mat-error class="error-msg"
+            *ngIf="createForm.get('email')?.invalid && (createForm.get('email')?.dirty || createForm.get('email')?.touched)">
             Email 格式不正確
-          </small>
+          </mat-error>
         </div>
         <div class="field-group">
           <label>現居年限</label>
@@ -182,6 +199,9 @@
               <mat-slider min="0" max="100" step="1" showTickMarks discrete>
                 <input matSliderThumb formControlName="year">
               </mat-slider>
+              <mat-error *ngIf="createForm.get('zipCode2')?.hasError('required')&&createForm.get('zipCode2')?.touched">
+                此為必填
+              </mat-error>
             </div>
           </div>
         </div>
@@ -190,7 +210,8 @@
       <!-- 底部操作按鈕區域 -->
       <div class="actions">
         <!-- 儲存按鈕，綁定了表單的提交事件。當表單無效時會被禁用。 -->
-        <button type="submit" mat-flat-button color="primary" [disabled]="createForm.invalid" class="save-btn">儲存</button>
+        <button type="submit" mat-flat-button color="primary" [disabled]="this.createForm.invalid||!isVerifying"
+          class="save-btn">儲存</button>
         <!-- 清除按鈕，點擊時重置表單 -->
         <button type="button" mat-stroked-button class="outline-green" (click)="onReset()">清除</button>
         <!-- 返回按鈕 -->

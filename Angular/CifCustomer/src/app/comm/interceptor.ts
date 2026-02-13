@@ -27,6 +27,7 @@ export const Interceptor: HttpInterceptorFn = (req, next) => {
   });
   // 3. 啟動讀取狀態：計數器 +1
   loaderService.show();
+  console.log(apiReq.body);
 
   return next(apiReq).pipe(
     //故意設定讓API請求顯示0.8秒

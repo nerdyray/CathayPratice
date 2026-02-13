@@ -122,11 +122,15 @@ export class Edit001 implements OnInit {
     // 監聽 'sameAsAddress1' 勾選框的變化
     this.editForm.get('sameAsAddress1')?.valueChanges.subscribe(checked => {
       if (checked) {
+        this.editForm.get('address2')?.disable();
         // 如果勾選，將戶籍地址的值同步到現居地址
         this.editForm.patchValue({
           zipCode2: this.editForm.get('zipCode1')?.value,
           address2: this.editForm.get('address1')?.value
         }, { emitEvent: false }); // emitEvent: false 避免觸發無窮迴圈
+      } else {
+        this.editForm.get('address2')?.enable();
+
       }
     });
 
@@ -143,9 +147,13 @@ export class Edit001 implements OnInit {
     this.editForm.get('sameAsTelephone1')?.valueChanges.subscribe(checked => {
       if (checked) {
         // 如果勾選，將戶籍電話同步到現居電話
+        this.editForm.get('telephone2')?.disable();
         this.editForm.patchValue({
           telephone2: this.editForm.get('telephone1')?.value
         }, { emitEvent: false });
+      } else {
+        this.editForm.get('telephone2')?.enable();
+
       }
     });
 
@@ -168,9 +176,9 @@ export class Edit001 implements OnInit {
       const payload = this.editForm.getRawValue();
       this.customerService.editCustomer(payload).subscribe({
         next: (res) => {
-          this.showToast('修改成功！', true);
+          if (res.RETURNCODE === '0000') { this.showToast('修改成功！', true); }
           // 可選：成功後跳轉回列表頁
-          // this.router.navigate(['/cif/list']);
+
         },
         error: (err) => {
           // 新增：處理 API 錯誤
@@ -215,3 +223,7 @@ export class Edit001 implements OnInit {
     });
   }
 }
+function takeUntilDestroyed(): import("rxjs").OperatorFunction<any, unknown> {
+  throw new Error('Function not implemented.');
+}
+

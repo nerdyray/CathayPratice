@@ -3,8 +3,12 @@ package com.exam.exam.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_COMMCODE")
+@IdClass(CommCodeEntityPK.class)
 public class CommCodeEntity {
 
     /**
@@ -33,24 +38,31 @@ public class CommCodeEntity {
     /**
      * 代碼的文字說明。
      */
+
     @Column(name = "MSG_CODE_MEMO", length = 20)
     private String msgCodeMemo;
 
     /**
      * 代碼的選項值。複合主鍵的一部分。
      */
+    @Id
+    @JsonProperty("MsgOption")
     @Column(name = "MSG_OPTION", length = 20, nullable = false)
     private String msgOption;
 
     /**
      * 代碼選項的文字說明。
      */
+
+    @JsonProperty("MsgOptionMemo")
     @Column(name = "MSG_OPTION_MEMO", length = 20)
     private String msgOptionMemo;
 
     /**
      * 代碼選項的顯示序號。複合主鍵的一部分。
      */
+    @Id
+    @JsonProperty("MsgOptionSerno")
     @Column(name = "MSG_OPTION_SERNO", nullable = false)
     private Integer msgOptionSerno;
 

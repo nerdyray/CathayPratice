@@ -12,6 +12,8 @@ import { Data as Q002Data } from '../interface/Q002Tranrq';
 // 導入 T001Tranrq 接口中的 Data，定義客戶新增的數據結構
 import { Data as T001Data } from '../interface/T001Tranrq';
 import { Data as T002Data } from '../interface/T002Tranrq';
+import { SortDirection } from '@angular/material/sort';
+import { Q004Res } from '../interface/Q004Trans';
 
 
 /**
@@ -30,6 +32,7 @@ export class CustomerService {
   private listUrl = 'filter';         // 查詢客戶列表的 API (過濾)
   private deleteUrl = 'deleteInfo';         // 刪除客戶的 API
   private editUrl = 'editInfo';       // 編輯客戶的 API
+  private selectUrl = 'commCode';
 
   /**
    * 構造函數，注入 HttpClient 服務。
@@ -80,7 +83,7 @@ export class CustomerService {
    * @param searchParams 查詢參數。
    * @returns 包含後端響應的 Observable。
    */
-  listCustomer(pageNum: number, pageSize: number, searchParams: any): Observable<any> {
+  listCustomer(pageNum: number, pageSize: number, sortBy: SortDirection, sortColumn: string, searchParams: any): Observable<any> {
     // 構建請求主體，包含消息頭、分頁資訊、數據過濾條件和排序資訊
     const requestBody = {
       // 訊息標頭，用於識別交易類型
@@ -106,8 +109,8 @@ export class CustomerService {
         } as Q002Data, // 類型斷言為 Q002Data 以符合結構
         // 排序相關資訊
         SORTINFO: {
-          sortBy: "DESC",       // 排序方向：降序
-          sortColumn: "ORDER_ID"// 排序欄位：訂單ID
+          sortBy: sortBy,       // 排序方向：降序
+          sortColumn: sortColumn// 排序欄位：訂單ID
         }
       }
     };
@@ -151,5 +154,20 @@ export class CustomerService {
     // 發送 POST 請求到 edit API
     return this.http.post(this.editUrl, editTranrq);
   }
+
+  selectOpt(): Observable<Q004Res> {
+    console.log("111111")
+    // 構建請求主體，包含消息頭和交易請求數據
+    const req = {
+      MWHEADER: {
+        MSGID: 'XXA-C-STOREQ004',
+      },
+    };
+    // 發送 POST 請求到 edit API
+    return this.http.post<Q004Res>(this.selectUrl, req);
+  }
+
+
+
 }
 

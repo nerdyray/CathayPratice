@@ -1,3 +1,4 @@
+import { MWHEADER } from './../../../interface/Q003Tranrs';
 // 導入與 T001Tranrq 接口相關的 Data 類型，用於新增客戶請求的數據結構
 import { Data } from './../../../interface/T001Tranrq';
 // 導入 CustomerService，用於與後端 API 互動
@@ -25,6 +26,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { Router, RouterLink } from '@angular/router';
 // 導入 MatSnackBar，用於顯示提示訊息
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { delay, takeUntil } from 'rxjs';
 
 // 將所有用到的 Angular Material 模組集合到一個常數中，方便管理
 const MATERIAL_MODULES = [
@@ -96,24 +98,20 @@ export class Create001 implements OnInit {
       // 中文姓名：必填，初始狀態為禁用
       chineseName: [{ value: '', disabled: true }, Validators.required],
       // 性別：初始禁用，默認為 'F' (女)
-      gender: [{ value: 'F', disabled: true }],
+      gender: [{ value: 'f', disabled: true }],
       // 學歷：初始禁用，默認為 'master' (碩士)
       education: [{ value: 'master', disabled: true }],
-
       // 戶籍地址相關欄位
       zipCode1: [{ value: '', disabled: true }, Validators.required],
       address1: [{ value: '', disabled: true }, Validators.required],
       telephone1: [{ value: '02', disabled: true }, [Validators.required, Validators.minLength(1), Validators.maxLength(10)]],
-
       // 現居地址相關欄位
       zipCode2: [{ value: '', disabled: true }, Validators.required],
       address2: [{ value: '', disabled: true }],
       telephone2: [{ value: '02', disabled: true }],
-
       // 「同戶籍地址/電話」的勾選框
       isSameAddress: [{ value: false, disabled: true }],
       isSamePhone: [{ value: false, disabled: true }],
-
       // 行動電話：必填，且長度為 10
       mobile: [{ value: '09', disabled: true }, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
       // 電子郵件：需要符合 email 格式
@@ -127,6 +125,7 @@ export class Create001 implements OnInit {
     // 監聽 'isSameAddress' 勾選框的變化
     this.createForm.get('isSameAddress')?.valueChanges.subscribe(checked => {
       if (checked) {
+        this.createForm.get('address2')?.disable();
         // 如果勾選，將戶籍地址的值同步到現居地址
         const address1Value = this.createForm.get('address1')?.value;
         const zipCode1Value = this.createForm.get('zipCode1')?.value;
@@ -134,6 +133,9 @@ export class Create001 implements OnInit {
           address2: address1Value,
           zipCode2: zipCode1Value
         }, { emitEvent: false }); // emitEvent: false 避免觸發無窮迴圈
+      } else {
+        this.createForm.get('address2')?.enable();
+
       }
     });
 
@@ -152,9 +154,13 @@ export class Create001 implements OnInit {
     // 監聽 'isSamePhone' 勾選框的變化
     this.createForm.get('isSamePhone')?.valueChanges.subscribe(checked => {
       if (checked) {
+        this.createForm.get('telephone2')?.disable();
         // 如果勾選，將戶籍電話的值同步到現居電話
         const telephone1Value = this.createForm.get('telephone1')?.value;
         this.createForm.get('telephone2')?.setValue(telephone1Value, { emitEvent: false });
+      } else {
+        this.createForm.get('telephone2')?.enable();
+
       }
     });
     this.createForm.get('telephone1')?.valueChanges.subscribe(val => {
@@ -162,8 +168,14 @@ export class Create001 implements OnInit {
         this.createForm.get('telephone2')?.setValue(val, { emitEvent: false });
       }
     });
+    this.createForm.get('idNum')?.valueChanges.subscribe(() => {
+      if (this.createForm.get('idNum')?.invalid) {
+        this.isVerifying = true;
+      } else {
+        this.isVerifying = false;
+      }
+    });
   }
-
   /**
    * 處理身份證字號的驗證。
    * 調用後端服務檢查該身份證號碼是否已存在於資料庫中。
@@ -171,10 +183,10 @@ export class Create001 implements OnInit {
   onVerify() {
     const idNum = this.createForm.get('idNum');
     // 如果身份證號碼本身格式無效，則不執行後續操作
-    if (idNum?.invalid) {
-      this.isVerifying = true; // 顯示加載狀態
-      return;
-    }
+    // if (idNum?.invalid) {
+    //   this.isVerifying = true; // 顯示加載狀態
+    //   return;
+    // }
     // 調用後端 API 進行驗證
     this.customerService.checkId({ idNum: idNum?.value }).subscribe({
       next: (res) => {
@@ -185,12 +197,12 @@ export class Create001 implements OnInit {
           this.createForm.get('idNum')?.disable(); // 鎖定已驗證的身份證號碼欄位
           idNum?.setErrors(null); // 清除可能存在的錯誤狀態
           this.showToast('身分證不存在可以註冊', true);
+          this.isVerifying = true; // 結束加載狀態
         } else {
           // 如果返回 '0000'，表示資料已存在
           idNum?.setErrors({ duplicate: true }); // 設置一個 'duplicate' 錯誤
           this.showToast('資料已存在', false);
         }
-        this.isVerifying = false; // 結束加載狀態
         this.cdr.detectChanges(); // 手動觸發變更檢測以更新 UI
       },
       error: (err) => {
@@ -215,23 +227,27 @@ export class Create001 implements OnInit {
   onSubmit() {
     // 步驟 1：檢查整個表單的有效性
     if (this.createForm.invalid) {
-      // 如果表單無效，將所有欄位標記為 'touched'，以觸發 Material Design 的錯誤提示
-      this.createForm.markAllAsTouched();
       this.showToast('請確認必填資料！', false);
       return; // 終止提交
     }
+    this.createForm.markAllAsTouched();
 
     // 步驟 2：獲取表單的原始數據 (包括被禁用的欄位)
     const rawData = this.createForm.getRawValue();
-
     // 步驟 3：調用後端服務提交數據
     this.customerService.addCustomer(rawData).subscribe({
       next: (res) => {
-        // API 請求成功後的回調
-        this.showToast('新增成功', true);
-        this.cdr.detectChanges();
-        // 可選：成功後跳轉到列表頁或其他頁面
-        // this.router.navigate(['/cif/list']);
+        if (res.MWHEADER.RETURNCODE === '0000') {
+          // API 請求成功後的回調
+          console.log("11111112312312")
+          this.showToast('新增成功', true)
+          this.cdr.detectChanges();
+          this.onReset();
+          this.isVerifying = true;
+        } else {
+          this.showToast('新增失敗，請稍後再試', false);
+          console.error('新增客戶失敗:');
+        }
       },
       error: (err) => {
         // API 請求失敗後的回調
@@ -239,6 +255,7 @@ export class Create001 implements OnInit {
         console.error('新增客戶失敗:', err);
       }
     });
+
   }
 
   /**
@@ -256,3 +273,7 @@ export class Create001 implements OnInit {
   }
 
 }
+function takeUntilDestroyed(): import("rxjs").OperatorFunction<any, unknown> {
+  throw new Error('Function not implemented.');
+}
+

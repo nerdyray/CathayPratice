@@ -18,25 +18,25 @@
 
       <!-- Angular Material 表格 -->
       <!-- [dataSource] 綁定了組件中 `dataSource` 變數，作為表格的數據來源 -->
-      <table mat-table [dataSource]="dataSource">
+      <table mat-table [dataSource]="dataSource" matSort >
 
         <!-- 定義 'idNum' 欄位 -->
         <ng-container matColumnDef="idNum">
           <!-- 表頭 -->
-          <th mat-header-cell *matHeaderCellDef> 身分證字號 </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> 身分證字號 </th>
           <!-- 單元格 -->
           <td mat-cell *matCellDef="let element"> {{element.idNum}} </td>
         </ng-container>
 
         <!-- 定義 'chineseName' 欄位 -->
         <ng-container matColumnDef="chineseName">
-          <th mat-header-cell *matHeaderCellDef> 姓名 </th>
+          <th mat-header-cell *matHeaderCellDef > 姓名 </th>
           <td mat-cell *matCellDef="let element"> {{element.chineseName}} </td>
         </ng-container>
 
         <!-- 定義 'gender' 欄位，並使用三元運算符轉換顯示的文字 -->
         <ng-container matColumnDef="gender">
-          <th mat-header-cell *matHeaderCellDef> 性別 </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> 性別 </th>
           <td mat-cell *matCellDef="let element">
             {{ element.gender === 'm' ? '男' : (element.gender === 'f' ? '女' : element.gender) }}
           </td>
@@ -44,31 +44,31 @@
 
         <!-- 定義 'education' 欄位 -->
         <ng-container matColumnDef="education">
-          <th mat-header-cell *matHeaderCellDef> 學歷 </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> 學歷 </th>
           <td mat-cell *matCellDef="let element"> {{element.education}} </td>
         </ng-container>
 
         <!-- 定義 'mobile' 欄位 -->
         <ng-container matColumnDef="mobile">
-          <th mat-header-cell *matHeaderCellDef> 手機 </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> 手機 </th>
           <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
         </ng-container>
 
         <!-- 定義 'email' 欄位 -->
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
           <td mat-cell *matCellDef="let element"> {{element.email}} </td>
         </ng-container>
 
         <!-- 定義 'zipCode1' 欄位 -->
         <ng-container matColumnDef="zipCode1">
-          <th mat-header-cell *matHeaderCellDef>郵遞區號 </th>
+          <th mat-header-cell *matHeaderCellDef >郵遞區號 </th>
           <td mat-cell *matCellDef="let element"> {{element.zipCode1}} </td>
         </ng-container>
 
         <!-- 定義 'address1' 欄位 -->
         <ng-container matColumnDef="address1">
-          <th mat-header-cell *matHeaderCellDef>戶籍地址 </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>戶籍地址 </th>
           <td mat-cell *matCellDef="let element"> {{element.address1}} </td>
         </ng-container>
 
@@ -80,7 +80,7 @@
 
         <!-- 定義 'year' 欄位 -->
         <ng-container matColumnDef="year">
-          <th mat-header-cell *matHeaderCellDef> 居住年限 </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> 居住年限 </th>
           <td mat-cell *matCellDef="let element"> {{element.year}} 年 </td>
         </ng-container>
 

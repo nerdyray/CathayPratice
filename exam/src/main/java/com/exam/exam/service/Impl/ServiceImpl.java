@@ -23,6 +23,9 @@ import com.exam.exam.dto.Q002Tranrs;
 import com.exam.exam.dto.Q002TranrsItems;
 import com.exam.exam.dto.Q003Tranrq;
 import com.exam.exam.dto.Q003Tranrs;
+import com.exam.exam.dto.Q004Tranrq;
+import com.exam.exam.dto.Q004Tranrs;
+import com.exam.exam.dto.Q004TranrsEducation;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.dto.T002Tranrq;
@@ -30,10 +33,12 @@ import com.exam.exam.dto.T002Tranrs;
 import com.exam.exam.dto.T003Tranrq;
 import com.exam.exam.dto.T003Tranrs;
 import com.exam.exam.dto.TranData;
+import com.exam.exam.entity.CommCodeEntity;
 import com.exam.exam.entity.CustomerEntity;
 import com.exam.exam.exception.DataNotFoundException;
 import com.exam.exam.exception.DeleteFailedException;
 import com.exam.exam.exception.DuplicateDataException;
+import com.exam.exam.repo.CommomCodeRepo;
 import com.exam.exam.repo.CustomerRepo;
 import com.exam.exam.service.CustomerService;
 
@@ -51,6 +56,8 @@ public class ServiceImpl implements CustomerService {
     private ObjectMapper om;
     @Autowired
     private CustomerRepo customerRepo;
+    @Autowired
+    private CommomCodeRepo commomCodeRepo;
 
     /**
      * {@inheritDoc}
@@ -199,8 +206,10 @@ public class ServiceImpl implements CustomerService {
         CustomerEntity entity = customerRepo.findByOrderId(orderId)
                 .orElseThrow(() -> new DataNotFoundException());
         entity = om.convertValue(dataDto, CustomerEntity.class);
-        List<TranData> dataList = new ArrayList<>();
-        dataList.add(dataDto);
+        System.out.println(entity);
+        // List<TranData> dataList = new ArrayList<>();
+        // dataList.add(dataDto);
+        // System.out.println(dataList);
         customerRepo.save(entity);
 
         T002Tranrs createTranrs = new T002Tranrs();
@@ -237,5 +246,26 @@ public class ServiceImpl implements CustomerService {
         res.setMwheader(createMwheader);
         res.setTranrs(createTranrs);
         return res;
+    }
+
+    @Override
+    public CustomerResponse<Q004Tranrs> selectOpt(CustomerRequest<Q004Tranrq> customerRequest) {
+        List<CommCodeEntity> eduOptions = commomCodeRepo.findByMsgCode("Education");
+        List<Q004TranrsEducation> eduDto = eduOptions.stream()
+                .map(entity -> om.convertValue(entity, Q004TranrsEducation.class)).collect(Collectors.toList());
+        Q004Tranrs createTranrs = new Q004Tranrs();
+        MWHEADER createMwheader = new MWHEADER();
+        // 組裝回應表頭
+        createMwheader.setMsgid("XXA-C-CIFQ004");
+        createMwheader.setReturncode("0000");
+        createMwheader.setReturndesc("交易成功");
+        //CreateTranrs
+        createTranrs.setEducation(eduDto);
+        // 裝進CustomerResponse
+        CustomerResponse<Q004Tranrs> res = new CustomerResponse<>();
+        res.setMwheader(createMwheader);
+        res.setTranrs(createTranrs);
+        return res;
+
     }
 }

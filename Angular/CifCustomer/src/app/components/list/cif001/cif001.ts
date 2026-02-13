@@ -11,6 +11,7 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 // Components & Services
 import { Search001 } from '../../comm/search001/search001';
@@ -28,7 +29,8 @@ const MATERIAL_MODULES = [
   MatTableModule,
   MatPaginatorModule,
   MatButtonModule,
-  MatDialogModule
+  MatDialogModule,
+  MatSortModule
 ];
 /**
  * Cif001 組件
@@ -54,8 +56,10 @@ export class Cif001 implements OnInit {
 
   // 透過 @ViewChild 獲取模板中對分頁器元件的引用
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   // 數據總筆數，用於分頁器
   totalItems = 0;
+
   /**
    * 組件的構造函數
    * @param dialog 用於打開 Material Design 對話框的服務
@@ -72,12 +76,20 @@ export class Cif001 implements OnInit {
     private cdr: ChangeDetectorRef
 
   ) { }
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
   /**
    * Angular 生命週期鉤子，在組件初始化時調用。
    */
   ngOnInit(): void {
+    this.customerService.selectOpt().subscribe({
+      next: (res) =>
+        console.log(res)
+    })
     // 初始化時從後端加載客戶數據
-    this.loadData();
+    // this.loadData();
   }
 
   /**
@@ -85,30 +97,29 @@ export class Cif001 implements OnInit {
    * 注意：目前的實現方式是獲取大量數據到前端進行過濾，這在數據量大時可能影響性能。
    * 優化方向：應改為每次搜尋或換頁時，都帶著過濾條件和分頁參數請求後端。
    */
-  loadData() {
-    // 呼叫 service，此處傳入的分頁參數 (1, 1000) 旨在一次獲取大量數據
-    this.customerService.listCustomer(1, 1000, {}).subscribe({
-      next: (res: any) => {
-        if (res && res.TRANRS && res.TRANRS.items) {
-          // 1. 備份原始數據
-          this.originalData = res.TRANRS.items;
-          // 2. 將數據填充到表格數據源中
-          this.dataSource.data = this.originalData;
-          // 3. 將分頁器與數據源關聯
-          this.dataSource.paginator = this.paginator;
-          this.totalItems = this.originalData.length;
-        } else {
-          // 如果沒有數據，清空表格
-          this.dataSource.data = [];
-          this.originalData = [];
-        }
-      },
-      error: (err) => {
-        console.error('API 錯誤:', err);
-        this.showToast('資料載入失敗', 'error-snackbar');
-      }
-    });
-  }
+  // loadData() {
+  //   this.customerService.listCustomer(pageSize, pageNumber, {}).subscribe({
+  //     next: (res: any) => {
+  //       if (res && res.TRANRS && res.TRANRS.items) {
+  //         // 1. 備份原始數據
+  //         this.originalData = res.TRANRS.items;
+  //         // 2. 將數據填充到表格數據源中
+  //         this.dataSource.data = this.originalData;
+  //         // 3. 將分頁器與數據源關聯
+  //         this.dataSource.paginator = this.paginator;
+  //         this.totalItems = this.originalData.length;
+  //       } else {
+  //         // 如果沒有數據，清空表格
+  //         this.dataSource.data = [];
+  //         this.originalData = [];
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error('API 錯誤:', err);
+  //       this.showToast('資料載入失敗', 'error-snackbar');
+  //     }
+  //   });
+  // }
   /**
    * 處理編輯按鈕的點擊事件。
    * 導航到編輯頁面，並透過路由狀態 (state) 傳遞該筆客戶的完整資料。
@@ -145,7 +156,7 @@ export class Cif001 implements OnInit {
             }
             // 刪除成功後，顯示成功訊息並重新加載數據以更新表格
             this.showToast('刪除成功', 'success-snackbar');
-            this.loadData();
+            // this.loadData();
           },
           error: (err) => {
             console.error('API 刪除錯誤:', err);

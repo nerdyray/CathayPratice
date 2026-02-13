@@ -14,6 +14,8 @@ import com.exam.exam.dto.Q002Tranrq;
 import com.exam.exam.dto.Q002Tranrs;
 import com.exam.exam.dto.Q003Tranrq;
 import com.exam.exam.dto.Q003Tranrs;
+import com.exam.exam.dto.Q004Tranrq;
+import com.exam.exam.dto.Q004Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.dto.T002Tranrq;
@@ -135,5 +137,14 @@ public class CustomerController {
             throw new DeleteFailedException();
         }
         return customerService.deleteCustomer(customerRequest);
+    }
+
+    @PostMapping("commCode")
+    public CustomerResponse<Q004Tranrs> selectOpt(@Valid @RequestBody CustomerRequest<Q004Tranrq> customerRequest,
+            Errors err) throws DataNotFoundException, DeleteFailedException {
+        if (err.hasErrors()) {
+            throw new DeleteFailedException();
+        }
+        return customerService.selectOpt(customerRequest);
     }
 }

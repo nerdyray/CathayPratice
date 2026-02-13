@@ -8,6 +8,8 @@ import com.exam.exam.dto.Q002Tranrq;
 import com.exam.exam.dto.Q002Tranrs;
 import com.exam.exam.dto.Q003Tranrq;
 import com.exam.exam.dto.Q003Tranrs;
+import com.exam.exam.dto.Q004Tranrq;
+import com.exam.exam.dto.Q004Tranrs;
 import com.exam.exam.dto.T001Tranrq;
 import com.exam.exam.dto.T001Tranrs;
 import com.exam.exam.dto.T002Tranrq;
@@ -81,4 +83,6 @@ public interface CustomerService {
          */
         CustomerResponse<T003Tranrs> deleteCustomer(CustomerRequest<T003Tranrq> customerRequest)
                         throws DeleteFailedException;
+
+        CustomerResponse<Q004Tranrs> selectOpt(CustomerRequest<Q004Tranrq> customerRequest);
 }
