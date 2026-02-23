@@ -1,3 +1,4 @@
+import { Q002Tranrq } from './../interface/Q002Tranrq';
 // 導入 HttpClient 模組，用於發送 HTTP 請求
 import { HttpClient } from '@angular/common/http';
 // 導入 Injectable 裝飾器，標記這個類為一個可被注入的服務
@@ -13,7 +14,7 @@ import { Data as Q002Data } from '../interface/Q002Tranrq';
 import { Data as T001Data } from '../interface/T001Tranrq';
 import { Data as T002Data } from '../interface/T002Tranrq';
 import { SortDirection } from '@angular/material/sort';
-import { Q004Res } from '../interface/Q004Trans';
+import { Q004Res } from '../interface/Q004Tranrs';
 
 
 /**
@@ -83,7 +84,7 @@ export class CustomerService {
    * @param searchParams 查詢參數。
    * @returns 包含後端響應的 Observable。
    */
-  listCustomer(pageNum: number, pageSize: number, sortBy: SortDirection, sortColumn: string, searchParams: any): Observable<any> {
+  listCustomer(tranrq: Q002Tranrq): Observable<any> {
     // 構建請求主體，包含消息頭、分頁資訊、數據過濾條件和排序資訊
     const requestBody = {
       // 訊息標頭，用於識別交易類型
@@ -91,28 +92,7 @@ export class CustomerService {
         MSGID: "XXA-C-CIFQ002"
       },
       // 交易請求主體
-      TRANRQ: {
-        // 分頁相關資訊
-        PAGE: {
-          pageNumber: pageNum, // 當前頁碼
-          pageSize: pageSize   // 每頁筆數
-        },
-        // 查詢條件數據
-        DATA: {
-          idNum: searchParams.idNum || "",
-          chineseName: searchParams.chineseName || "",
-          gender: searchParams.gender || "",
-          education: searchParams.education || "",
-          mobile: searchParams.mobile || "",
-          email: searchParams.email || "",
-          year: searchParams.year || 0 // 注意這裡將 year 映射到 year
-        } as Q002Data, // 類型斷言為 Q002Data 以符合結構
-        // 排序相關資訊
-        SORTINFO: {
-          sortBy: sortBy,       // 排序方向：降序
-          sortColumn: sortColumn// 排序欄位：訂單ID
-        }
-      }
+      TRANRQ: tranrq
     };
     // 發送 POST 請求到 list API
     return this.http.post(this.listUrl, requestBody);
@@ -156,14 +136,13 @@ export class CustomerService {
   }
 
   selectOpt(): Observable<Q004Res> {
-    console.log("111111")
     // 構建請求主體，包含消息頭和交易請求數據
     const req = {
       MWHEADER: {
         MSGID: 'XXA-C-STOREQ004',
       },
     };
-    // 發送 POST 請求到 edit API
+    // 發送 POST 請求到  API
     return this.http.post<Q004Res>(this.selectUrl, req);
   }
 

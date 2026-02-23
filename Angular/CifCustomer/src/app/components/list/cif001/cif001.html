@@ -11,14 +11,14 @@
   <div class="content-card">
     <!-- 搜尋條件組件 -->
     <!-- (searchEvent) 是一個輸出事件，當在 app-search001 內部觸發搜尋時，會調用父組件的 onSearchFromChild($event) 方法 -->
-    <app-search001 (searchEvent)="onSearchFromChild($event)"></app-search001>
+    <app-search001 (searchEvent)="fetchData()"></app-search001>
 
     <!-- 表格容器，mat-elevation-z2 提供了陰影效果 -->
     <div class="table-container mat-elevation-z2" style="margin-top: 20px;">
 
       <!-- Angular Material 表格 -->
       <!-- [dataSource] 綁定了組件中 `dataSource` 變數，作為表格的數據來源 -->
-      <table mat-table [dataSource]="dataSource" matSort >
+      <table mat-table [dataSource]="dataSource" matSort>
 
         <!-- 定義 'idNum' 欄位 -->
         <ng-container matColumnDef="idNum">
@@ -30,7 +30,7 @@
 
         <!-- 定義 'chineseName' 欄位 -->
         <ng-container matColumnDef="chineseName">
-          <th mat-header-cell *matHeaderCellDef > 姓名 </th>
+          <th mat-header-cell *matHeaderCellDef> 姓名 </th>
           <td mat-cell *matCellDef="let element"> {{element.chineseName}} </td>
         </ng-container>
 
@@ -62,7 +62,7 @@
 
         <!-- 定義 'zipCode1' 欄位 -->
         <ng-container matColumnDef="zipCode1">
-          <th mat-header-cell *matHeaderCellDef >郵遞區號 </th>
+          <th mat-header-cell *matHeaderCellDef>郵遞區號 </th>
           <td mat-cell *matCellDef="let element"> {{element.zipCode1}} </td>
         </ng-container>
 

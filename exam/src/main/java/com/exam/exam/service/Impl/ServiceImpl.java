@@ -10,8 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.exam.exam.dto.CriteriaDTO;
 import com.exam.exam.dto.CustomerRequest;
 import com.exam.exam.dto.CustomerResponse;
 import com.exam.exam.dto.MWHEADER;
@@ -41,6 +43,7 @@ import com.exam.exam.exception.DuplicateDataException;
 import com.exam.exam.repo.CommomCodeRepo;
 import com.exam.exam.repo.CustomerRepo;
 import com.exam.exam.service.CustomerService;
+import com.exam.exam.specification.CustomerCriteria;
 
 import jakarta.transaction.Transactional;
 import tools.jackson.databind.ObjectMapper;
@@ -94,12 +97,16 @@ public class ServiceImpl implements CustomerService {
     public CustomerResponse<Q002Tranrs> findAllCustomer(CustomerRequest<Q002Tranrq> customerRequest)
             throws DataNotFoundException {
         Q002Tranrq tranrq = customerRequest.getTranrq();
+        // Build Specification
+        CriteriaDTO criteriaDto = om.convertValue(tranrq.getTranrqData(), CriteriaDTO.class);
+        Specification<CustomerEntity> cutomerSpecification = CustomerCriteria.buildSearchSpecification(criteriaDto);
+        // Build Pagable
         int pageNumber = tranrq.getPage().getPageNumber();
         int pageSize = tranrq.getPage().getPageSize();
         int pageIndex = (pageNumber > 0) ? pageNumber - 1 : 0;
         Sort sort = Sort.by(Sort.Direction.DESC, "orderId");
         Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
-        Page<CustomerEntity> pageEntity = customerRepo.findAll(pageable);
+        Page<CustomerEntity> pageEntity = customerRepo.findAll(cutomerSpecification, pageable);
         if (pageEntity.isEmpty()) {
             throw new DataNotFoundException();
         }
@@ -259,7 +266,7 @@ public class ServiceImpl implements CustomerService {
         createMwheader.setMsgid("XXA-C-CIFQ004");
         createMwheader.setReturncode("0000");
         createMwheader.setReturndesc("交易成功");
-        //CreateTranrs
+        // CreateTranrs
         createTranrs.setEducation(eduDto);
         // 裝進CustomerResponse
         CustomerResponse<Q004Tranrs> res = new CustomerResponse<>();

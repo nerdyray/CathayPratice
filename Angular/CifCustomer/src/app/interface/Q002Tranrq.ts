@@ -24,7 +24,7 @@ export interface Data {
  * StoreInfo 接口定義了排序資訊的結構。
  * 用於指定查詢結果的排序方式和排序字段。
  */
-export interface StoreInfo {
+export interface Q002TranrqSortInfo {
   sortBy: string,     // 排序方向 (例如 "ASC" 或 "DESC")
   sortColumn: string  // 排序的字段名稱
 }
@@ -44,9 +44,9 @@ export interface Q002TranrqPage {
  * 包含查詢條件、分頁資訊和排序資訊。
  */
 export interface Q002Tranrq {
-  data: Data;           // 欲查詢的客戶資料 (作為篩選條件，可包含空字串表示不篩選該字段)
-  page: Q002TranrqPage; // 分頁資訊
-  storeInfo: StoreInfo; // 排序資訊
+  DATA: Data;           // 欲查詢的客戶資料 (作為篩選條件，可包含空字串表示不篩選該字段)
+  PAGE: Q002TranrqPage; // 分頁資訊
+  STOREINFO: Q002TranrqSortInfo; // 排序資訊
 }
 
 

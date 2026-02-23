@@ -239,7 +239,7 @@ export class Create001 implements OnInit {
       next: (res) => {
         if (res.MWHEADER.RETURNCODE === '0000') {
           // API 請求成功後的回調
-          console.log("11111112312312")
+
           this.showToast('新增成功', true)
           this.cdr.detectChanges();
           this.onReset();

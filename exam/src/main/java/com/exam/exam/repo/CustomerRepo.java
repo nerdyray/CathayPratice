@@ -3,6 +3,7 @@ package com.exam.exam.repo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.exam.exam.entity.CustomerEntity;
 import java.util.Optional;
@@ -10,7 +11,8 @@ import java.util.Optional;
 /**
  * 客戶資料的 JPA Repository，提供對 {@link CustomerEntity} 的資料庫操作。
  */
-public interface CustomerRepo extends JpaRepository<CustomerEntity, Integer> {
+public interface CustomerRepo extends JpaRepository<CustomerEntity, Integer>,
+        JpaSpecificationExecutor<CustomerEntity> {
     /**
      * 檢查具有指定身分證號碼的客戶是否存在。
      *

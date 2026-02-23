@@ -13,6 +13,9 @@ import { MatRadioButton, MatRadioModule } from "@angular/material/radio";
 import { MatSlider, MatSliderModule } from "@angular/material/slider";
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Q002Tranrq, Q002TranrqPage, Q002TranrqSortInfo } from '../../../interface/Q002Tranrq';
+import { CustomerService } from '../../../services/customerService';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // 將所有用到的 Angular Material 模組集合到一個常數中，方便管理
 const MATERIAL_MODULES = [
@@ -40,9 +43,17 @@ const MATERIAL_MODULES = [
   styleUrls: ['./search001.css'],
 })
 export class Search001 implements OnInit {
+  page: Q002TranrqPage = {
+    pageNumber: 1,
+    pageSize: 5
+  }
+  sortInfo: Q002TranrqSortInfo = {
+    sortBy: 'asc',
+    sortColumn: 'idNum'
+  }
 
   // 搜尋表單的 FormGroup 實例
-  searchForm: FormGroup;
+  searchForm: FormGroup
 
   // @Output() 裝飾器創建一個事件發射器，用於將數據從子組件傳遞到父組件。
   // 當 onSearch 被調用時，會發射 searchEvent 事件，並攜帶表單的數據。
@@ -52,7 +63,11 @@ export class Search001 implements OnInit {
    * 組件的構造函數
    * @param fb FormBuilder 服務，用於創建響應式表單。
    */
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private customerService: CustomerService,
+    private snackBar: MatSnackBar,
+  ) {
     // 初始化搜尋表單及其所有欄位
     this.searchForm = this.fb.group({
       idNum: [''],       // 身分證字號
@@ -65,10 +80,15 @@ export class Search001 implements OnInit {
     });
   }
 
+
   /**
    * Angular 生命週期鉤子，在組件初始化時調用。
    */
-  ngOnInit(): void { }
+  ngOnInit(): void {
+
+
+
+  }
 
   /**
    * 處理「查詢」按鈕的點擊事件。
@@ -95,7 +115,21 @@ export class Search001 implements OnInit {
       year: null
     });
 
+
     // 清除後，立即觸發一次查詢事件，以便父組件更新列表
     this.onSearch();
+  }
+
+  
+  /**
+ * 顯示一個 SnackBar (Toast) 訊息。
+ * @param message - 要顯示的訊息文字
+ * @param panelClass - 用於控制樣式的 CSS class (例如 'success-snackbar', 'error-snackbar')
+ */
+  private showToast(message: string, panelClass: string) {
+    this.snackBar.open(message, '關閉', {
+      duration: 3000, // 3 秒後自動關閉
+      panelClass: [panelClass]
+    });
   }
 }

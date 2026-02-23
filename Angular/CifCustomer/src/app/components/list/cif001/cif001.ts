@@ -1,3 +1,4 @@
+import { Q002Tranrq, Q002TranrqPage, Q002TranrqSortInfo } from './../../../interface/Q002Tranrq';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirDelete } from '../../confir-delete/confir-delete';
 import { MWHEADER } from './../../../interface/Q003Tranrs';
@@ -44,9 +45,17 @@ const MATERIAL_MODULES = [
   styleUrl: './cif001.css',
 })
 export class Cif001 implements OnInit {
+  page: Q002TranrqPage = {
+    pageNumber: 1,
+    pageSize: 5
+  }
+  sortInfo: Q002TranrqSortInfo = {
+    sortBy: 'asc',
+    sortColumn: 'idNum'
+  }
 
   // 用於備份從後端獲取的完整原始數據，以便在前端進行過濾
-  originalData: Data[] = [];
+  // originalData: Data[] = [];
 
   // Angular Material 表格的數據源，提供過濾、排序和分頁功能
   dataSource = new MatTableDataSource<Data>([]);
@@ -55,6 +64,7 @@ export class Cif001 implements OnInit {
   displayedColumns: string[] = ['idNum', 'chineseName', 'gender', 'education', 'mobile', 'email', 'address1', 'zipCode1', 'year', 'actions'];
 
   // 透過 @ViewChild 獲取模板中對分頁器元件的引用
+  @ViewChild(Search001) form!: Search001;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   // 數據總筆數，用於分頁器
@@ -78,6 +88,7 @@ export class Cif001 implements OnInit {
   ) { }
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.fetchData();
   }
 
   /**
@@ -88,38 +99,9 @@ export class Cif001 implements OnInit {
       next: (res) =>
         console.log(res)
     })
-    // 初始化時從後端加載客戶數據
-    // this.loadData();
+
   }
 
-  /**
-   * 從後端服務加載客戶數據。
-   * 注意：目前的實現方式是獲取大量數據到前端進行過濾，這在數據量大時可能影響性能。
-   * 優化方向：應改為每次搜尋或換頁時，都帶著過濾條件和分頁參數請求後端。
-   */
-  // loadData() {
-  //   this.customerService.listCustomer(pageSize, pageNumber, {}).subscribe({
-  //     next: (res: any) => {
-  //       if (res && res.TRANRS && res.TRANRS.items) {
-  //         // 1. 備份原始數據
-  //         this.originalData = res.TRANRS.items;
-  //         // 2. 將數據填充到表格數據源中
-  //         this.dataSource.data = this.originalData;
-  //         // 3. 將分頁器與數據源關聯
-  //         this.dataSource.paginator = this.paginator;
-  //         this.totalItems = this.originalData.length;
-  //       } else {
-  //         // 如果沒有數據，清空表格
-  //         this.dataSource.data = [];
-  //         this.originalData = [];
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('API 錯誤:', err);
-  //       this.showToast('資料載入失敗', 'error-snackbar');
-  //     }
-  //   });
-  // }
   /**
    * 處理編輯按鈕的點擊事件。
    * 導航到編輯頁面，並透過路由狀態 (state) 傳遞該筆客戶的完整資料。
@@ -166,39 +148,83 @@ export class Cif001 implements OnInit {
       }
     });
   }
+
+  /**
+   * 從後端服務加載客戶數據。
+   * 注意：目前的實現方式是獲取大量數據到前端進行過濾，這在數據量大時可能影響性能。
+   * 優化方向：應改為每次搜尋或換頁時，都帶著過濾條件和分頁參數請求後端。
+   */
+
+  fetchData() {
+    console.log(this.form.searchForm)
+    // build search params
+    const tranrq: Q002Tranrq = {
+      DATA: this.form.searchForm.getRawValue(),
+      PAGE: this.page,
+      STOREINFO: this.sortInfo
+    }
+
+    this.customerService.listCustomer(tranrq).subscribe({
+      next: (res: any) => {
+        if (res && res.TRANRS && res.TRANRS.items) {
+        }
+        // 將過濾後的結果更新到表格數據源
+        this.dataSource.data = res.TRANRS.items;
+        // 如果過濾後沒有任何結果，顯示提示訊息
+        if (res.TRANRS.items.length === 0) {
+          this.showToast('查無符合條件的資料', 'warning-snackbar');
+        }
+        // 如果表格正在使用分頁器，搜尋後應將分頁器跳回第一頁
+        if (this.paginator) {
+          this.paginator.firstPage();
+        }
+      },
+      error: (err) => {
+        console.error('API 錯誤:', err);
+        this.showToast('資料載入失敗', 'error-snackbar');
+      }
+    });
+
+
+
+
+  }
+
+
+
   /**
    * 接收子組件 (Search001) 觸發的搜尋事件，並在前端進行數據過濾。
    * @param criteria - 從 Search001 組件傳來的搜尋條件對象
    */
-  onSearchFromChild(criteria: any): void {
+  // onSearchFromChild(criteria: any): void {
 
-    // 使用 Array.prototype.filter 方法，根據搜尋條件過濾 originalData
-    const filteredResult = this.originalData.filter(item => {
-      // 逐一檢查每個搜尋條件是否滿足
-      const matchId = criteria.idNum ? (item.idNum || '').includes(criteria.idNum) : true;
-      const matchName = criteria.chineseName ? (item.chineseName || '').includes(criteria.chineseName) : true;
-      const matchGender = criteria.gender ? item.gender === criteria.gender : true;
-      const matchEdu = criteria.education ? (item.education || '').includes(criteria.education) : true;
-      const matchMobile = criteria.mobile ? (item.mobile || '').includes(criteria.mobile) : true;
-      const matchEmail = criteria.email ? (item.email || '').includes(criteria.email) : true;
-      const matchYear = (criteria.year !== null && criteria.year !== undefined) ?
-        Number(item.year || 0) >= criteria.year : true;
-      // 所有條件都必須為 true，該筆數據才算匹配
-      return matchId && matchName && matchGender && matchEdu && matchMobile && matchEmail && matchYear;
-    });
+  //   // 使用 Array.prototype.filter 方法，根據搜尋條件過濾 originalData
+  //   const filteredResult = this.originalData.filter(item => {
+  //     // 逐一檢查每個搜尋條件是否滿足
+  //     const matchId = criteria.idNum ? (item.idNum || '').includes(criteria.idNum) : true;
+  //     const matchName = criteria.chineseName ? (item.chineseName || '').includes(criteria.chineseName) : true;
+  //     const matchGender = criteria.gender ? item.gender === criteria.gender : true;
+  //     const matchEdu = criteria.education ? (item.education || '').includes(criteria.education) : true;
+  //     const matchMobile = criteria.mobile ? (item.mobile || '').includes(criteria.mobile) : true;
+  //     const matchEmail = criteria.email ? (item.email || '').includes(criteria.email) : true;
+  //     const matchYear = (criteria.year !== null && criteria.year !== undefined) ?
+  //       Number(item.year || 0) >= criteria.year : true;
+  //     // 所有條件都必須為 true，該筆數據才算匹配
+  //     return matchId && matchName && matchGender && matchEdu && matchMobile && matchEmail && matchYear;
+  //   });
 
-    // 將過濾後的結果更新到表格數據源
-    this.dataSource.data = filteredResult;
+  //   // 將過濾後的結果更新到表格數據源
+  //   this.dataSource.data = filteredResult;
 
-    // 如果表格正在使用分頁器，搜尋後應將分頁器跳回第一頁
-    if (this.paginator) {
-      this.paginator.firstPage();
-    }
-    // 如果過濾後沒有任何結果，顯示提示訊息
-    if (filteredResult.length === 0) {
-      this.showToast('查無符合條件的資料', 'warning-snackbar');
-    }
-  }
+  //   // 如果表格正在使用分頁器，搜尋後應將分頁器跳回第一頁
+  //   if (this.paginator) {
+  //     this.paginator.firstPage();
+  //   }
+  //   // 如果過濾後沒有任何結果，顯示提示訊息
+  //   if (filteredResult.length === 0) {
+  //     this.showToast('查無符合條件的資料', 'warning-snackbar');
+  //   }
+  // }
 
   /**
    * 顯示一個 SnackBar (Toast) 訊息。
