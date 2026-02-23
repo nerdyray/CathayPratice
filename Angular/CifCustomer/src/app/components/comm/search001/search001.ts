@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 
@@ -16,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Q002Tranrq, Q002TranrqPage, Q002TranrqSortInfo } from '../../../interface/Q002Tranrq';
 import { CustomerService } from '../../../services/customerService';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Education } from '../../../interface/Q004Tranrs';
 
 // 將所有用到的 Angular Material 模組集合到一個常數中，方便管理
 const MATERIAL_MODULES = [
@@ -43,6 +44,8 @@ const MATERIAL_MODULES = [
   styleUrls: ['./search001.css'],
 })
 export class Search001 implements OnInit {
+  @Input() educatinOpt: Education[] = [];
+
   page: Q002TranrqPage = {
     pageNumber: 1,
     pageSize: 5
@@ -58,6 +61,7 @@ export class Search001 implements OnInit {
   // @Output() 裝飾器創建一個事件發射器，用於將數據從子組件傳遞到父組件。
   // 當 onSearch 被調用時，會發射 searchEvent 事件，並攜帶表單的數據。
   @Output() searchEvent = new EventEmitter<any>();
+  // res: any;
 
   /**
    * 組件的構造函數
@@ -120,7 +124,7 @@ export class Search001 implements OnInit {
     this.onSearch();
   }
 
-  
+
   /**
  * 顯示一個 SnackBar (Toast) 訊息。
  * @param message - 要顯示的訊息文字

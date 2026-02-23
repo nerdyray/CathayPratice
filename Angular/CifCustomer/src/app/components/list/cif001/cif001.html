@@ -11,7 +11,7 @@
   <div class="content-card">
     <!-- 搜尋條件組件 -->
     <!-- (searchEvent) 是一個輸出事件，當在 app-search001 內部觸發搜尋時，會調用父組件的 onSearchFromChild($event) 方法 -->
-    <app-search001 (searchEvent)="fetchData()"></app-search001>
+    <app-search001 [educatinOpt]="educatinOpt" (searchEvent)="fetchData()"></app-search001>
 
     <!-- 表格容器，mat-elevation-z2 提供了陰影效果 -->
     <div class="table-container mat-elevation-z2" style="margin-top: 20px;">
@@ -45,7 +45,7 @@
         <!-- 定義 'education' 欄位 -->
         <ng-container matColumnDef="education">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> 學歷 </th>
-          <td mat-cell *matCellDef="let element"> {{element.education}} </td>
+          <td mat-cell *matCellDef="let element"> {{getMesgMemo(element.education)}} </td>
         </ng-container>
 
         <!-- 定義 'mobile' 欄位 -->
@@ -116,7 +116,17 @@
 
       <!-- Angular Material 分頁器 -->
       <!-- [pageSizeOptions] 定義了每頁顯示筆數的選項 -->
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of customer elements">
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]"
+      (page)="onPageChange($event)"
+              [length]="length"
+              [pageSize]="pageSize"
+              [disabled]="disabled"
+              [showFirstLastButtons]="showFirstLastButtons"
+              [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+              [hidePageSize]="hidePageSize"
+              [pageIndex]="pageIndex"
+      aria-label="Select page of customer elements">
+
       </mat-paginator>
 
     </div>

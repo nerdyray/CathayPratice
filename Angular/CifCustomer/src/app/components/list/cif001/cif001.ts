@@ -1,7 +1,7 @@
 import { Q002Tranrq, Q002TranrqPage, Q002TranrqSortInfo } from './../../../interface/Q002Tranrq';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirDelete } from '../../confir-delete/confir-delete';
-import { MWHEADER } from './../../../interface/Q003Tranrs';
+import { MWHEADER, TRANRS } from './../../../interface/Q003Tranrs';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -19,6 +19,7 @@ import { Search001 } from '../../comm/search001/search001';
 import { CustomerService } from '../../../services/customerService';
 import { Data } from '../../../interface/Q002Tranrq';
 import { Router } from '@angular/router';
+import { Education } from '../../../interface/Q004Tranrs';
 
 // 集合所有需要使用的 Angular Material 模組，方便管理
 const MATERIAL_MODULES = [
@@ -45,19 +46,34 @@ const MATERIAL_MODULES = [
   styleUrl: './cif001.css',
 })
 export class Cif001 implements OnInit {
+  length = 0;
+  pageSize = 10;
+  pageIndex = 0;
+  pageSizeOptions = [5, 10, 25];
+
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  disabled = false;
+
+  pageEvent: PageEvent | undefined;
   page: Q002TranrqPage = {
-    pageNumber: 1,
-    pageSize: 5
+    pageNumber: 0,
+    pageSize: 10
   }
   sortInfo: Q002TranrqSortInfo = {
     sortBy: 'asc',
     sortColumn: 'idNum'
   }
 
+  educatinOpt: Education[] = [];
+
+  eduList: string[] = [];
+
   // 用於備份從後端獲取的完整原始數據，以便在前端進行過濾
   // originalData: Data[] = [];
 
-  // Angular Material 表格的數據源，提供過濾、排序和分頁功能
+
   dataSource = new MatTableDataSource<Data>([]);
 
   // 定義表格要顯示的欄位名稱和順序
@@ -67,8 +83,6 @@ export class Cif001 implements OnInit {
   @ViewChild(Search001) form!: Search001;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  // 數據總筆數，用於分頁器
-  totalItems = 0;
 
   /**
    * 組件的構造函數
@@ -88,7 +102,26 @@ export class Cif001 implements OnInit {
   ) { }
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.sort.sortChange.subscribe(() => {
+      // 排序一變動，通常會強迫回到第一頁
+      this.pageIndex = 0;
+      if (this.paginator) {
+        this.paginator.pageIndex = 0;
+      }
+
+      // 2. 更新你預先包裝好的 sortInfo 物件
+      this.sortInfo = {
+        sortColumn: this.sort.active,    // 目前點擊的欄位名稱 (例如: "idNum")
+        sortBy: this.sort.direction     // "asc", "desc" 或 "" (空字串)
+      };
+
+      // 3. 重新抓取資料
+      this.fetchData();
+    });
+
+    // 初始載入
     this.fetchData();
+
   }
 
   /**
@@ -96,8 +129,11 @@ export class Cif001 implements OnInit {
    */
   ngOnInit(): void {
     this.customerService.selectOpt().subscribe({
-      next: (res) =>
-        console.log(res)
+      next: (res) => {
+        this.educatinOpt = res.TRANRS.education;
+        this.eduList = res.TRANRS.education.map(edu => edu.MsgOptionMemo);
+        console.log(this.eduList)
+      }
     })
 
   }
@@ -160,8 +196,14 @@ export class Cif001 implements OnInit {
     // build search params
     const tranrq: Q002Tranrq = {
       DATA: this.form.searchForm.getRawValue(),
-      PAGE: this.page,
-      STOREINFO: this.sortInfo
+      PAGE: {
+        pageNumber: this.pageIndex, // 抓取最新的變數值
+        pageSize: this.pageSize
+      },
+      STOREINFO: {
+        sortColumn: this.sort.active || 'idNum', // 沒選欄位時的預設排序
+        sortBy: this.sort.direction
+      }
     }
 
     this.customerService.listCustomer(tranrq).subscribe({
@@ -169,15 +211,21 @@ export class Cif001 implements OnInit {
         if (res && res.TRANRS && res.TRANRS.items) {
         }
         // 將過濾後的結果更新到表格數據源
+        this.length = res.TRANRS.totalCount;
         this.dataSource.data = res.TRANRS.items;
+
+        console.log(res.TRANRS.items);
+        console.log(res.TRANRS.totalCount);
+
         // 如果過濾後沒有任何結果，顯示提示訊息
         if (res.TRANRS.items.length === 0) {
           this.showToast('查無符合條件的資料', 'warning-snackbar');
         }
         // 如果表格正在使用分頁器，搜尋後應將分頁器跳回第一頁
-        if (this.paginator) {
-          this.paginator.firstPage();
-        }
+        // if (this.paginator) {
+        //   this.paginator.firstPage();
+        //   this.dataSource.data = res.content;
+        // }
       },
       error: (err) => {
         console.error('API 錯誤:', err);
@@ -190,7 +238,9 @@ export class Cif001 implements OnInit {
 
   }
 
-
+  getMesgMemo(msgOption: string): string {
+    return this.educatinOpt.find(edu => edu.MsgOption === msgOption)?.MsgOptionMemo ?? '';
+  }
 
   /**
    * 接收子組件 (Search001) 觸發的搜尋事件，並在前端進行數據過濾。
@@ -217,9 +267,6 @@ export class Cif001 implements OnInit {
   //   this.dataSource.data = filteredResult;
 
   //   // 如果表格正在使用分頁器，搜尋後應將分頁器跳回第一頁
-  //   if (this.paginator) {
-  //     this.paginator.firstPage();
-  //   }
   //   // 如果過濾後沒有任何結果，顯示提示訊息
   //   if (filteredResult.length === 0) {
   //     this.showToast('查無符合條件的資料', 'warning-snackbar');
@@ -230,11 +277,19 @@ export class Cif001 implements OnInit {
    * 顯示一個 SnackBar (Toast) 訊息。
    * @param message - 要顯示的訊息文字
    * @param panelClass - 用於控制樣式的 CSS class (例如 'success-snackbar', 'error-snackbar')
-   */
+  */
   private showToast(message: string, panelClass: string) {
     this.snackBar.open(message, '關閉', {
       duration: 3000, // 3 秒後自動關閉
       panelClass: [panelClass]
     });
+  }
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.fetchData();
+    console.log(this.pageIndex);
+    console.log(this.pageSize);
+
   }
 }
