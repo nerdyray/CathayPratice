@@ -84,11 +84,18 @@
 
         <div class="field-group">
           <label>學歷</label>
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-select formControlName="education">
-              <mat-option value="大學">大學</mat-option>
-              <mat-option value="碩士">碩士</mat-option>
-              <mat-option value="博士">博士</mat-option>
+          <!-- 學歷下拉選單 -->
+          <mat-form-field appearance="outline">
+            <mat-label>學歷</mat-label>
+            <mat-select formControlName="education" placeholder="請選擇學歷">
+              @for(item of educatinOpt;track item.MsgOptionMemo){
+              <mat-option [value]="item.MsgOption">
+                {{item.MsgOptionMemo}}
+              </mat-option>
+              }
+              <!-- <mat-option value="1"></mat-option>
+          <mat-option value="2"></mat-option>
+          <mat-option value="3"></mat-option> -->
             </mat-select>
           </mat-form-field>
           <mat-error *ngIf="createForm.get('education')?.hasError('required')&&createForm.get('education')?.touched">

@@ -1,3 +1,4 @@
+import { MWHEADER } from './../../../interface/Q003Tranrs';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -17,6 +18,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSidenavContainer, MatSidenav, MatSidenavContent } from "@angular/material/sidenav";
 import { MatNavList } from "@angular/material/list";
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Education } from '../../../interface/Q004Tranrs';
 
 // 將所有用到的 Angular Material 模組集合到一個常數中，方便管理
 const MATERIAL_MODULES = [
@@ -43,7 +45,9 @@ const MATERIAL_MODULES = [
   styleUrl: './edit001.css',
 })
 export class Edit001 implements OnInit {
+  educatinOpt: Education[] = [];
 
+  eduList: string[] = [];
   // 編輯表單的 FormGroup 實例
   editForm: FormGroup;
 
@@ -81,21 +85,31 @@ export class Edit001 implements OnInit {
     // 初始化表單結構，欄位名與後端數據結構對應
     this.editForm = this.fb.group({
       orderId: [''],
-      idNum: [{ value: '', disabled: true }, Validators.required], // 身份證號碼設為禁用，不可修改
-      chineseName: ['', Validators.required],
-      gender: [''],
-      education: [''],
-      zipCode1: [''],
-      address1: [''],
-      telephone1: [''],
-      zipCode2: [''],
-      address2: [''],
-      telephone2: [''],
-      sameAsAddress1: [false], // 此為前端 UI 控制用，不屬於後端數據
-      sameAsTelephone1: [false], // 此為前端 UI 控制用，不屬於後端數據
-      mobile: ['', Validators.required],
-      email: ['', Validators.email],
-      year: [0]
+      // 身份證字號：必填，並符合台灣身份證的正則表達式格式
+      idNum: ['', [Validators.required, Validators.pattern(/^[A-Z][12]\d{8}$/)]],
+      // 中文姓名：必填，初始狀態為禁用
+      chineseName: [{ value: '', }, Validators.required],
+      // 性別：初始禁用，默認為 'F' (女)
+      gender: [{ value: 'f', }],
+      // 學歷：初始禁用，默認為 'master' (碩士)
+      education: [{ value: '2', }],
+      // 戶籍地址相關欄位
+      zipCode1: [{ value: '', }, Validators.required],
+      address1: [{ value: '', }, Validators.required],
+      telephone1: [{ value: '02', }, [Validators.required, Validators.minLength(1), Validators.maxLength(10)]],
+      // 現居地址相關欄位
+      zipCode2: [{ value: '', }, Validators.required],
+      address2: [{ value: '', }],
+      telephone2: [{ value: '02', }],
+      // 「同戶籍地址/電話」的勾選框
+      isSameAddress: [{ value: false, }],
+      isSamePhone: [{ value: false, }],
+      // 行動電話：必填，且長度為 10
+      mobile: [{ value: '09', }, [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+      // 電子郵件：需要符合 email 格式
+      email: [{ value: '123@gmail.com', }, [Validators.email]],
+      // 現居年限：必填
+      year: [{ value: 0, }, Validators.required]
     });
   }
 
@@ -103,6 +117,13 @@ export class Edit001 implements OnInit {
    * Angular 生命週期鉤子，在組件初始化時執行。
    */
   ngOnInit(): void {
+    this.customerService.selectOpt().subscribe({
+      next: (res) => {
+        this.educatinOpt = res.TRANRS.education;
+        this.eduList = res.TRANRS.education.map(edu => edu.MsgOptionMemo);
+        console.log(this.eduList)
+      }
+    })
     // 步驟 1: 從路由的 history.state 中獲取從列表頁傳遞過來的客戶數據
     const navigation = window.history.state;
     const data = navigation.customerData;
@@ -176,7 +197,7 @@ export class Edit001 implements OnInit {
       const payload = this.editForm.getRawValue();
       this.customerService.editCustomer(payload).subscribe({
         next: (res) => {
-          if (res.RETURNCODE === '0000') { this.showToast('修改成功！', true); }
+          if (res.MWHEADER.RETURNCODE === '0000') { this.showToast('修改成功！', true); }
           // 可選：成功後跳轉回列表頁
 
         },
@@ -215,6 +236,7 @@ export class Edit001 implements OnInit {
    * @param isSuccess 訊息類型是否為成功
    */
   showToast(message: string, isSuccess: boolean) {
+    console.log("修改成功～～～～");
     this.snackBar.open(message, '關閉', {
       duration: 3000,
       horizontalPosition: 'right',
@@ -222,8 +244,8 @@ export class Edit001 implements OnInit {
       panelClass: isSuccess ? ['success-snackbar'] : ['fail-snackbar']
     });
   }
-}
-function takeUntilDestroyed(): import("rxjs").OperatorFunction<any, unknown> {
-  throw new Error('Function not implemented.');
-}
 
+  getMesgMemo(msgOption: string): string {
+    return this.educatinOpt.find(edu => edu.MsgOption === msgOption)?.MsgOptionMemo ?? '';
+  }
+}

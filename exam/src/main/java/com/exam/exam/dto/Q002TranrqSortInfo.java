@@ -22,6 +22,6 @@ public class Q002TranrqSortInfo implements Serializable {
     /**
      * 要排序的欄位名稱。
      */
-    private String Column;
+    private String sortColumn;
 
 }

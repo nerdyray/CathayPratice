@@ -6,7 +6,7 @@ import { CustomerService } from './../../../services/customerService';
 // 導入 Q003Tranrq，用於身份證驗證請求的數據結構
 import { Q003Tranrq } from './../../../interface/Q003Tranrq';
 // 導入 Angular 核心模組
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 // 導入 Angular 表單相關模組
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 // 導入 CommonModule，提供常用指令如 ngIf, ngFor
@@ -26,7 +26,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { Router, RouterLink } from '@angular/router';
 // 導入 MatSnackBar，用於顯示提示訊息
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { delay, takeUntil } from 'rxjs';
+
+import { Education } from '../../../interface/Q004Tranrs';
 
 // 將所有用到的 Angular Material 模組集合到一個常數中，方便管理
 const MATERIAL_MODULES = [
@@ -55,6 +56,9 @@ const MATERIAL_MODULES = [
 })
 export class Create001 implements OnInit {
 
+  educatinOpt: Education[] = [];
+  eduList: string[] = [];
+
   // 響應式表單的 FormGroup 實例
   createForm!: FormGroup;
   // 用於驗證字串的正則表達式，允許中文、英文、數字和部分符號
@@ -78,20 +82,7 @@ export class Create001 implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private snackBar: MatSnackBar
-  ) { }
-
-  /**
-   * Angular 的生命週期鉤子，在組件初始化時調用。
-   */
-  ngOnInit(): void {
-    // 初始化表單結構和驗證規則
-    this.initForm();
-  }
-
-  /**
-   * 初始化響應式表單 (createForm) 的結構和驗證規則。
-   */
-  initForm() {
+  ) {
     this.createForm = this.fb.group({
       // 身份證字號：必填，並符合台灣身份證的正則表達式格式
       idNum: ['', [Validators.required, Validators.pattern(/^[A-Z][12]\d{8}$/)]],
@@ -100,7 +91,7 @@ export class Create001 implements OnInit {
       // 性別：初始禁用，默認為 'F' (女)
       gender: [{ value: 'f', disabled: true }],
       // 學歷：初始禁用，默認為 'master' (碩士)
-      education: [{ value: 'master', disabled: true }],
+      education: [{ value: '2', disabled: true }],
       // 戶籍地址相關欄位
       zipCode1: [{ value: '', disabled: true }, Validators.required],
       address1: [{ value: '', disabled: true }, Validators.required],
@@ -175,6 +166,24 @@ export class Create001 implements OnInit {
         this.isVerifying = false;
       }
     });
+  }
+
+  /**
+   * Angular 的生命週期鉤子，在組件初始化時調用。
+   */
+  ngOnInit(): void {
+    this.customerService.selectOpt().subscribe({
+      next: (res) => {
+        this.educatinOpt = res.TRANRS.education;
+        this.eduList = res.TRANRS.education.map(edu => edu.MsgOptionMemo);
+        console.log(this.eduList)
+      }
+    })
+  }
+
+  getMesgMemo(msgOption: string): string {
+
+    return this.educatinOpt.find(edu => edu.MsgOption === msgOption)?.MsgOptionMemo ?? '';
   }
   /**
    * 處理身份證字號的驗證。
@@ -273,7 +282,5 @@ export class Create001 implements OnInit {
   }
 
 }
-function takeUntilDestroyed(): import("rxjs").OperatorFunction<any, unknown> {
-  throw new Error('Function not implemented.');
-}
+
 

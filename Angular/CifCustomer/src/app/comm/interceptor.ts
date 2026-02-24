@@ -31,7 +31,7 @@ export const Interceptor: HttpInterceptorFn = (req, next) => {
 
   return next(apiReq).pipe(
     //故意設定讓API請求顯示0.8秒
-    delay(800),
+    delay(0),
     catchError((error: HttpErrorResponse) => {
       let errorMessage = '';
       if (error.error instanceof ErrorEvent) {

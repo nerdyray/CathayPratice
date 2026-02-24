@@ -45,6 +45,7 @@ import com.exam.exam.repo.CustomerRepo;
 import com.exam.exam.service.CustomerService;
 import com.exam.exam.specification.CustomerCriteria;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
@@ -103,8 +104,14 @@ public class ServiceImpl implements CustomerService {
         // Build Pagable
         int pageNumber = tranrq.getPage().getPageNumber();
         int pageSize = tranrq.getPage().getPageSize();
-        int pageIndex = (pageNumber > 0) ? pageNumber - 1 : 0;
-        Sort sort = Sort.by(Sort.Direction.DESC, "orderId");
+        int pageIndex = pageNumber;
+        String sortByRaw = tranrq.getStoreInfo().getSortBy();
+        String sortByClean = !StringUtils.isBlank(sortByRaw) ? sortByRaw.toUpperCase() : "ASC";
+        Sort.Direction sortBy = "ASC".equals(sortByClean) ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+        String sortByColumnRaw = tranrq.getStoreInfo().getSortColumn();
+        String sortByColumnClean = !StringUtils.isBlank(sortByColumnRaw) ? sortByColumnRaw : "gender";
+        Sort sort = Sort.by(sortBy, sortByColumnClean);
         Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
         Page<CustomerEntity> pageEntity = customerRepo.findAll(cutomerSpecification, pageable);
         if (pageEntity.isEmpty()) {
@@ -125,8 +132,8 @@ public class ServiceImpl implements CustomerService {
         createMwheader.setReturncode("0000");
         createMwheader.setReturndesc("交易成功");
         // 排序
-        createSortInfo.setSortBy("DESC");
-        createSortInfo.setColumn("ORDER_ID");
+        createSortInfo.setSortBy(sortByClean);
+        createSortInfo.setSortColumn(sortByColumnClean);
         // 回應本體
         createTranrs.setPageSize(pageSize);
         createTranrs.setPageNumber(pageNumber);

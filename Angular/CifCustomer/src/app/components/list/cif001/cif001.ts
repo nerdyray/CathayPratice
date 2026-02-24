@@ -101,7 +101,7 @@ export class Cif001 implements OnInit {
 
   ) { }
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sort;
     this.sort.sortChange.subscribe(() => {
       // 排序一變動，通常會強迫回到第一頁
       this.pageIndex = 0;
